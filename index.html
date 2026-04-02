@@ -142,6 +142,33 @@
     .health-score { font-size: 24px; font-weight: 600; }
     .health-label { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
 
+    /* GEO + HOURS ROW */
+    .grid-extra { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.4fr); gap: 10px; }
+
+    /* GEO */
+    .geo-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+    .geo-rank { font-size: 11px; color: var(--text-tertiary); min-width: 16px; text-align: right; }
+    .geo-name { font-size: 12px; color: var(--text-primary); min-width: 90px; flex-shrink: 0; }
+    .geo-bar-wrap { flex: 1; background: var(--bg-secondary); border-radius: 3px; height: 18px; overflow: hidden; }
+    .geo-bar { height: 100%; border-radius: 3px; background: #FF5000; display: flex; align-items: center; padding-left: 7px; transition: width 0.6s ease; }
+    .geo-bar span { font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; }
+
+    /* HOURS */
+    .hours-chart { display: flex; align-items: flex-end; gap: 2px; height: 60px; }
+    .hours-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .hours-bar { width: 100%; border-radius: 2px 2px 0 0; transition: height 0.4s ease; min-height: 2px; }
+    .hours-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+    .hours-lbl { font-size: 10px; color: var(--text-tertiary); }
+    .hours-peak { font-size: 11px; color: var(--text-secondary); margin-top: 8px; }
+
+    @media (max-width: 900px) {
+      .grid-extra { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+    }
+    @media (max-width: 640px) {
+      .grid-extra { grid-template-columns: minmax(0,1fr); }
+      .geo-name { min-width: 75px; }
+    }
+
     /* ===== MOBILE ===== */
     @media (max-width: 900px) {
       .grid-mid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
@@ -240,6 +267,17 @@
     </div>
   </div>
 
+  <div class="grid-extra">
+    <div class="card">
+      <div class="card-title">Откуда водители</div>
+      <div id="geo-content"><div style="font-size:12px;color:var(--text-tertiary)">Загрузка…</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Когда водители активны</div>
+      <div id="hours-content"><div style="font-size:12px;color:var(--text-tertiary)">Загрузка…</div></div>
+    </div>
+  </div>
+
   <div class="table-section">
     <div class="tbl-header">
       <div class="card-title" style="margin-bottom:0;">Все события <span id="tbl-summary" style="color:var(--text-tertiary);font-weight:400;"></span></div>
@@ -299,6 +337,8 @@ const DATA_YESTERDAY = [
 ];
 
 let DATA = [...DATA_YESTERDAY];
+let GEO_DATA = [];
+let HOURS_DATA = [];
 
 function find(name) {
   return DATA.find(d => d.event_name === name) || { unique_devices: 0, total_events: 0 };
@@ -310,6 +350,8 @@ function renderAll() {
   renderDonut();
   renderChurn();
   renderTable();
+  renderGeo();
+  renderHours();
 }
 
 function renderKPI() {
@@ -453,6 +495,53 @@ function renderTable() {
   });
 }
 
+function renderGeo() {
+  const el = document.getElementById("geo-content");
+  if (!GEO_DATA || GEO_DATA.length === 0) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--text-tertiary)">Нет данных о географии</div>';
+    return;
+  }
+  const maxD = Math.max(...GEO_DATA.map(r => r.drivers), 1);
+  el.innerHTML = GEO_DATA.map((r, i) => `
+    <div class="geo-row">
+      <div class="geo-rank">${i + 1}</div>
+      <div class="geo-name">${r.city}</div>
+      <div class="geo-bar-wrap">
+        <div class="geo-bar" style="width:${Math.round(r.drivers / maxD * 100)}%">
+          <span>${r.drivers}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderHours() {
+  const el = document.getElementById("hours-content");
+  if (!HOURS_DATA || HOURS_DATA.length === 0) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--text-tertiary)">Нет данных по часам</div>';
+    return;
+  }
+  // Aggregate by hour (sum if multiple days)
+  const byHour = Array(24).fill(0);
+  HOURS_DATA.forEach(h => { if (h.hour >= 0 && h.hour < 24) byHour[h.hour] += h.events; });
+  const maxV = Math.max(...byHour, 1);
+  const peakHour = byHour.indexOf(Math.max(...byHour));
+  const bars = byHour.map((v, h) => {
+    const pct = Math.round(v / maxV * 100);
+    const isPeak = h === peakHour;
+    return `<div class="hours-bar-col"><div class="hours-bar" style="height:${Math.max(pct, 3)}%;background:${isPeak ? '#FF5000' : 'var(--bg-tertiary)'}"></div></div>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="hours-chart">${bars}</div>
+    <div class="hours-labels">
+      <span class="hours-lbl">00:00</span>
+      <span class="hours-lbl">06:00</span>
+      <span class="hours-lbl">12:00</span>
+      <span class="hours-lbl">18:00</span>
+      <span class="hours-lbl">23:00</span>
+    </div>
+    <div class="hours-peak">Пик активности: <strong>${peakHour}:00–${peakHour + 1}:00</strong> · ${byHour[peakHour].toLocaleString('ru')} событий</div>`;
+}
+
 function selectPeriod(btn) {
   document.querySelectorAll(".period-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
@@ -473,8 +562,22 @@ async function triggerRefresh() {
       body: JSON.stringify({ period_label: currentPeriod })
     });
     if (!res.ok) throw new Error("HTTP " + res.status);
-    const rows = await res.json();
-    if (Array.isArray(rows) && rows.length > 0) {
+    const response = await res.json();
+    let rows = null;
+    if (Array.isArray(response) && response.length > 0) {
+      if (response[0] && response[0].events) {
+        // New structured format: [{events, geo, hours}]
+        rows = response[0].events;
+        GEO_DATA = response[0].geo || [];
+        HOURS_DATA = response[0].hours || [];
+      } else {
+        // Legacy format: array of event rows
+        rows = response;
+        GEO_DATA = [];
+        HOURS_DATA = [];
+      }
+    }
+    if (rows && rows.length > 0) {
       DATA = rows;
       document.getElementById("period-label-text").textContent =
         "Данные: " + PERIOD_LABELS[currentPeriod] + " · AppMetrica";
