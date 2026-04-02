@@ -1,0 +1,87 @@
+{
+  "name": "Грузап Дашборд",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"triggerAtHour": 10, "triggerAtMinute": 30}]}},
+      "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.3,
+      "position": [-64, 0], "id": "1047ab76-42ab-44ef-b24b-faf21f1b3e8f", "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {"httpMethod": "POST", "path": "gruzap-dashboard", "responseMode": "lastNode", "responseData": "allEntries", "options": {}},
+      "id": "f3a1b2c4-d5e6-4789-a0bc-de1234567890", "webhookId": "a7c3e591-22fd-4b8a-9d0e-bf5678901234",
+      "name": "Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 1, "position": [-64, 140]
+    },
+    {
+      "parameters": {"jsCode": "const payload = ($json && $json.body) ? $json.body : ($json || {});\nconst token = payload.yandex_oauth_token || $env.YANDEX_OAUTH_TOKEN || $env.YANDEX_TOKEN || 'y0__xCIj9GiBxjMqD8gnNLv6xYi53tNIuy00fSsAXVvz3ME1dx2Lg';\nconst clientLogin = payload.client_login || 'siberian.gruzoviki';\nconst counterId = payload.metrika_counter_id || '105289797';\nconst periodLabel = payload.period_label || 'yesterday';\nlet dateFrom = payload.date_from || null, dateTo = payload.date_to || null;\nif (!dateFrom || !dateTo) {\n  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());\n  const fmt = (d) => d.toISOString().slice(0, 10);\n  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);\n  switch (periodLabel) {\n    case 'today': dateFrom = fmt(today); dateTo = fmt(today); break;\n    case 'yesterday': dateFrom = fmt(yesterday); dateTo = fmt(yesterday); break;\n    case 'last_7_days': { const d = new Date(today); d.setDate(today.getDate() - 7); dateFrom = fmt(d); dateTo = fmt(yesterday); break; }\n    case 'last_30_days': { const d = new Date(today); d.setDate(today.getDate() - 30); dateFrom = fmt(d); dateTo = fmt(yesterday); break; }\n    case 'this_month': { const first = new Date(today.getFullYear(), today.getMonth(), 1); dateFrom = fmt(first); dateTo = fmt(today); break; }\n    default: dateFrom = fmt(yesterday); dateTo = fmt(yesterday);\n  }\n}\nreturn [{ json: { yandex_oauth_token: token, client_login: clientLogin, metrika_counter_id: counterId, period_label: periodLabel, date_from: dateFrom, date_to: dateTo } }];"},
+      "id": "dfbf3963-6969-409a-bdb0-bc88af413fe4", "name": "Set Inputs + Resolve Dates",
+      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [144, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://api.appmetrica.yandex.ru/stat/v1/data", "sendQuery": true,
+        "queryParameters": {"parameters": [
+          {"name": "id", "value": "4735402"},
+          {"name": "metrics", "value": "ym:ce2:devicesWithEvent,ym:ce2:allEvents"},
+          {"name": "dimensions", "value": "ym:ce2:eventLabel"},
+          {"name": "date1", "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"},
+          {"name": "date2", "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"},
+          {"name": "sort", "value": "-ym:ce2:allEvents"}, {"name": "limit", "value": "100"}, {"name": "accuracy", "value": "medium"}
+        ]},
+        "sendHeaders": true,
+        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ 'OAuth ' + ($env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA') }}"}]},
+        "options": {"timeout": 30000}
+      },
+      "id": "95b8da43-1187-40e0-bcba-8caa48b3e046", "name": "AppMetrica: Топ Действий1",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [384, 0]
+    },
+    {
+      "parameters": {"jsCode": "const rawData = $input.first().json.data || [];\nconst formattedData = rawData.map(row => ({\n  event_name: row.dimensions[0].name || 'Неизвестное событие',\n  unique_devices: row.metrics[0] || 0,\n  total_events: row.metrics[1] || 0\n}));\nreturn formattedData.map(item => ({ json: item }));"},
+      "id": "8a2ca066-849a-42e7-8d79-f08b29647553", "name": "Форматирование для Дашборда1",
+      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [608, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const events = $input.all().map(item => item.json);\nconst setInputs = $('Set Inputs + Resolve Dates').first().json;\nconst dateFrom = setInputs.date_from;\nconst dateTo = setInputs.date_to;\nconst token = $env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA';\nconst appId = '4735402';\nconst auth = { Authorization: 'OAuth ' + token };\n\nlet geo = [];\ntry {\n  const geoR = await fetch('https://api.appmetrica.yandex.ru/stat/v1/data?id=' + appId + '&metrics=ym:ce2:devicesWithEvent&dimensions=ym:ce2:regionCity&date1=' + dateFrom + '&date2=' + dateTo + '&sort=-ym:ce2:devicesWithEvent&limit=8&accuracy=medium', { headers: auth });\n  const geoD = await geoR.json();\n  geo = (geoD.data || []).map(row => ({ city: (row.dimensions[0] || {}).name || '', drivers: Math.round(row.metrics[0] || 0) })).filter(r => r.city && r.city !== 'Unknown');\n} catch(e) { geo = []; }\n\nlet hours = [];\ntry {\n  const hR = await fetch('https://api.appmetrica.yandex.ru/stat/v1/data/bytime?id=' + appId + '&metrics=ym:ce2:allEvents&group=Hour&date1=' + dateFrom + '&date2=' + dateTo + '&accuracy=medium', { headers: auth });\n  const hD = await hR.json();\n  if (Array.isArray(hD.time_intervals) && hD.data && hD.data[0]) {\n    const vals = hD.data[0].metrics[0];\n    hours = hD.time_intervals.map((t, i) => {\n      const ts = Array.isArray(t) ? t[0] : t;\n      const h = new Date(ts * 1000).getUTCHours();\n      return { hour: h, events: Math.round(Array.isArray(vals) ? (vals[i] || 0) : 0) };\n    });\n  }\n} catch(e) { hours = []; }\n\nreturn [{ json: { events, geo, hours } }];",
+        "mode": "runOnceForAllItems"
+      },
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890", "name": "Объединить данные",
+      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [832, 0]
+    },
+    {
+      "parameters": {"httpMethod": "POST", "path": "gruzap-analytics", "responseMode": "lastNode", "responseData": "firstEntryJson", "options": {}},
+      "id": "b1c2d3e4-f5a6-7890-bcde-f12345678901", "webhookId": "c9d8e7f6-5432-4abc-def0-123456789abc",
+      "name": "Webhook Analytics", "type": "n8n-nodes-base.webhook", "typeVersion": 1, "position": [-64, 320]
+    },
+    {
+      "parameters": {"jsCode": "const body = ($json && $json.body) ? $json.body : $json;\nconst data = body.data || [];\nconst period = body.period_label || 'yesterday';\nconst periodNames = { yesterday: 'вчера', last_7_days: 'последние 7 дней', last_30_days: 'последние 30 дней', this_month: 'текущий месяц' };\nconst periodName = periodNames[period] || period;\nconst find = (name) => data.find(d => d.event_name === name) || { unique_devices: 0, total_events: 0 };\nconst maxU = Math.max(...data.map(d => d.unique_devices), 1);\nconst zayvki = find('Открыл заявку').unique_devices;\nconst tel = find('Нажал на телефон в заявке').unique_devices;\nconst conv = zayvki > 0 ? Math.round(tel / zayvki * 100) : 0;\nconst reg = find('Зарегистрировался').unique_devices;\nconst churn = find('Вышел из аккаунта').unique_devices + find('Открыл ссылку на удаление аккаунта').unique_devices + find('Удалил ТС').unique_devices;\nconst inter = find('Использовал фильтр межгород').total_events;\nconst city = find('Использовал фильтр по городу').total_events;\nconst total = inter + city;\nconst interPct = total > 0 ? Math.round(inter / total * 100) : 0;\nconst rows = data.map(d => '  - ' + d.event_name + ': ' + d.unique_devices + ' вод., ' + d.total_events + ' раз').join('\\n');\nconst prompt = 'Ты аналитик приложения ГРУЗАП — маркетплейс грузовых перевозок. Проанализируй данные за период: ' + periodName + '.\\n\\nКлючевые метрики:\\n- Активных водителей: ' + maxU + '\\n- Новых регистраций: ' + reg + '\\n- Просматривали заявки: ' + zayvki + ' водителей\\n- Позвонили по заявке: ' + tel + ' водителей (конверсия ' + conv + '%)\\n- Уходят из приложения: ' + churn + ' водителей\\n- Маршруты: ' + interPct + '% ищут межгород, ' + (100 - interPct) + '% городские перевозки\\n\\nВсе действия:\\n' + rows + '\\n\\nНапиши короткий понятный отчёт для руководителя. Без технических терминов. Укажи что хорошо, что вызывает беспокойство и 1-2 конкретных действия. Максимум 150 слов.';\nreturn [{ json: { prompt: prompt } }];"},
+      "id": "e2f3a4b5-c6d7-8901-efab-c23456789012", "name": "Подготовить промпт",
+      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [200, 320]
+    },
+    {
+      "parameters": {"prompt": "={{ $json.prompt }}", "hasOutputParser": false, "options": {}},
+      "id": "d4e5f6a7-b8c9-0123-defa-b34567890123", "name": "Анализ данных",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm", "typeVersion": 1.2, "position": [450, 320]
+    },
+    {
+      "parameters": {},
+      "id": "2535e432-6de2-4b18-a6ad-277fd24550b8", "name": "Message a model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic", "typeVersion": 1.7,
+      "position": [450, 480],
+      "credentials": {"anthropicApi": {"id": "TANiFJGJNiy8a25a", "name": "Аналитик и СММ - Клод"}}
+    }
+  ],
+  "connections": {
+    "Schedule Trigger":      {"main": [[{"node": "Set Inputs + Resolve Dates", "type": "main", "index": 0}]]},
+    "Webhook":               {"main": [[{"node": "Set Inputs + Resolve Dates", "type": "main", "index": 0}]]},
+    "Set Inputs + Resolve Dates": {"main": [[{"node": "AppMetrica: Топ Действий1", "type": "main", "index": 0}]]},
+    "AppMetrica: Топ Действий1":  {"main": [[{"node": "Форматирование для Дашборда1", "type": "main", "index": 0}]]},
+    "Форматирование для Дашборда1": {"main": [[{"node": "Объединить данные", "type": "main", "index": 0}]]},
+    "Объединить данные": {"main": [[]]},
+    "Webhook Analytics":     {"main": [[{"node": "Подготовить промпт", "type": "main", "index": 0}]]},
+    "Подготовить промпт":    {"main": [[{"node": "Анализ данных", "type": "main", "index": 0}]]},
+    "Message a model":       {"ai_languageModel": [[{"node": "Анализ данных", "type": "ai_languageModel", "index": 0}]]},
+    "Анализ данных":         {"main": [[]]}
+  },
+  "settings": {"executionOrder": "v1", "availableInMCP": true},
+  "staticData": null
+}
