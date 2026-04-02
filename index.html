@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>ГРУЗАП · Аналитика</title>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f4f2;
+      --bg-tertiary: #eceae6;
+      --text-primary: #1a1a1a;
+      --text-secondary: #6b6b6b;
+      --text-tertiary: #a0a0a0;
+      --border: rgba(0,0,0,0.08);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --accent: #FF5000;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1c1c1e;
+        --bg-secondary: #2c2c2e;
+        --bg-tertiary: #3a3a3c;
+        --text-primary: #f5f5f5;
+        --text-secondary: #a0a0a0;
+        --text-tertiary: #6b6b6b;
+        --border: rgba(255,255,255,0.08);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-secondary); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text-primary); min-height: 100vh; }
+
+    .dash { padding: 16px; display: flex; flex-direction: column; gap: 12px; max-width: 1400px; margin: 0 auto; }
+
+    /* HEADER */
+    .dash-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-name { font-size: 15px; font-weight: 600; color: var(--text-primary); letter-spacing: 1.5px; }
+    .brand-sub { font-size: 13px; color: var(--text-secondary); }
+    .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .period-group { display: flex; background: var(--bg-secondary); border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+    .period-btn { padding: 7px 11px; font-size: 12px; font-weight: 500; color: var(--text-secondary); cursor: pointer; border: none; background: transparent; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+    .period-btn:hover { background: var(--bg-primary); color: var(--text-primary); }
+    .period-btn.active { background: #FF5000; color: #fff; border-radius: 6px; }
+
+    .live-badge { font-size: 11px; color: #639922; background: #EAF3DE; border: 0.5px solid #97C459; border-radius: 20px; padding: 5px 10px; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #639922; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .date-label { font-size: 12px; color: var(--text-tertiary); }
+
+    .refresh-btn { display: flex; align-items: center; gap: 6px; padding: 7px 13px; font-size: 12px; font-weight: 500; background: var(--bg-secondary); border: 0.5px solid var(--border); border-radius: var(--radius-md); cursor: pointer; color: var(--text-secondary); transition: all 0.15s; }
+    .refresh-btn:hover { background: var(--bg-primary); color: #FF5000; border-color: #FF5000; }
+    .refresh-btn.loading svg { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .ai-btn { display: flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 12px; font-weight: 600; background: #FF5000; border: none; border-radius: var(--radius-md); cursor: pointer; color: #fff; transition: all 0.15s; }
+    .ai-btn:hover { background: #e04600; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,80,0,0.35); }
+    .ai-btn:disabled { background: #ccc; transform: none; box-shadow: none; cursor: not-allowed; }
+    .ai-btn .ai-spin { animation: spin 0.8s linear infinite; }
+
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: 16px; width: 100%; max-width: 560px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalIn 0.2s ease; }
+    @keyframes modalIn { from { opacity:0; transform:scale(0.95) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+    .modal-head { display: flex; align-items: center; gap: 10px; padding: 18px 20px 14px; border-bottom: 0.5px solid var(--border); }
+    .modal-icon { width: 32px; height: 32px; background: #FF5000; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .modal-title { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; }
+    .modal-period { font-size: 11px; color: var(--text-tertiary); }
+    .modal-close { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 6px; color: var(--text-tertiary); background: none; border: none; font-size: 18px; transition: background 0.15s; }
+    .modal-close:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+    .modal-loading { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 0; color: var(--text-secondary); font-size: 13px; }
+    .modal-loading-ring { width: 36px; height: 36px; border: 3px solid var(--bg-tertiary); border-top-color: #FF5000; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .modal-text { font-size: 14px; line-height: 1.75; color: var(--text-primary); white-space: pre-wrap; }
+    .modal-text strong, .modal-text b { color: var(--text-primary); font-weight: 600; }
+    .modal-text h1, .modal-text h2, .modal-text h3 { font-size: 14px; font-weight: 700; margin: 12px 0 6px; color: var(--text-primary); }
+
+    @media (max-width: 640px) {
+      .ai-btn span { display: none; }
+      .modal { max-height: 92vh; border-radius: 14px; }
+    }
+
+    /* KPI GRID */
+    .grid-top { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+    .kpi { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
+    .kpi-label { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+    .kpi-value { font-size: 28px; font-weight: 600; line-height: 1; margin-bottom: 4px; }
+    .kpi-sub { font-size: 11px; color: var(--text-tertiary); }
+
+    /* MID GRID */
+    .grid-mid { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+    .card { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
+    .card-title { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+
+    /* FUNNEL */
+    .funnel-step { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .funnel-label { font-size: 12px; color: var(--text-primary); min-width: 130px; flex-shrink: 0; }
+    .funnel-bar-wrap { flex: 1; background: var(--bg-secondary); border-radius: 4px; height: 28px; overflow: hidden; }
+    .funnel-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; transition: width 0.6s ease; }
+    .funnel-bar span { font-size: 13px; font-weight: 600; color: #fff; }
+    .funnel-conv { font-size: 11px; color: var(--text-tertiary); min-width: 40px; text-align: right; }
+    .conv-box { margin-top: 14px; background: var(--bg-secondary); border-radius: var(--radius-md); padding: 12px; text-align: center; }
+    .conv-big { font-size: 32px; font-weight: 600; color: #FF5000; }
+    .conv-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+    /* DONUT */
+    .donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .legend-row { display: flex; align-items: center; gap: 8px; width: 100%; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .legend-name { font-size: 12px; color: var(--text-secondary); flex: 1; }
+    .legend-val { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .legend-pct { font-size: 11px; color: var(--text-tertiary); min-width: 32px; text-align: right; }
+
+    /* CHURN */
+    .churn-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .churn-label { font-size: 11px; color: var(--text-secondary); width: 105px; flex-shrink: 0; }
+    .churn-wrap { flex: 1; background: var(--bg-secondary); border-radius: 3px; height: 22px; overflow: hidden; }
+    .churn-bar { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; transition: width 0.6s ease; }
+    .churn-num { font-size: 11px; font-weight: 600; color: #fff; }
+    .churn-total { font-size: 11px; color: var(--text-tertiary); min-width: 24px; text-align: right; }
+
+    /* TABLE */
+    .table-section { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
+    .tbl-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 6px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.7px; text-align: left; padding: 8px 10px; border-bottom: 0.5px solid var(--border); cursor: pointer; user-select: none; white-space: nowrap; }
+    th:hover { color: var(--text-primary); }
+    th.sorted { color: #FF5000; }
+    td { font-size: 13px; color: var(--text-primary); padding: 9px 10px; border-bottom: 0.5px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-secondary); }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .avg-pill { background: var(--bg-secondary); border-radius: 4px; padding: 2px 7px; font-size: 12px; }
+
+    /* HEALTH */
+    .health-block { margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--border); }
+    .health-title { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+    .health-score { font-size: 24px; font-weight: 600; }
+    .health-label { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 900px) {
+      .grid-mid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+      .card:first-child { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 640px) {
+      .dash { padding: 12px; gap: 10px; }
+      .grid-top { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+      .kpi-value { font-size: 24px; }
+      .grid-mid { grid-template-columns: minmax(0,1fr); }
+      .card:first-child { grid-column: auto; }
+      .funnel-label { min-width: 100px; font-size: 11px; }
+      .funnel-bar span { font-size: 11px; }
+      .brand-sub { display: none; }
+      .period-btn { padding: 6px 8px; font-size: 11px; }
+      th { padding: 6px 8px; font-size: 10px; }
+      td { padding: 7px 8px; font-size: 12px; }
+      .tbl-hint { display: none; }
+      /* скрываем mini bar в таблице на мобиле */
+      .mini-bar-wrap { display: none; }
+      .date-label { font-size: 11px; }
+    }
+
+    @media (max-width: 420px) {
+      .grid-top { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .kpi { padding: 12px; }
+      .kpi-value { font-size: 22px; }
+      .live-badge { display: none; }
+      /* stack header */
+      .header-right { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+<div class="dash">
+
+  <div class="dash-header">
+    <div class="brand">
+      <svg width="26" height="20" viewBox="0 0 184 147" fill="none">
+        <path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#FF5000"/>
+      </svg>
+      <span class="brand-name">ГРУЗАП</span>
+      <span class="brand-sub">Аналитика</span>
+    </div>
+    <div class="header-right">
+      <div class="period-group">
+        <button class="period-btn" data-period="yesterday" onclick="selectPeriod(this)">Вчера</button>
+        <button class="period-btn active" data-period="last_7_days" onclick="selectPeriod(this)">7 дней</button>
+        <button class="period-btn" data-period="last_30_days" onclick="selectPeriod(this)">30 дней</button>
+        <button class="period-btn" data-period="this_month" onclick="selectPeriod(this)">Месяц</button>
+      </div>
+      <div class="live-badge"><div class="live-dot"></div>AppMetrica</div>
+      <button class="ai-btn" id="ai-btn" onclick="openAnalytics()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z" fill="currentColor"/></svg>
+        <span>Аналитика</span>
+      </button>
+      <button class="refresh-btn" id="refresh-btn" onclick="triggerRefresh()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13.65 2.35A8 8 0 1 0 15 8h-2a6 6 0 1 1-1.06-3.35L10 7h5V2l-1.35.35Z" fill="currentColor"/></svg>
+        Обновить
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <span class="date-label" id="period-label-text">Данные: 01 апреля 2026 · вчера</span>
+  </div>
+
+  <div class="grid-top" id="kpi-grid"></div>
+
+  <div class="grid-mid">
+    <div class="card">
+      <div class="card-title">Воронка поиска работы</div>
+      <div id="funnel"></div>
+      <div class="conv-box">
+        <div class="conv-big" id="conv-rate">—</div>
+        <div class="conv-label">водителей, которые нашли работу и позвонили</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Какие маршруты ищут водители</div>
+      <div class="donut-wrap">
+        <svg width="120" height="120" viewBox="0 0 120 120" id="donut-svg"></svg>
+        <div id="donut-legend" style="width:100%;display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Водители, уходящие из приложения</div>
+      <div id="churn-bars"></div>
+      <div class="health-block">
+        <div class="health-title">Остаются в приложении</div>
+        <div class="health-score" id="health-score">—</div>
+        <div class="health-label" id="health-label"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <div class="tbl-header">
+      <div class="card-title" style="margin-bottom:0;">Все события <span id="tbl-summary" style="color:var(--text-tertiary);font-weight:400;"></span></div>
+      <span class="tbl-hint" style="font-size:11px;color:var(--text-tertiary);">Нажмите столбец для сортировки</span>
+    </div>
+    <div style="overflow-x:auto;"><table id="data-table"></table></div>
+  </div>
+
+</div>
+
+<!-- MODAL АНАЛИТИКА -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L9.5 9.5 2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5z" fill="#fff"/></svg>
+      </div>
+      <div>
+        <div class="modal-title">Анализ данных</div>
+        <div class="modal-period" id="modal-period-label"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <div class="modal-loading">
+        <div class="modal-loading-ring"></div>
+        Собираю данные и анализирую…
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PERIOD_LABELS = {
+  yesterday:    "Вчера · 01 апр 2026",
+  last_7_days:  "Последние 7 дней",
+  last_30_days: "Последние 30 дней",
+  this_month:   "Текущий месяц",
+};
+
+let currentPeriod = "last_7_days";
+let sortCol = "total_events", sortAsc = false;
+
+const DATA_YESTERDAY = [
+  { event_name: "Открыл заявку", unique_devices: 39, total_events: 591 },
+  { event_name: "Открыл фильтр", unique_devices: 35, total_events: 159 },
+  { event_name: "Использовал фильтр межгород", unique_devices: 30, total_events: 127 },
+  { event_name: "Нажал на телефон в заявке", unique_devices: 9, total_events: 27 },
+  { event_name: "Использовал фильтр по городу", unique_devices: 9, total_events: 19 },
+  { event_name: "Зарегистрировался", unique_devices: 8, total_events: 10 },
+  { event_name: "Вышел из аккаунта", unique_devices: 2, total_events: 6 },
+  { event_name: "Открыл ссылку на удаление аккаунта", unique_devices: 1, total_events: 4 },
+  { event_name: "Отметил выполненной заявку", unique_devices: 1, total_events: 2 },
+  { event_name: "Отредактировал ТС", unique_devices: 2, total_events: 2 },
+  { event_name: "Удалил ТС", unique_devices: 2, total_events: 2 },
+];
+
+let DATA = [...DATA_YESTERDAY];
+
+function find(name) {
+  return DATA.find(d => d.event_name === name) || { unique_devices: 0, total_events: 0 };
+}
+
+function renderAll() {
+  renderKPI();
+  renderFunnel();
+  renderDonut();
+  renderChurn();
+  renderTable();
+}
+
+function renderKPI() {
+  const maxU = Math.max(...DATA.map(d => d.unique_devices));
+  const churnTotal = ["Вышел из аккаунта","Открыл ссылку на удаление аккаунта","Удалил ТС"]
+    .reduce((s,n) => s + find(n).unique_devices, 0);
+  const zayvki = find("Открыл заявку").unique_devices;
+  const tel = find("Нажал на телефон в заявке").unique_devices;
+  const conv = zayvki > 0 ? Math.round(tel / zayvki * 100) : 0;
+  const reg = find("Зарегистрировался").unique_devices;
+  const totalEv = DATA.reduce((s,d) => s + d.total_events, 0);
+
+  document.getElementById("kpi-grid").innerHTML = [
+    { label: "Активных водителей", val: maxU, sub: "открывали приложение", color: "var(--text-primary)" },
+    { label: "Уходят из приложения", val: churnTotal, sub: "вышли или удалили акк.", color: "#E24B4A" },
+    { label: "Новых регистраций", val: reg, sub: "зарегистрировались", color: "#639922" },
+    { label: "Дозвонились до работы", val: conv + "%", sub: "смотрели заявку → нажали звонок", color: "#FF5000" },
+  ].map(k => `<div class="kpi">
+    <div class="kpi-label">${k.label}</div>
+    <div class="kpi-value" style="color:${k.color}">${k.val}</div>
+    <div class="kpi-sub">${k.sub}</div>
+  </div>`).join('');
+
+  document.getElementById("tbl-summary").textContent = `· ${DATA.length} событий · ${totalEv} действий`;
+}
+
+function renderFunnel() {
+  const steps = [
+    { label: "Открыл фильтр", val: find("Открыл фильтр").unique_devices },
+    { label: "Открыл заявку", val: find("Открыл заявку").unique_devices },
+    { label: "Нажал на телефон", val: find("Нажал на телефон в заявке").unique_devices },
+  ];
+  const max = Math.max(...steps.map(s => s.val), 1);
+  const colors = ["#FF5000","#FF7A3D","#FFB38A"];
+  document.getElementById("funnel").innerHTML = steps.map((s,i) => `
+    <div class="funnel-step">
+      <div class="funnel-label">${s.label}</div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-bar" style="width:${Math.round(s.val/max*100)}%;background:${colors[i]}">
+          <span>${s.val}</span>
+        </div>
+      </div>
+      <span class="funnel-conv">${i > 0 && steps[i-1].val > 0 ? '↓' + Math.round(s.val/steps[i-1].val*100) + '%' : ''}</span>
+    </div>`).join('');
+
+  const z = find("Открыл заявку").unique_devices;
+  const t = find("Нажал на телефон в заявке").unique_devices;
+  document.getElementById("conv-rate").textContent = z > 0 ? Math.round(t/z*100) + "%" : "—";
+}
+
+function renderDonut() {
+  const inter = find("Использовал фильтр межгород").total_events;
+  const city  = find("Использовал фильтр по городу").total_events;
+  const total = inter + city;
+  if (total === 0) {
+    document.getElementById("donut-svg").innerHTML = '';
+    document.getElementById("donut-legend").innerHTML = '<div style="font-size:12px;color:var(--text-tertiary)">Нет данных</div>';
+    return;
+  }
+  const interPct = Math.round(inter/total*100);
+  const r=46,ri=28,cx=60,cy=60,TAU=2*Math.PI;
+  const a = inter/total*TAU, s = -Math.PI/2;
+  function arc(s0,a0,col) {
+    const x1=cx+r*Math.cos(s0),y1=cy+r*Math.sin(s0),
+          x2=cx+r*Math.cos(s0+a0),y2=cy+r*Math.sin(s0+a0),
+          xi1=cx+ri*Math.cos(s0),yi1=cy+ri*Math.sin(s0),
+          xi2=cx+ri*Math.cos(s0+a0),yi2=cy+ri*Math.sin(s0+a0);
+    return `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${a0>Math.PI?1:0},1 ${x2.toFixed(1)},${y2.toFixed(1)} L${xi2.toFixed(1)},${yi2.toFixed(1)} A${ri},${ri} 0 ${a0>Math.PI?1:0},0 ${xi1.toFixed(1)},${yi1.toFixed(1)} Z" fill="${col}"/>`;
+  }
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const bgFill = isDark ? '#1c1c1e' : '#ffffff';
+  const textFill = isDark ? '#f5f5f5' : '#1a1a1a';
+  const subFill = isDark ? '#a0a0a0' : '#6b6b6b';
+  document.getElementById("donut-svg").innerHTML =
+    `${arc(s,a,"#FF5000")}${arc(s+a,TAU-a,"#B4B2A9")}
+    <circle cx="${cx}" cy="${cy}" r="${ri-2}" fill="${bgFill}"/>
+    <text x="${cx}" y="${cy-5}" text-anchor="middle" font-size="15" font-weight="600" fill="${textFill}">${interPct}%</text>
+    <text x="${cx}" y="${cy+10}" text-anchor="middle" font-size="9" fill="${subFill}">межгород</text>`;
+  document.getElementById("donut-legend").innerHTML = `
+    <div class="legend-row"><div class="legend-dot" style="background:#FF5000"></div><span class="legend-name">Межгород</span><span class="legend-val">${inter}</span><span class="legend-pct">${interPct}%</span></div>
+    <div class="legend-row"><div class="legend-dot" style="background:#B4B2A9"></div><span class="legend-name">По городу</span><span class="legend-val">${city}</span><span class="legend-pct">${100-interPct}%</span></div>
+    <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;">Событий с фильтрами: ${total}</div>`;
+}
+
+function renderChurn() {
+  const items = [
+    { label: "Вышел из аккаунта", d: find("Вышел из аккаунта") },
+    { label: "Удалил транспорт", d: find("Удалил ТС") },
+    { label: "Хотел удалить акк.", d: find("Открыл ссылку на удаление аккаунта") },
+  ];
+  const maxV = Math.max(...items.map(c => c.d.unique_devices), 1);
+  document.getElementById("churn-bars").innerHTML = items.map(c => `
+    <div class="churn-row">
+      <div class="churn-label">${c.label}</div>
+      <div class="churn-wrap"><div class="churn-bar" style="width:${Math.round(c.d.unique_devices/maxV*100)}%;background:#E24B4A;"><span class="churn-num">${c.d.unique_devices}</span></div></div>
+      <div class="churn-total">${c.d.total_events}</div>
+    </div>`).join('');
+  const totalChurn = items.reduce((s,c) => s + c.d.unique_devices, 0);
+  const active = find("Открыл заявку").unique_devices || 1;
+  const hp = Math.round((1 - totalChurn/active)*100);
+  const scoreEl = document.getElementById("health-score");
+  scoreEl.textContent = hp + "%";
+  scoreEl.style.color = hp >= 90 ? "#639922" : hp >= 75 ? "#BA7517" : "#E24B4A";
+  const activeCount = find("Открыл заявку").unique_devices;
+  document.getElementById("health-label").textContent = `из ${activeCount} активных водителей`;
+}
+
+function renderTable() {
+  const cols = [
+    { key: "event_name", label: "Действие в приложении", align: "left" },
+    { key: "unique_devices", label: "Водителей", align: "right" },
+    { key: "total_events", label: "Всего раз", align: "right" },
+    { key: "avg", label: "Раз на чел.", align: "right" },
+  ];
+  const rows = DATA.map(d => ({...d, avg: d.total_events / d.unique_devices}));
+  rows.sort((a,b) => {
+    const av=a[sortCol], bv=b[sortCol];
+    return typeof av==="string" ? (sortAsc?av.localeCompare(bv):bv.localeCompare(av)) : (sortAsc?av-bv:bv-av);
+  });
+  const maxUD = Math.max(...rows.map(r=>r.unique_devices), 1);
+  document.getElementById("data-table").innerHTML = `
+    <thead><tr>${cols.map(c=>`<th class="${sortCol===c.key?'sorted':''}" data-key="${c.key}" style="text-align:${c.align}">${c.label}${sortCol===c.key?` ${sortAsc?'↑':'↓'}`:''}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr>
+      <td>${r.event_name}</td>
+      <td class="num"><div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;"><div class="mini-bar-wrap" style="width:56px;height:4px;background:var(--bg-secondary);border-radius:2px;overflow:hidden;"><div style="width:${Math.round(r.unique_devices/maxUD*100)}%;height:100%;background:#FF5000;border-radius:2px;"></div></div>${r.unique_devices}</div></td>
+      <td class="num">${r.total_events}</td>
+      <td class="num"><span class="avg-pill">${r.avg.toFixed(1)}×</span></td>
+    </tr>`).join('')}</tbody>`;
+  document.querySelectorAll("th[data-key]").forEach(th => {
+    th.addEventListener("click", () => {
+      const k = th.getAttribute("data-key");
+      sortCol === k ? sortAsc = !sortAsc : (sortCol = k, sortAsc = false);
+      renderTable();
+    });
+  });
+}
+
+function selectPeriod(btn) {
+  document.querySelectorAll(".period-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentPeriod = btn.getAttribute("data-period");
+  document.getElementById("period-label-text").textContent = "Данные: " + PERIOD_LABELS[currentPeriod];
+  triggerRefresh();
+}
+
+const N8N_WEBHOOK = "https://n8n.gruz.app/webhook/gruzap-dashboard";
+
+async function triggerRefresh() {
+  const btn = document.getElementById("refresh-btn");
+  btn.classList.add("loading");
+  try {
+    const res = await fetch(N8N_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ period_label: currentPeriod })
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const rows = await res.json();
+    if (Array.isArray(rows) && rows.length > 0) {
+      DATA = rows;
+      document.getElementById("period-label-text").textContent =
+        "Данные: " + PERIOD_LABELS[currentPeriod] + " · AppMetrica";
+      renderAll();
+    }
+  } catch (e) {
+    console.error("Webhook error:", e);
+  } finally {
+    btn.classList.remove("loading");
+  }
+}
+
+// ===== АНАЛИТИКА =====
+const N8N_ANALYTICS = "https://n8n.gruz.app/webhook/gruzap-analytics";
+
+function openModal() {
+  document.getElementById("modal-overlay").classList.add("show");
+  document.getElementById("modal-period-label").textContent = PERIOD_LABELS[currentPeriod] || currentPeriod;
+  document.getElementById("modal-body").innerHTML = `
+    <div class="modal-loading">
+      <div class="modal-loading-ring"></div>
+      Собираю данные и анализирую…
+    </div>`;
+}
+function closeModal() { document.getElementById("modal-overlay").classList.remove("show"); }
+function closeModalOutside(e) { if (e.target === document.getElementById("modal-overlay")) closeModal(); }
+
+function mdToHtml(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^#{1,3}\s+(.+)$/gm, '<strong>$1</strong>')
+    .replace(/^[-•]\s+(.+)$/gm, '• $1')
+    .replace(/\n/g, '<br>');
+}
+
+async function openAnalytics() {
+  const btn = document.getElementById("ai-btn");
+  btn.disabled = true;
+  openModal();
+  try {
+    const res = await fetch(N8N_ANALYTICS, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ period_label: currentPeriod, data: DATA })
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const json = await res.json();
+    const text = json.text || json.output || JSON.stringify(json);
+    document.getElementById("modal-body").innerHTML =
+      `<div class="modal-text">${mdToHtml(text)}</div>`;
+  } catch(e) {
+    document.getElementById("modal-body").innerHTML =
+      `<div class="modal-text" style="color:#E24B4A">Не удалось получить анализ. Попробуйте ещё раз.<br><small>${e.message}</small></div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+renderAll();
+triggerRefresh();
+</script>
+</body>
+</html>
