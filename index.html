@@ -189,6 +189,7 @@
     </div>
     <div class="header-right">
       <div class="period-group">
+        <button class="period-btn" data-period="today" onclick="selectPeriod(this)">Сегодня</button>
         <button class="period-btn" data-period="yesterday" onclick="selectPeriod(this)">Вчера</button>
         <button class="period-btn active" data-period="last_7_days" onclick="selectPeriod(this)">7 дней</button>
         <button class="period-btn" data-period="last_30_days" onclick="selectPeriod(this)">30 дней</button>
@@ -273,7 +274,8 @@
 
 <script>
 const PERIOD_LABELS = {
-  yesterday:    "Вчера · 01 апр 2026",
+  today:        "Сегодня",
+  yesterday:    "Вчера",
   last_7_days:  "Последние 7 дней",
   last_30_days: "Последние 30 дней",
   this_month:   "Текущий месяц",
@@ -420,7 +422,7 @@ function renderTable() {
     { key: "event_name", label: "Действие в приложении", align: "left" },
     { key: "unique_devices", label: "Водителей", align: "right" },
     { key: "total_events", label: "Всего раз", align: "right" },
-    { key: "avg", label: "Раз на чел.", align: "right" },
+    { key: "total_events", label: "Популярность", align: "right", type: "bar" },
   ];
   const rows = DATA.map(d => ({...d, avg: d.total_events / d.unique_devices}));
   rows.sort((a,b) => {
@@ -428,13 +430,19 @@ function renderTable() {
     return typeof av==="string" ? (sortAsc?av.localeCompare(bv):bv.localeCompare(av)) : (sortAsc?av-bv:bv-av);
   });
   const maxUD = Math.max(...rows.map(r=>r.unique_devices), 1);
+  const maxTE = Math.max(...rows.map(r=>r.total_events), 1);
   document.getElementById("data-table").innerHTML = `
-    <thead><tr>${cols.map(c=>`<th class="${sortCol===c.key?'sorted':''}" data-key="${c.key}" style="text-align:${c.align}">${c.label}${sortCol===c.key?` ${sortAsc?'↑':'↓'}`:''}</th>`).join('')}</tr></thead>
+    <thead><tr>
+      <th class="${sortCol==='event_name'?'sorted':''}" data-key="event_name">Действие в приложении${sortCol==='event_name'?` ${sortAsc?'↑':'↓'}`:''}</th>
+      <th class="${sortCol==='unique_devices'?'sorted':''}" data-key="unique_devices" style="text-align:right">Водителей${sortCol==='unique_devices'?` ${sortAsc?'↑':'↓'}`:''}</th>
+      <th class="${sortCol==='total_events'?'sorted':''}" data-key="total_events" style="text-align:right">Всего раз${sortCol==='total_events'?` ${sortAsc?'↑':'↓'}`:''}</th>
+      <th style="text-align:left;min-width:100px">Активность</th>
+    </tr></thead>
     <tbody>${rows.map(r=>`<tr>
       <td>${r.event_name}</td>
-      <td class="num"><div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;"><div class="mini-bar-wrap" style="width:56px;height:4px;background:var(--bg-secondary);border-radius:2px;overflow:hidden;"><div style="width:${Math.round(r.unique_devices/maxUD*100)}%;height:100%;background:#FF5000;border-radius:2px;"></div></div>${r.unique_devices}</div></td>
+      <td class="num"><div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;"><div class="mini-bar-wrap" style="width:44px;height:3px;background:var(--bg-secondary);border-radius:2px;overflow:hidden;"><div style="width:${Math.round(r.unique_devices/maxUD*100)}%;height:100%;background:#FF5000;border-radius:2px;"></div></div>${r.unique_devices}</div></td>
       <td class="num">${r.total_events}</td>
-      <td class="num"><span class="avg-pill">${r.avg.toFixed(1)}×</span></td>
+      <td><div style="width:${Math.round(r.total_events/maxTE*100)}%;max-width:120px;min-width:4px;height:6px;background:#FF5000;border-radius:3px;opacity:0.75;"></div></td>
     </tr>`).join('')}</tbody>`;
   document.querySelectorAll("th[data-key]").forEach(th => {
     th.addEventListener("click", () => {
