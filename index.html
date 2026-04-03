@@ -395,8 +395,9 @@ function closeDp() {
 
 function applyDp() {
   if (!DP.tFrom) return;
-  const lo = DP.tFrom < (DP.tTo||DP.tFrom) ? DP.tFrom : (DP.tTo||DP.tFrom);
-  const hi = DP.tFrom < (DP.tTo||DP.tFrom) ? (DP.tTo||DP.tFrom) : DP.tFrom;
+  const end = DP.tTo || DP.hover || DP.tFrom;
+  const lo = DP.tFrom < end ? DP.tFrom : end;
+  const hi = DP.tFrom < end ? end : DP.tFrom;
   DP.from = lo; DP.to = hi;
   document.getElementById('dp-label').textContent = dpLabelText();
   // clear active preset highlight
@@ -503,7 +504,7 @@ function dpClick(date) {
   if (DP.stage === 0) {
     DP.tFrom = date; DP.tTo = null; DP.hover = null; DP.stage = 1;
   } else {
-    DP.tTo = date; DP.stage = 0;
+    DP.tTo = date; DP.hover = null; DP.stage = 0;
   }
   renderDp(); updateDpRangeInfo();
 }
@@ -511,7 +512,8 @@ function dpHover(date) {
   if (DP.stage === 1) { DP.hover = date; renderDp(); updateDpRangeInfo(); }
 }
 function dpLeave() {
-  if (DP.stage === 1) { DP.hover = null; renderDp(); }
+  // Intentionally keep hover so the range preview stays visible
+  // when moving mouse toward the Apply button
 }
 
 // Close popup on outside click
