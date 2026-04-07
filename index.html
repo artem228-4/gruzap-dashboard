@@ -282,6 +282,7 @@
         <div id="donut-legend" style="width:100%;display:flex;flex-direction:column;gap:8px;"></div>
       </div>
     </div>
+    <!-- churn card hidden until real metric is ready
     <div class="card">
       <div class="card-title">Водители, уходящие из приложения</div>
       <div id="churn-bars"></div>
@@ -291,6 +292,7 @@
         <div class="health-label" id="health-label"></div>
       </div>
     </div>
+    -->
   </div>
 
   <div class="grid-extra">
@@ -547,7 +549,7 @@ function renderKPI() {
 
   const kpis = [
     { label:'Активных водителей',    val: maxU,            sub:'открывали приложение',            color:'var(--text-primary)' },
-    { label:'Уходят из приложения',  val: churn,           sub:'вышли или удалили акк.',           color:'#E24B4A' },
+    // { label:'Уходят из приложения',  val: churn,           sub:'вышли или удалили акк.',           color:'#E24B4A' },
     { label:'Новых регистраций',     val: reg,             sub:'зарегистрировались',               color:'#639922' },
     { label:'Дозвонились до работы', val: conv+'%',        sub:'смотрели заявку → нажали звонок', color:'#FF5000' },
     { label:'Установок',             val: INSTALLS_TOTAL||'—', sub:'новых установок за период',   color:'#5B7FD4' },
