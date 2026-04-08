@@ -108,7 +108,7 @@
     .kpi-sub { font-size: 11px; color: var(--text-tertiary); }
 
     /* MID GRID */
-    .grid-mid { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+    .grid-mid { display: grid; grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); gap: 10px; }
     .card { background: var(--bg-primary); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
     .card-title { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
 
@@ -614,13 +614,19 @@ function renderDonut() {
 }
 
 function renderChurn() {
+  // Churn card can be removed from DOM; skip safely if hidden/disabled.
+  const churnBarsEl = document.getElementById('churn-bars');
+  const healthScoreEl = document.getElementById('health-score');
+  const healthLabelEl = document.getElementById('health-label');
+  if (!churnBarsEl || !healthScoreEl || !healthLabelEl) return;
+
   const items = [
     { label:'Вышел из аккаунта',  d:find('Вышел из аккаунта') },
     { label:'Удалил транспорт',   d:find('Удалил ТС') },
     { label:'Хотел удалить акк.', d:find('Открыл ссылку на удаление аккаунта') },
   ];
   const maxV = Math.max(...items.map(c=>c.d.unique_devices), 1);
-  document.getElementById('churn-bars').innerHTML = items.map(c=>`
+  churnBarsEl.innerHTML = items.map(c=>`
     <div class="churn-row">
       <div class="churn-label">${c.label}</div>
       <div class="churn-wrap"><div class="churn-bar" style="width:${Math.round(c.d.unique_devices/maxV*100)}%;background:#E24B4A;"><span class="churn-num">${c.d.unique_devices}</span></div></div>
@@ -629,10 +635,9 @@ function renderChurn() {
   const totalChurn = items.reduce((s,c)=>s+c.d.unique_devices, 0);
   const active = find('Открыл заявку').unique_devices||1;
   const hp = Math.round((1-totalChurn/active)*100);
-  const scoreEl = document.getElementById('health-score');
-  scoreEl.textContent = hp+'%';
-  scoreEl.style.color = hp>=90?'#639922':hp>=75?'#BA7517':'#E24B4A';
-  document.getElementById('health-label').textContent = `из ${find('Открыл заявку').unique_devices} активных водителей`;
+  healthScoreEl.textContent = hp+'%';
+  healthScoreEl.style.color = hp>=90?'#639922':hp>=75?'#BA7517':'#E24B4A';
+  healthLabelEl.textContent = `из ${find('Открыл заявку').unique_devices} активных водителей`;
 }
 
 function renderTable() {
