@@ -1,87 +1,955 @@
 {
-  "name": "Грузап Дашборд",
+  "name": "ГРУЗАП ДАШБОРД",
   "nodes": [
     {
-      "parameters": {"rule": {"interval": [{"triggerAtHour": 10, "triggerAtMinute": 30}]}},
-      "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.3,
-      "position": [-64, 0], "id": "1047ab76-42ab-44ef-b24b-faf21f1b3e8f", "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {"httpMethod": "POST", "path": "gruzap-dashboard", "responseMode": "lastNode", "responseData": "allEntries", "options": {}},
-      "id": "f3a1b2c4-d5e6-4789-a0bc-de1234567890", "webhookId": "a7c3e591-22fd-4b8a-9d0e-bf5678901234",
-      "name": "Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 1, "position": [-64, 140]
-    },
-    {
-      "parameters": {"jsCode": "const payload = ($json && $json.body) ? $json.body : ($json || {});\nconst token = payload.yandex_oauth_token || $env.YANDEX_OAUTH_TOKEN || $env.YANDEX_TOKEN || 'y0__xCIj9GiBxjMqD8gnNLv6xYi53tNIuy00fSsAXVvz3ME1dx2Lg';\nconst clientLogin = payload.client_login || 'siberian.gruzoviki';\nconst counterId = payload.metrika_counter_id || '105289797';\nconst periodLabel = payload.period_label || 'yesterday';\nlet dateFrom = payload.date_from || null, dateTo = payload.date_to || null;\nif (!dateFrom || !dateTo) {\n  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());\n  const fmt = (d) => d.toISOString().slice(0, 10);\n  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);\n  switch (periodLabel) {\n    case 'today': dateFrom = fmt(today); dateTo = fmt(today); break;\n    case 'yesterday': dateFrom = fmt(yesterday); dateTo = fmt(yesterday); break;\n    case 'last_7_days': { const d = new Date(today); d.setDate(today.getDate() - 7); dateFrom = fmt(d); dateTo = fmt(yesterday); break; }\n    case 'last_30_days': { const d = new Date(today); d.setDate(today.getDate() - 30); dateFrom = fmt(d); dateTo = fmt(yesterday); break; }\n    case 'this_month': { const first = new Date(today.getFullYear(), today.getMonth(), 1); dateFrom = fmt(first); dateTo = fmt(today); break; }\n    default: dateFrom = fmt(yesterday); dateTo = fmt(yesterday);\n  }\n}\nreturn [{ json: { yandex_oauth_token: token, client_login: clientLogin, metrika_counter_id: counterId, period_label: periodLabel, date_from: dateFrom, date_to: dateTo } }];"},
-      "id": "dfbf3963-6969-409a-bdb0-bc88af413fe4", "name": "Set Inputs + Resolve Dates",
-      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [144, 0]
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1792,
+        208
+      ],
+      "id": "5aac841a-a8cc-41e5-a0f0-6a52d9bea888",
+      "name": "Schedule Trigger"
     },
     {
       "parameters": {
-        "url": "https://api.appmetrica.yandex.ru/stat/v1/data", "sendQuery": true,
-        "queryParameters": {"parameters": [
-          {"name": "id", "value": "4735402"},
-          {"name": "metrics", "value": "ym:ce2:devicesWithEvent,ym:ce2:allEvents"},
-          {"name": "dimensions", "value": "ym:ce2:eventLabel"},
-          {"name": "date1", "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"},
-          {"name": "date2", "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"},
-          {"name": "sort", "value": "-ym:ce2:allEvents"}, {"name": "limit", "value": "100"}, {"name": "accuracy", "value": "medium"}
-        ]},
+        "httpMethod": "POST",
+        "path": "gruzap-dashboard",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {}
+      },
+      "id": "416b6158-566d-4d66-a015-905e216b40d8",
+      "webhookId": "a7c3e591-22fd-4b8a-9d0e-bf5678901234",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1792,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = ($json && $json.body) ? $json.body : ($json || {});\nlet dateFrom = payload.date_from || null;\nlet dateTo = payload.date_to || null;\nif (!dateFrom || !dateTo) {\n  const now = new Date();\n  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());\n  const fmt = (d) => { const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+dd; };\n  const yesterday = new Date(today);\n  yesterday.setDate(today.getDate() - 1);\n  const periodLabel = payload.period_label || 'yesterday';\n  switch (periodLabel) {\n    case 'today': dateFrom = fmt(today); dateTo = fmt(today); break;\n    case 'yesterday': dateFrom = fmt(yesterday); dateTo = fmt(yesterday); break;\n    case 'last_7_days': { const d = new Date(today); d.setDate(today.getDate() - 7); dateFrom = fmt(d); dateTo = fmt(yesterday); break; }\n    case 'last_30_days': { const d = new Date(today); d.setDate(today.getDate() - 30); dateFrom = fmt(d); dateTo = fmt(yesterday); break; }\n    case 'this_month': { const first = new Date(today.getFullYear(), today.getMonth(), 1); dateFrom = fmt(first); dateTo = fmt(today); break; }\n    default: dateFrom = fmt(yesterday); dateTo = fmt(yesterday);\n  }\n}\nconst devCutoff = '2026-03-31';\nconst appIds = dateFrom < '2026-04-01' ? '6272311,4735402' : '6272311';\nconst useBothCheck = appIds.includes(',');\nconst inst2DateTo = useBothCheck ? (dateTo > devCutoff ? devCutoff : dateTo) : dateTo;\nconst yandexOauthToken = payload.yandex_oauth_token || $env.YANDEX_OAUTH_TOKEN || $env.YANDEX_TOKEN || 'y0__xCIj9GiBxjMqD8gnNLv6xYi53tNIuy00fSsAXVvz3ME1dx2Lg';\nconst clientLogin = payload.client_login || 'siberian.gruzoviki';\nconst metrikaCounterId = payload.metrika_counter_id || '105289797';\nreturn [{ json: {\n  date_from: dateFrom,\n  date_to: dateTo,\n  period_label: payload.period_label || 'custom',\n  app_ids: appIds,\n  inst2_date_to: inst2DateTo,\n  yandex_oauth_token: yandexOauthToken,\n  client_login: clientLogin,\n  metrika_counter_id: metrikaCounterId\n} }];"
+      },
+      "id": "4719118b-df0c-4f3c-8856-23b5b541912f",
+      "name": "Set Inputs + Resolve Dates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1584,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.appmetrica.yandex.ru/stat/v1/data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "={{ $json.app_ids }}"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:ce2:devicesWithEvent,ym:ce2:allEvents"
+            },
+            {
+              "name": "dimensions",
+              "value": "ym:ce2:eventLabel"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"
+            },
+            {
+              "name": "sort",
+              "value": "-ym:ce2:allEvents"
+            },
+            {
+              "name": "limit",
+              "value": "100"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
         "sendHeaders": true,
-        "headerParameters": {"parameters": [{"name": "Authorization", "value": "={{ 'OAuth ' + ($env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA') }}"}]},
-        "options": {"timeout": 30000}
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'OAuth ' + ($env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA') }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
       },
-      "id": "95b8da43-1187-40e0-bcba-8caa48b3e046", "name": "AppMetrica: Топ Действий1",
-      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [384, 0]
-    },
-    {
-      "parameters": {"jsCode": "const rawData = $input.first().json.data || [];\nconst formattedData = rawData.map(row => ({\n  event_name: row.dimensions[0].name || 'Неизвестное событие',\n  unique_devices: row.metrics[0] || 0,\n  total_events: row.metrics[1] || 0\n}));\nreturn formattedData.map(item => ({ json: item }));"},
-      "id": "8a2ca066-849a-42e7-8d79-f08b29647553", "name": "Форматирование для Дашборда1",
-      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [608, 0]
+      "id": "df9df543-af8d-465f-9c47-374e07373edc",
+      "name": "AppMetrica: Топ Действий1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1344,
+        208
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const events = $input.all().map(item => item.json);\nconst setInputs = $('Set Inputs + Resolve Dates').first().json;\nconst dateFrom = setInputs.date_from;\nconst dateTo = setInputs.date_to;\nconst token = $env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA';\nconst appId = '4735402';\nconst auth = { Authorization: 'OAuth ' + token };\n\nlet geo = [];\ntry {\n  const geoR = await fetch('https://api.appmetrica.yandex.ru/stat/v1/data?id=' + appId + '&metrics=ym:ce2:devicesWithEvent&dimensions=ym:ce2:regionCity&date1=' + dateFrom + '&date2=' + dateTo + '&sort=-ym:ce2:devicesWithEvent&limit=8&accuracy=medium', { headers: auth });\n  const geoD = await geoR.json();\n  geo = (geoD.data || []).map(row => ({ city: (row.dimensions[0] || {}).name || '', drivers: Math.round(row.metrics[0] || 0) })).filter(r => r.city && r.city !== 'Unknown');\n} catch(e) { geo = []; }\n\nlet hours = [];\ntry {\n  const hR = await fetch('https://api.appmetrica.yandex.ru/stat/v1/data/bytime?id=' + appId + '&metrics=ym:ce2:allEvents&group=Hour&date1=' + dateFrom + '&date2=' + dateTo + '&accuracy=medium', { headers: auth });\n  const hD = await hR.json();\n  if (Array.isArray(hD.time_intervals) && hD.data && hD.data[0]) {\n    const vals = hD.data[0].metrics[0];\n    hours = hD.time_intervals.map((t, i) => {\n      const ts = Array.isArray(t) ? t[0] : t;\n      const h = new Date(ts * 1000).getUTCHours();\n      return { hour: h, events: Math.round(Array.isArray(vals) ? (vals[i] || 0) : 0) };\n    });\n  }\n} catch(e) { hours = []; }\n\nreturn [{ json: { events, geo, hours } }];",
-        "mode": "runOnceForAllItems"
+        "jsCode": "const rawData = $input.first().json.data || [];\nconst formattedData = rawData.map(row => ({\n  event_name: row.dimensions[0].name || 'Неизвестное событие',\n  unique_devices: row.metrics[0] || 0,\n  total_events: row.metrics[1] || 0\n}));\nreturn [{ json: { events: formattedData } }];"
       },
-      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890", "name": "Объединить данные",
-      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [832, 0]
+      "id": "dd0cbeca-0f9d-40ac-853a-d75bb032e7bf",
+      "name": "Форматирование для Дашборда1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1120,
+        208
+      ]
     },
     {
-      "parameters": {"httpMethod": "POST", "path": "gruzap-analytics", "responseMode": "lastNode", "responseData": "firstEntryJson", "options": {}},
-      "id": "b1c2d3e4-f5a6-7890-bcde-f12345678901", "webhookId": "c9d8e7f6-5432-4abc-def0-123456789abc",
-      "name": "Webhook Analytics", "type": "n8n-nodes-base.webhook", "typeVersion": 1, "position": [-64, 320]
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gruzap-analytics",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "86d0aba1-88c3-489e-80af-ae6a5beb28ad",
+      "webhookId": "c9d8e7f6-5432-4abc-def0-123456789abc",
+      "name": "Webhook Analytics",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1792,
+        528
+      ]
     },
     {
-      "parameters": {"jsCode": "const body = ($json && $json.body) ? $json.body : $json;\nconst data = body.data || [];\nconst period = body.period_label || 'yesterday';\nconst periodNames = { yesterday: 'вчера', last_7_days: 'последние 7 дней', last_30_days: 'последние 30 дней', this_month: 'текущий месяц' };\nconst periodName = periodNames[period] || period;\nconst find = (name) => data.find(d => d.event_name === name) || { unique_devices: 0, total_events: 0 };\nconst maxU = Math.max(...data.map(d => d.unique_devices), 1);\nconst zayvki = find('Открыл заявку').unique_devices;\nconst tel = find('Нажал на телефон в заявке').unique_devices;\nconst conv = zayvki > 0 ? Math.round(tel / zayvki * 100) : 0;\nconst reg = find('Зарегистрировался').unique_devices;\nconst churn = find('Вышел из аккаунта').unique_devices + find('Открыл ссылку на удаление аккаунта').unique_devices + find('Удалил ТС').unique_devices;\nconst inter = find('Использовал фильтр межгород').total_events;\nconst city = find('Использовал фильтр по городу').total_events;\nconst total = inter + city;\nconst interPct = total > 0 ? Math.round(inter / total * 100) : 0;\nconst rows = data.map(d => '  - ' + d.event_name + ': ' + d.unique_devices + ' вод., ' + d.total_events + ' раз').join('\\n');\nconst prompt = 'Ты аналитик приложения ГРУЗАП — маркетплейс грузовых перевозок. Проанализируй данные за период: ' + periodName + '.\\n\\nКлючевые метрики:\\n- Активных водителей: ' + maxU + '\\n- Новых регистраций: ' + reg + '\\n- Просматривали заявки: ' + zayvki + ' водителей\\n- Позвонили по заявке: ' + tel + ' водителей (конверсия ' + conv + '%)\\n- Уходят из приложения: ' + churn + ' водителей\\n- Маршруты: ' + interPct + '% ищут межгород, ' + (100 - interPct) + '% городские перевозки\\n\\nВсе действия:\\n' + rows + '\\n\\nНапиши короткий понятный отчёт для руководителя. Без технических терминов. Укажи что хорошо, что вызывает беспокойство и 1-2 конкретных действия. Максимум 150 слов.';\nreturn [{ json: { prompt: prompt } }];"},
-      "id": "e2f3a4b5-c6d7-8901-efab-c23456789012", "name": "Подготовить промпт",
-      "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [200, 320]
+      "parameters": {
+        "jsCode": "const body = ($json && $json.body) ? $json.body : ($json || {});\nconst tab = body.tab || 'appmetrica';\nconst dateFrom = body.date_from || '';\nconst dateTo = body.date_to || '';\nconst payload = body.data || body;\n\nfunction formatRuDate(iso) {\n  if (!iso || typeof iso !== 'string') return iso || '';\n  const parts = iso.split('-');\n  if (parts.length !== 3) return iso;\n  const date = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])));\n  const months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];\n  return String(date.getUTCDate()) + ' ' + months[date.getUTCMonth()];\n}\n\nconst periodName = (dateFrom && dateTo)\n  ? (dateFrom === dateTo ? formatRuDate(dateFrom) : formatRuDate(dateFrom) + ' - ' + formatRuDate(dateTo))\n  : 'выбранный период';\n\nfunction buildAppPrompt(data) {\n  const events = Array.isArray(data.events) ? data.events : [];\n  const find = (name) => events.find((item) => item.event_name === name) || { unique_devices: 0, total_events: 0 };\n  const active = events.length ? Math.max(...events.map((item) => Number(item.unique_devices) || 0), 0) : 0;\n  const openOrder = Number(find('Открыл заявку').unique_devices) || 0;\n  const phoneTap = Number(find('Нажал на телефон в заявке').unique_devices) || 0;\n  const registrations = Number(find('Зарегистрировался').unique_devices) || 0;\n  const conversion = openOrder > 0 ? Math.round((phoneTap / openOrder) * 100) : 0;\n  const lines = events.slice(0, 12).map((item) => '- ' + item.event_name + ': ' + (item.unique_devices || 0) + ' вод., ' + (item.total_events || 0) + ' раз').join('\\n');\n  const title = 'Отчёт по AppMetrica за период ' + periodName;\n  return [\n    'Ты аналитик приложения ГРУЗАП.',\n    'Первая строка ответа должна быть ровно такой: ' + title,\n    'Данные:',\n    '- Активных водителей: ' + active,\n    '- Регистраций: ' + registrations,\n    '- Просмотров заявок: ' + openOrder,\n    '- Нажатий на телефон: ' + phoneTap + ' (конверсия ' + conversion + '%)',\n    lines || '- Нет событий',\n    'Напиши короткий отчёт для руководителя в 3 блоках: что хорошо, что беспокоит, что проверить дальше.',\n    'Без технарского жаргона, максимум 150 слов.'\n  ].join('\\n');\n}\n\nfunction buildMetrikaPrompt(data) {\n  const summary = data.summary || {};\n  const sources = Array.isArray(data.sources) ? data.sources.slice(0, 6) : [];\n  const botPages = Array.isArray(data.bot_pages) ? data.bot_pages.slice(0, 6) : [];\n  const title = 'Отчёт по Яндекс Метрике за период ' + periodName;\n  return [\n    'Ты аналитик сайта ГРУЗАП.',\n    'Первая строка ответа должна быть ровно такой: ' + title,\n    'Данные:',\n    '- Сессии: ' + (summary.sessions || 0),\n    '- Пользователи: ' + (summary.users || 0),\n    '- Bounce rate: ' + (summary.bounce_rate || 0),\n    '- Средняя сессия (мин): ' + (summary.avg_session_min || 0),\n    '- Telegram/startURL сессии: ' + (summary.bot_sessions || 0) + ' (' + (summary.bot_activation_percent || 0) + '%)',\n    'Источники:',\n    sources.map((item) => '- ' + item.name + ': ' + (item.visits || 0) + ' визитов').join('\\n') || '- Нет данных',\n    'Telegram страницы:',\n    botPages.map((item) => '- ' + item.name + ': ' + (item.visits || 0) + ' визитов').join('\\n') || '- Нет данных',\n    'Напиши короткий отчёт для руководителя: что хорошо, что беспокоит, какие 1-2 сигнала надо проверить дальше.',\n    'Максимум 150 слов.'\n  ].join('\\n');\n}\n\nfunction buildDirectPrompt(data) {\n  const summary = data.summary || {};\n  const daily = Array.isArray(data.daily) ? data.daily.slice(0, 7) : [];\n  const title = 'Отчёт по Яндекс Direct за период ' + periodName;\n  return [\n    'Ты маркетинговый аналитик ГРУЗАП.',\n    'Первая строка ответа должна быть ровно такой: ' + title,\n    'Данные:',\n    '- Расход: ' + (summary.spend || 0),\n    '- Показы: ' + (summary.impressions || 0),\n    '- Клики: ' + (summary.clicks || 0),\n    '- CTR: ' + (summary.ctr || 0),\n    '- Средний CPC: ' + (summary.avg_cpc || 0),\n    '- Конверсии: ' + (summary.conversions || 0),\n    '- CPA: ' + (summary.cpa || 0),\n    'Дневная динамика:',\n    daily.map((item) => '- ' + item.date + ': расход ' + item.spend + ', клики ' + item.clicks + ', конверсии ' + item.conversions).join('\\n') || '- Нет данных',\n    'Напиши короткий отчёт для руководителя: что хорошо, что беспокоит и где рекламная эффективность проседает.',\n    'Максимум 150 слов.'\n  ].join('\\n');\n}\n\nlet prompt = '';\nif (tab === 'metrika') prompt = buildMetrikaPrompt(payload);\nelse if (tab === 'direct') prompt = buildDirectPrompt(payload);\nelse prompt = buildAppPrompt(Array.isArray(body.data) ? { events: body.data } : payload);\n\nreturn [{ json: { prompt, tab, period_name: periodName } }];"
+      },
+      "id": "755b01ae-0f5d-4e2f-b747-cba1e88af190",
+      "name": "Подготовить промпт",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1520,
+        528
+      ]
     },
     {
-      "parameters": {"prompt": "={{ $json.prompt }}", "hasOutputParser": false, "options": {}},
-      "id": "d4e5f6a7-b8c9-0123-defa-b34567890123", "name": "Анализ данных",
-      "type": "@n8n/n8n-nodes-langchain.chainLlm", "typeVersion": 1.2, "position": [450, 320]
+      "parameters": {
+        "prompt": "={{ $json.prompt }}"
+      },
+      "id": "505e0ad9-3c23-4130-8f08-8aa9c52954f8",
+      "name": "Анализ данных",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.2,
+      "position": [
+        -1264,
+        528
+      ]
     },
     {
-      "parameters": {},
-      "id": "2535e432-6de2-4b18-a6ad-277fd24550b8", "name": "Message a model",
-      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic", "typeVersion": 1.7,
-      "position": [450, 480],
-      "credentials": {"anthropicApi": {"id": "TANiFJGJNiy8a25a", "name": "Аналитик и СММ - Клод"}}
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-sonnet-4-5-20250929",
+          "cachedResultName": "Claude Sonnet 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -1264,
+        720
+      ],
+      "id": "7113de09-65f2-45b4-833b-83271370921a",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "TANiFJGJNiy8a25a",
+          "name": "Аналитик и СММ - Клод"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.appmetrica.yandex.ru/stat/v1/data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.app_ids }}"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:ce2:devicesWithEvent"
+            },
+            {
+              "name": "dimensions",
+              "value": "ym:ce2:regionCity"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"
+            },
+            {
+              "name": "sort",
+              "value": "-ym:ce2:devicesWithEvent"
+            },
+            {
+              "name": "limit",
+              "value": "8"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'OAuth ' + ($env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA') }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "10e6900a-e0f0-4b83-a52a-c40dae61ce3d",
+      "name": "AppMetrica: География",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -896,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const events = $('Форматирование для Дашборда1').first().json.events || [];\nconst geoRaw = $('AppMetrica: География').first().json.data || [];\nconst geo = geoRaw.map((row) => ({\n  city: (row.dimensions?.[0] || {}).name || '',\n  drivers: Math.round(row.metrics?.[0] || 0),\n})).filter((row) => row.city && row.city !== 'Unknown');\n\nfunction parseInstallSources(raw) {\n  const map = {};\n  if (!raw || !Array.isArray(raw.data)) return map;\n  raw.data.forEach((row) => {\n    const source = row.dimensions?.[0]?.name || 'Unknown';\n    const metric = row.metrics?.[0] || 0;\n    const installs = Array.isArray(metric) ? metric.reduce((sum, value) => sum + (value || 0), 0) : metric;\n    map[source] = (map[source] || 0) + Math.round(installs || 0);\n  });\n  return map;\n}\n\nfunction getInstallTotal(raw) {\n  if (raw?.totals?.[0] != null) return Math.round(raw.totals[0]);\n  return Object.values(parseInstallSources(raw)).reduce((sum, value) => sum + value, 0);\n}\n\nconst appIds = $('Set Inputs + Resolve Dates').first().json.app_ids || '6272311';\nconst useBothApps = String(appIds).includes(',');\nconst installs1 = $('AppMetrica: Inst1').first().json;\nconst installs2 = $('AppMetrica: Inst2').first().json;\nconst mergedSources = { ...parseInstallSources(installs1) };\nlet installsTotal = getInstallTotal(installs1);\nif (useBothApps) {\n  const secondMap = parseInstallSources(installs2);\n  Object.entries(secondMap).forEach(([key, value]) => {\n    mergedSources[key] = (mergedSources[key] || 0) + value;\n  });\n  installsTotal += getInstallTotal(installs2);\n}\n\nconst appSources = Object.entries(mergedSources)\n  .map(([name, installs]) => ({ name, installs }))\n  .sort((a, b) => b.installs - a.installs)\n  .slice(0, 8);\n\nfunction metricAt(raw, index) {\n  if (!raw) return 0;\n  if (Array.isArray(raw.totals) && raw.totals[index] != null) return Number(raw.totals[index]) || 0;\n  if (Array.isArray(raw.data) && raw.data[0] && Array.isArray(raw.data[0].metrics)) return Number(raw.data[0].metrics[index]) || 0;\n  return 0;\n}\n\nfunction rowsToNamedMetrics(raw) {\n  return Array.isArray(raw?.data)\n    ? raw.data.map((row) => ({\n        name: row.dimensions?.[0]?.name || row.dimensions?.[0]?.id || 'Unknown',\n        visits: Number(row.metrics?.[0]) || 0,\n        users: Number(row.metrics?.[1]) || 0,\n        bounce_rate: Number(row.metrics?.[2]) || 0,\n      }))\n    : [];\n}\n\nconst metrikaSummaryRaw = $('Metrika Snapshot').first().json || {};\nconst metrikaSeriesRaw = $('Metrika ByTime Snapshot').first().json || {};\nconst metrikaSourcesRaw = $('Metrika Sources Snapshot').first().json || {};\nconst botTrafficRaw = $('Bot Traffic Snapshot').first().json || {};\n\nconst sessions = metricAt(metrikaSummaryRaw, 0);\nconst users = metricAt(metrikaSummaryRaw, 1);\nconst bounceRate = metricAt(metrikaSummaryRaw, 2);\nconst avgVisitSeconds = metricAt(metrikaSummaryRaw, 3);\nconst botRows = Array.isArray(botTrafficRaw.data)\n  ? botTrafficRaw.data.map((row) => ({\n      name: row.dimensions?.[0]?.name || 'Unknown page',\n      visits: Number(row.metrics?.[0]) || 0,\n      users: Number(row.metrics?.[1]) || 0,\n    }))\n  : [];\nconst botSessions = botRows.reduce((sum, row) => sum + row.visits, 0);\n\nlet series = [];\nif (Array.isArray(metrikaSeriesRaw.time_intervals?.[0]) && Array.isArray(metrikaSeriesRaw.data?.[0]?.metrics?.[0])) {\n  const labels = metrikaSeriesRaw.time_intervals[0];\n  const visitsSeries = metrikaSeriesRaw.data[0].metrics[0] || [];\n  const usersSeries = metrikaSeriesRaw.data[0].metrics[1] || [];\n  series = labels.map((label, index) => ({\n    date: label,\n    label: label.slice(5),\n    visits: Number(visitsSeries[index]) || 0,\n    users: Number(usersSeries[index]) || 0,\n  }));\n}\n\nconst metrikaWarnings = [];\nif (bounceRate >= 65) metrikaWarnings.push('Высокий bounce rate: стоит проверить релевантность рекламных посадок.');\nif (sessions > 0 && (botSessions / sessions) >= 0.2) metrikaWarnings.push('Высокая доля Telegram/startURL-переходов: проверьте качество и намерение трафика.');\n\nconst sources = rowsToNamedMetrics(metrikaSourcesRaw)\n  .sort((a, b) => b.visits - a.visits)\n  .slice(0, 8)\n  .map(({ name, visits, users }) => ({ name, visits, users }));\n\nfunction extractText(raw) {\n  if (typeof raw === 'string') return raw;\n  if (typeof raw?.body === 'string') return raw.body;\n  if (typeof raw?.data === 'string') return raw.data;\n  if (typeof raw?.responseBody === 'string') return raw.responseBody;\n  return '';\n}\n\nfunction parseTsv(text) {\n  const lines = String(text || '').split(/\\r?\\n/).map((line) => line.trim()).filter(Boolean);\n  if (!lines.length) return [];\n  const headerIndex = lines.findIndex((line) => line.includes('\\t') && /Date|Impressions|Clicks/.test(line));\n  if (headerIndex === -1 || headerIndex === lines.length - 1) return [];\n  const headers = lines[headerIndex].split('\\t');\n  return lines.slice(headerIndex + 1).map((line) => {\n    const values = line.split('\\t');\n    const row = {};\n    headers.forEach((header, index) => { row[header] = values[index]; });\n    return row;\n  });\n}\n\nconst directRows = parseTsv(extractText($('Direct Snapshot').first().json)).map((row) => {\n  const spend = Number(row.Cost || row.CostCur || row.CostWithVAT || 0) || 0;\n  const impressions = Number(row.Impressions || 0) || 0;\n  const clicks = Number(row.Clicks || 0) || 0;\n  const ctr = Number(row.Ctr || 0) || 0;\n  const avgCpc = Number(row.AvgCpc || row.AvgClickPrice || 0) || 0;\n  const conversions = Number(row.Conversions || row.GoalReaches || 0) || 0;\n  const cpa = conversions > 0 ? spend / conversions : 0;\n  return {\n    date: row.Date || '',\n    spend,\n    impressions,\n    clicks,\n    ctr,\n    avg_cpc: avgCpc,\n    conversions,\n    cpa,\n  };\n});\n\nconst directSummary = directRows.reduce((acc, row) => {\n  acc.spend += row.spend;\n  acc.impressions += row.impressions;\n  acc.clicks += row.clicks;\n  acc.conversions += row.conversions;\n  return acc;\n}, { spend: 0, impressions: 0, clicks: 0, conversions: 0 });\ndirectSummary.ctr = directSummary.impressions > 0 ? (directSummary.clicks / directSummary.impressions) * 100 : 0;\ndirectSummary.avg_cpc = directSummary.clicks > 0 ? directSummary.spend / directSummary.clicks : 0;\ndirectSummary.cr = directSummary.clicks > 0 ? (directSummary.conversions / directSummary.clicks) * 100 : 0;\ndirectSummary.cpa = directSummary.conversions > 0 ? directSummary.spend / directSummary.conversions : 0;\n\nconst directWarnings = [];\nif (directSummary.ctr > 0 && directSummary.ctr < 1) directWarnings.push('CTR ниже 1%: объявлениям может не хватать кликабельности.');\nif (directSummary.conversions === 0) directWarnings.push('Конверсии не найдены: проверьте цели Метрики и связку с Direct.');\n\nreturn [{\n  json: {\n    appmetrica: {\n      events,\n      geo,\n      hours: [],\n      installs_total: installsTotal,\n      sources: appSources,\n    },\n    metrika: {\n      summary: {\n        sessions,\n        users,\n        bounce_rate: bounceRate,\n        avg_session_min: avgVisitSeconds / 60,\n        bot_sessions: botSessions,\n        bot_activation_percent: sessions > 0 ? (botSessions / sessions) * 100 : 0,\n      },\n      series,\n      sources,\n      bot_pages: botRows.slice(0, 8),\n      warnings: metrikaWarnings,\n    },\n    direct: {\n      summary: directSummary,\n      daily: directRows,\n      warnings: directWarnings,\n    },\n  },\n}];"
+      },
+      "id": "cd01b8c3-af39-4e9f-9520-2a5d50bee6fe",
+      "name": "Объединить данные",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        432
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.appmetrica.yandex.ru/stat/v1/data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "6272311"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:i:devices"
+            },
+            {
+              "name": "dimensions",
+              "value": "ym:i:campaignName"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"
+            },
+            {
+              "name": "sort",
+              "value": "-ym:i:devices"
+            },
+            {
+              "name": "limit",
+              "value": "20"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'OAuth ' + ($env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA') }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "2edac235-8cc3-49ca-8d22-2c8e9ff0608a",
+      "name": "AppMetrica: Inst1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -896,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.appmetrica.yandex.ru/stat/v1/data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "4735402"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:i:devices"
+            },
+            {
+              "name": "dimensions",
+              "value": "ym:i:campaignName"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.inst2_date_to }}"
+            },
+            {
+              "name": "sort",
+              "value": "-ym:i:devices"
+            },
+            {
+              "name": "limit",
+              "value": "20"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'OAuth ' + ($env.APPMETRICA_TOKEN || 'y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA') }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "c2f3c5a7-b135-45ce-bf5a-f464fe6633ae",
+      "name": "AppMetrica: Inst2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -896,
+        -112
+      ]
+    },
+    {
+      "name": "Metrika Snapshot",
+      "id": "64807ef4-5aae-49d2-a5b3-986e4036f0a1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1344,
+        432
+      ],
+      "parameters": {
+        "url": "https://api-metrika.yandex.net/stat/v1/data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.metrika_counter_id }}"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:s:visits,ym:s:users,ym:s:bounceRate,ym:s:avgVisitDurationSeconds"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "name": "Metrika ByTime Snapshot",
+      "id": "904f813e-45c3-45d6-b0cb-d5f501878f49",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1120,
+        432
+      ],
+      "parameters": {
+        "url": "https://api-metrika.yandex.net/stat/v1/data/bytime",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.metrika_counter_id }}"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:s:visits,ym:s:users"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"
+            },
+            {
+              "name": "group",
+              "value": "day"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "name": "Metrika Sources Snapshot",
+      "id": "6037dbee-ddc5-4fe9-a8cf-19372c6bc1e1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -896,
+        432
+      ],
+      "parameters": {
+        "url": "https://api-metrika.yandex.net/stat/v1/data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.metrika_counter_id }}"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:s:visits,ym:s:users,ym:s:bounceRate"
+            },
+            {
+              "name": "dimensions",
+              "value": "ym:s:lastTrafficSource"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"
+            },
+            {
+              "name": "sort",
+              "value": "-ym:s:visits"
+            },
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "name": "Bot Traffic Snapshot",
+      "id": "338fbf74-219b-4ec2-a0f1-a25f1637cb58",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -672,
+        432
+      ],
+      "parameters": {
+        "url": "https://api-metrika.yandex.net/stat/v1/data",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ids",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.metrika_counter_id }}"
+            },
+            {
+              "name": "metrics",
+              "value": "ym:s:visits,ym:s:users"
+            },
+            {
+              "name": "dimensions",
+              "value": "ym:s:startURL"
+            },
+            {
+              "name": "date1",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_from }}"
+            },
+            {
+              "name": "date2",
+              "value": "={{ $(\"Set Inputs + Resolve Dates\").first().json.date_to }}"
+            },
+            {
+              "name": "filters",
+              "value": "ym:s:startURL=~'telegram' OR ym:s:startURL=~'t.me'"
+            },
+            {
+              "name": "sort",
+              "value": "-ym:s:visits"
+            },
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "accuracy",
+              "value": "full"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      }
+    },
+    {
+      "name": "Build Direct Request Body",
+      "id": "54fc0f86-a34d-4f13-ae89-839eff95d10f",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1344,
+        704
+      ],
+      "parameters": {
+        "jsCode": "const d = $('Set Inputs + Resolve Dates').first().json;\nconst periodMap = {\n  yesterday: 'YESTERDAY',\n  today: 'TODAY',\n  last_7_days: 'LAST_7_DAYS',\n  last_30_days: 'LAST_30_DAYS',\n  this_month: 'THIS_MONTH'\n};\nconst nativePeriod = periodMap[d.period_label];\nconst fieldNames = ['Date','Clicks','Impressions','Ctr','AvgCpc','Cost','Conversions','CostPerConversion'];\nlet params;\nif (nativePeriod) {\n  params = {\n    SelectionCriteria: {},\n    FieldNames: fieldNames,\n    ReportName: 'gruzap_dashboard_' + nativePeriod.toLowerCase(),\n    ReportType: 'ACCOUNT_PERFORMANCE_REPORT',\n    DateRangeType: nativePeriod,\n    Format: 'TSV',\n    IncludeVAT: 'YES',\n    IncludeDiscount: 'YES'\n  };\n} else {\n  params = {\n    SelectionCriteria: { DateFrom: d.date_from, DateTo: d.date_to },\n    FieldNames: fieldNames,\n    ReportName: 'gruzap_dashboard_custom',\n    ReportType: 'ACCOUNT_PERFORMANCE_REPORT',\n    DateRangeType: 'CUSTOM_DATE',\n    Format: 'TSV',\n    IncludeVAT: 'YES',\n    IncludeDiscount: 'YES'\n  };\n}\nreturn [{\n  json: {\n    ...d,\n    direct_request_body: JSON.stringify({ params })\n  }\n}];"
+      }
+    },
+    {
+      "name": "Direct Snapshot",
+      "id": "4136ee16-0204-4e1c-a2ef-9e7126dd29ec",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1120,
+        704
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.direct.yandex.com/json/v5/reports",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ \"Bearer \" + $json.yandex_oauth_token }}"
+            },
+            {
+              "name": "Client-Login",
+              "value": "={{ $json.client_login }}"
+            },
+            {
+              "name": "Accept-Language",
+              "value": "ru"
+            },
+            {
+              "name": "processingMode",
+              "value": "auto"
+            },
+            {
+              "name": "skipReportHeader",
+              "value": "true"
+            },
+            {
+              "name": "skipColumnHeader",
+              "value": "false"
+            },
+            {
+              "name": "skipReportSummary",
+              "value": "true"
+            },
+            {
+              "name": "returnMoneyInMicros",
+              "value": "false"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.direct_request_body }}",
+        "responseFormat": "string",
+        "options": {
+          "timeout": 60000
+        }
+      }
+    },
+    {
+      "name": "Wait App + Metrika",
+      "id": "a4ce0fb3-47fa-4740-a11f-706b32f5f273",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -432,
+        320
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "name": "Wait All Dashboard Sources",
+      "id": "43b6d9fa-67ed-4659-931a-7071e71f584c",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -176,
+        432
+      ],
+      "parameters": {
+        "mode": "append"
+      }
     }
   ],
   "connections": {
-    "Schedule Trigger":      {"main": [[{"node": "Set Inputs + Resolve Dates", "type": "main", "index": 0}]]},
-    "Webhook":               {"main": [[{"node": "Set Inputs + Resolve Dates", "type": "main", "index": 0}]]},
-    "Set Inputs + Resolve Dates": {"main": [[{"node": "AppMetrica: Топ Действий1", "type": "main", "index": 0}]]},
-    "AppMetrica: Топ Действий1":  {"main": [[{"node": "Форматирование для Дашборда1", "type": "main", "index": 0}]]},
-    "Форматирование для Дашборда1": {"main": [[{"node": "Объединить данные", "type": "main", "index": 0}]]},
-    "Объединить данные": {"main": [[]]},
-    "Webhook Analytics":     {"main": [[{"node": "Подготовить промпт", "type": "main", "index": 0}]]},
-    "Подготовить промпт":    {"main": [[{"node": "Анализ данных", "type": "main", "index": 0}]]},
-    "Message a model":       {"ai_languageModel": [[{"node": "Анализ данных", "type": "ai_languageModel", "index": 0}]]},
-    "Анализ данных":         {"main": [[]]}
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Inputs + Resolve Dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Set Inputs + Resolve Dates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Inputs + Resolve Dates": {
+      "main": [
+        [
+          {
+            "node": "AppMetrica: Топ Действий1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Metrika Snapshot",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build Direct Request Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppMetrica: Топ Действий1": {
+      "main": [
+        [
+          {
+            "node": "Форматирование для Дашборда1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Форматирование для Дашборда1": {
+      "main": [
+        [
+          {
+            "node": "AppMetrica: География",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Analytics": {
+      "main": [
+        [
+          {
+            "node": "Подготовить промпт",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Подготовить промпт": {
+      "main": [
+        [
+          {
+            "node": "Анализ данных",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Анализ данных",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppMetrica: География": {
+      "main": [
+        [
+          {
+            "node": "AppMetrica: Inst1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppMetrica: Inst1": {
+      "main": [
+        [
+          {
+            "node": "AppMetrica: Inst2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppMetrica: Inst2": {
+      "main": [
+        [
+          {
+            "node": "Wait App + Metrika",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Metrika Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Metrika ByTime Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Metrika ByTime Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Metrika Sources Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Metrika Sources Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Bot Traffic Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bot Traffic Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Wait App + Metrika",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Build Direct Request Body": {
+      "main": [
+        [
+          {
+            "node": "Direct Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Direct Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Wait All Dashboard Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Wait App + Metrika": {
+      "main": [
+        [
+          {
+            "node": "Wait All Dashboard Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait All Dashboard Sources": {
+      "main": [
+        [
+          {
+            "node": "Объединить данные",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": {"executionOrder": "v1", "availableInMCP": true},
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
   "staticData": null
 }
