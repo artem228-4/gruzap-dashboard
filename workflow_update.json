@@ -10,10 +10,12 @@
                   {
                       "parameters":  {
                                          "rule":  {
-                                                      "interval":  {
-                                                                       "triggerAtHour":  10,
-                                                                       "triggerAtMinute":  30
-                                                                   }
+                                                      "interval":  [
+                                                                       {
+                                                                           "triggerAtHour":  10,
+                                                                           "triggerAtMinute":  30
+                                                                       }
+                                                                   ]
                                                   }
                                      },
                       "type":  "n8n-nodes-base.scheduleTrigger",
@@ -100,10 +102,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -245,10 +249,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -318,10 +324,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -378,10 +386,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \u0027OAuth \u0027 + ($env.APPMETRICA_TOKEN || \u0027y0__xCIj9GiBxi1vz8gk8e18BYV3hcGH9BGMLJrW38Yqfst56Q4fA\u0027) }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -434,10 +444,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -486,10 +498,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -546,10 +560,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -610,10 +626,12 @@
                                                              },
                                          "sendHeaders":  true,
                                          "headerParameters":  {
-                                                                  "parameters":  {
-                                                                                     "name":  "Authorization",
-                                                                                     "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
-                                                                                 }
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "={{ \"OAuth \" + $(\"Set Inputs + Resolve Dates\").first().json.yandex_oauth_token }}"
+                                                                                     }
+                                                                                 ]
                                                               },
                                          "options":  {
                                                          "timeout":  30000
@@ -721,149 +739,223 @@
               ],
     "connections":  {
                         "Schedule Trigger":  {
-                                                 "main":  {
-                                                              "node":  "Set Inputs + Resolve Dates",
-                                                              "type":  "main",
-                                                              "index":  0
-                                                          }
-                                             },
-                        "Webhook":  {
-                                        "main":  {
-                                                     "node":  "Set Inputs + Resolve Dates",
-                                                     "type":  "main",
-                                                     "index":  0
-                                                 }
-                                    },
-                        "Set Inputs + Resolve Dates":  {
-                                                           "main":  [
-                                                                        {
-                                                                            "node":  "AppMetrica: Топ Действий1",
-                                                                            "type":  "main",
-                                                                            "index":  0
-                                                                        },
-                                                                        {
-                                                                            "node":  "Metrika Snapshot",
-                                                                            "type":  "main",
-                                                                            "index":  0
-                                                                        },
-                                                                        {
-                                                                            "node":  "Build Direct Request Body",
-                                                                            "type":  "main",
-                                                                            "index":  0
-                                                                        }
-                                                                    ]
-                                                       },
-                        "AppMetrica: Р СћР С•Р С— Р вЂќР ВµР в„–РЎРѓРЎвЂљР Р†Р С‘Р в„–1":  {
-                                                                                               "main":  {
-                                                                                                            "node":  "Форматирование для Дашборда1",
-                                                                                                            "type":  "main",
-                                                                                                            "index":  0
-                                                                                                        }
-                                                                                           },
-                        "Р В¤Р С•РЎР‚Р СР В°РЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Т‘Р В»РЎРЏ Р вЂќР В°РЎв‚¬Р В±Р С•РЎР‚Р Т‘Р В°1":  {
-                                                                                                                                           "main":  {
-                                                                                                                                                        "node":  "AppMetrica: География",
-                                                                                                                                                        "type":  "main",
-                                                                                                                                                        "index":  0
-                                                                                                                                                    }
-                                                                                                                                       },
-                        "Webhook Analytics":  {
-                                                  "main":  {
-                                                               "node":  "Подготовить промпт",
-                                                               "type":  "main",
-                                                               "index":  0
-                                                           }
-                                              },
-                        "Р СџР С•Р Т‘Р С–Р С•РЎвЂљР С•Р Р†Р С‘РЎвЂљРЎРЉ Р С—РЎР‚Р С•Р СР С—РЎвЂљ":  {
-                                                                                                         "main":  {
-                                                                                                                      "node":  "Анализ данных",
-                                                                                                                      "type":  "main",
-                                                                                                                      "index":  0
-                                                                                                                  }
-                                                                                                     },
-                        "Anthropic Chat Model":  {
-                                                     "ai_languageModel":  {
-                                                                              "node":  "Анализ данных",
-                                                                              "type":  "ai_languageModel",
-                                                                              "index":  0
-                                                                          }
-                                                 },
-                        "AppMetrica: Р вЂњР ВµР С•Р С–РЎР‚Р В°РЎвЂћР С‘РЎРЏ":  {
-                                                                                   "main":  {
-                                                                                                "node":  "AppMetrica: Inst1",
-                                                                                                "type":  "main",
-                                                                                                "index":  0
-                                                                                            }
-                                                                               },
-                        "AppMetrica: Inst1":  {
-                                                  "main":  {
-                                                               "node":  "AppMetrica: Inst2",
-                                                               "type":  "main",
-                                                               "index":  0
-                                                           }
-                                              },
-                        "AppMetrica: Inst2":  {
-                                                  "main":  {
-                                                               "node":  "Wait App + Metrika",
-                                                               "type":  "main",
-                                                               "index":  0
-                                                           }
-                                              },
-                        "Metrika Snapshot":  {
-                                                 "main":  {
-                                                              "node":  "Metrika ByTime Snapshot",
-                                                              "type":  "main",
-                                                              "index":  0
-                                                          }
-                                             },
-                        "Metrika ByTime Snapshot":  {
-                                                        "main":  {
-                                                                     "node":  "Metrika Sources Snapshot",
-                                                                     "type":  "main",
-                                                                     "index":  0
-                                                                 }
-                                                    },
-                        "Metrika Sources Snapshot":  {
-                                                         "main":  {
-                                                                      "node":  "Bot Traffic Snapshot",
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Set Inputs + Resolve Dates",
                                                                       "type":  "main",
                                                                       "index":  0
                                                                   }
-                                                     },
-                        "Bot Traffic Snapshot":  {
-                                                     "main":  {
-                                                                  "node":  "Wait App + Metrika",
-                                                                  "type":  "main",
-                                                                  "index":  1
-                                                              }
-                                                 },
-                        "Build Direct Request Body":  {
-                                                          "main":  {
-                                                                       "node":  "Direct Snapshot",
+                                                              ]
+                                                          ]
+                                             },
+                        "Webhook":  {
+                                        "main":  [
+                                                     [
+                                                         {
+                                                             "node":  "Set Inputs + Resolve Dates",
+                                                             "type":  "main",
+                                                             "index":  0
+                                                         }
+                                                     ]
+                                                 ]
+                                    },
+                        "Set Inputs + Resolve Dates":  {
+                                                           "main":  [
+                                                                        [
+                                                                            {
+                                                                                "node":  "AppMetrica: Топ Действий1",
+                                                                                "type":  "main",
+                                                                                "index":  0
+                                                                            },
+                                                                            {
+                                                                                "node":  "Metrika Snapshot",
+                                                                                "type":  "main",
+                                                                                "index":  0
+                                                                            },
+                                                                            {
+                                                                                "node":  "Build Direct Request Body",
+                                                                                "type":  "main",
+                                                                                "index":  0
+                                                                            }
+                                                                        ]
+                                                                    ]
+                                                       },
+                        "AppMetrica: Топ Действий1":  {
+                                                          "main":  [
+                                                                       [
+                                                                           {
+                                                                               "node":  "Форматирование для Дашборда1",
+                                                                               "type":  "main",
+                                                                               "index":  0
+                                                                           }
+                                                                       ]
+                                                                   ]
+                                                      },
+                        "Форматирование для Дашборда1":  {
+                                                             "main":  [
+                                                                          [
+                                                                              {
+                                                                                  "node":  "AppMetrica: География",
+                                                                                  "type":  "main",
+                                                                                  "index":  0
+                                                                              }
+                                                                          ]
+                                                                      ]
+                                                         },
+                        "Webhook Analytics":  {
+                                                  "main":  [
+                                                               [
+                                                                   {
+                                                                       "node":  "Подготовить промпт",
                                                                        "type":  "main",
                                                                        "index":  0
                                                                    }
-                                                      },
-                        "Direct Snapshot":  {
-                                                "main":  {
-                                                             "node":  "Wait All Dashboard Sources",
-                                                             "type":  "main",
-                                                             "index":  1
-                                                         }
-                                            },
-                        "Wait App + Metrika":  {
-                                                   "main":  {
-                                                                "node":  "Wait All Dashboard Sources",
-                                                                "type":  "main",
-                                                                "index":  0
-                                                            }
-                                               },
-                        "Wait All Dashboard Sources":  {
-                                                           "main":  {
-                                                                        "node":  "Объединить данные",
+                                                               ]
+                                                           ]
+                                              },
+                        "Подготовить промпт":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Анализ данных",
                                                                         "type":  "main",
                                                                         "index":  0
                                                                     }
+                                                                ]
+                                                            ]
+                                               },
+                        "Anthropic Chat Model":  {
+                                                     "ai_languageModel":  [
+                                                                              [
+                                                                                  {
+                                                                                      "node":  "Анализ данных",
+                                                                                      "type":  "ai_languageModel",
+                                                                                      "index":  0
+                                                                                  }
+                                                                              ]
+                                                                          ]
+                                                 },
+                        "AppMetrica: География":  {
+                                                      "main":  [
+                                                                   [
+                                                                       {
+                                                                           "node":  "AppMetrica: Inst1",
+                                                                           "type":  "main",
+                                                                           "index":  0
+                                                                       }
+                                                                   ]
+                                                               ]
+                                                  },
+                        "AppMetrica: Inst1":  {
+                                                  "main":  [
+                                                               [
+                                                                   {
+                                                                       "node":  "AppMetrica: Inst2",
+                                                                       "type":  "main",
+                                                                       "index":  0
+                                                                   }
+                                                               ]
+                                                           ]
+                                              },
+                        "AppMetrica: Inst2":  {
+                                                  "main":  [
+                                                               [
+                                                                   {
+                                                                       "node":  "Wait App + Metrika",
+                                                                       "type":  "main",
+                                                                       "index":  0
+                                                                   }
+                                                               ]
+                                                           ]
+                                              },
+                        "Metrika Snapshot":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Metrika ByTime Snapshot",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                        "Metrika ByTime Snapshot":  {
+                                                        "main":  [
+                                                                     [
+                                                                         {
+                                                                             "node":  "Metrika Sources Snapshot",
+                                                                             "type":  "main",
+                                                                             "index":  0
+                                                                         }
+                                                                     ]
+                                                                 ]
+                                                    },
+                        "Metrika Sources Snapshot":  {
+                                                         "main":  [
+                                                                      [
+                                                                          {
+                                                                              "node":  "Bot Traffic Snapshot",
+                                                                              "type":  "main",
+                                                                              "index":  0
+                                                                          }
+                                                                      ]
+                                                                  ]
+                                                     },
+                        "Bot Traffic Snapshot":  {
+                                                     "main":  [
+                                                                  [
+                                                                      {
+                                                                          "node":  "Wait App + Metrika",
+                                                                          "type":  "main",
+                                                                          "index":  1
+                                                                      }
+                                                                  ]
+                                                              ]
+                                                 },
+                        "Build Direct Request Body":  {
+                                                          "main":  [
+                                                                       [
+                                                                           {
+                                                                               "node":  "Direct Snapshot",
+                                                                               "type":  "main",
+                                                                               "index":  0
+                                                                           }
+                                                                       ]
+                                                                   ]
+                                                      },
+                        "Direct Snapshot":  {
+                                                "main":  [
+                                                             [
+                                                                 {
+                                                                     "node":  "Wait All Dashboard Sources",
+                                                                     "type":  "main",
+                                                                     "index":  1
+                                                                 }
+                                                             ]
+                                                         ]
+                                            },
+                        "Wait App + Metrika":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Wait All Dashboard Sources",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               },
+                        "Wait All Dashboard Sources":  {
+                                                           "main":  [
+                                                                        [
+                                                                            {
+                                                                                "node":  "Объединить данные",
+                                                                                "type":  "main",
+                                                                                "index":  0
+                                                                            }
+                                                                        ]
+                                                                    ]
                                                        }
                     },
     "settings":  {
@@ -1694,20 +1786,20 @@
                                                                                               }
                                                                                           ]
                                                                              },
-                                              "AppMetrica: Р СћР С•Р С— Р вЂќР ВµР в„–РЎРѓРЎвЂљР Р†Р С‘Р в„–1":  {
-                                                                                                                     "main":  {
-                                                                                                                                  "node":  "Форматирование для Дашборда1",
-                                                                                                                                  "type":  "main",
-                                                                                                                                  "index":  0
-                                                                                                                              }
-                                                                                                                 },
-                                              "Р В¤Р С•РЎР‚Р СР В°РЎвЂљР С‘РЎР‚Р С•Р Р†Р В°Р Р…Р С‘Р Вµ Р Т‘Р В»РЎРЏ Р вЂќР В°РЎв‚¬Р В±Р С•РЎР‚Р Т‘Р В°1":  {
-                                                                                                                                                                 "main":  {
-                                                                                                                                                                              "node":  "AppMetrica: География",
-                                                                                                                                                                              "type":  "main",
-                                                                                                                                                                              "index":  0
-                                                                                                                                                                          }
-                                                                                                                                                             },
+                                              "AppMetrica: Топ Действий1":  {
+                                                                                "main":  {
+                                                                                             "node":  "Форматирование для Дашборда1",
+                                                                                             "type":  "main",
+                                                                                             "index":  0
+                                                                                         }
+                                                                            },
+                                              "Форматирование для Дашборда1":  {
+                                                                                   "main":  {
+                                                                                                "node":  "AppMetrica: География",
+                                                                                                "type":  "main",
+                                                                                                "index":  0
+                                                                                            }
+                                                                               },
                                               "Webhook Analytics":  {
                                                                         "main":  {
                                                                                      "node":  "Подготовить промпт",
@@ -1715,13 +1807,13 @@
                                                                                      "index":  0
                                                                                  }
                                                                     },
-                                              "Р СџР С•Р Т‘Р С–Р С•РЎвЂљР С•Р Р†Р С‘РЎвЂљРЎРЉ Р С—РЎР‚Р С•Р СР С—РЎвЂљ":  {
-                                                                                                                               "main":  {
-                                                                                                                                            "node":  "Анализ данных",
-                                                                                                                                            "type":  "main",
-                                                                                                                                            "index":  0
-                                                                                                                                        }
-                                                                                                                           },
+                                              "Подготовить промпт":  {
+                                                                         "main":  {
+                                                                                      "node":  "Анализ данных",
+                                                                                      "type":  "main",
+                                                                                      "index":  0
+                                                                                  }
+                                                                     },
                                               "Anthropic Chat Model":  {
                                                                            "ai_languageModel":  {
                                                                                                     "node":  "Анализ данных",
@@ -1729,13 +1821,13 @@
                                                                                                     "index":  0
                                                                                                 }
                                                                        },
-                                              "AppMetrica: Р вЂњР ВµР С•Р С–РЎР‚Р В°РЎвЂћР С‘РЎРЏ":  {
-                                                                                                         "main":  {
-                                                                                                                      "node":  "AppMetrica: Inst1",
-                                                                                                                      "type":  "main",
-                                                                                                                      "index":  0
-                                                                                                                  }
-                                                                                                     },
+                                              "AppMetrica: География":  {
+                                                                            "main":  {
+                                                                                         "node":  "AppMetrica: Inst1",
+                                                                                         "type":  "main",
+                                                                                         "index":  0
+                                                                                     }
+                                                                        },
                                               "AppMetrica: Inst1":  {
                                                                         "main":  {
                                                                                      "node":  "AppMetrica: Inst2",
