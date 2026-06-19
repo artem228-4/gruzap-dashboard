@@ -93,6 +93,28 @@ body.is-loading-data:not(.locked) .shell{filter:blur(7px);pointer-events:none;us
   .presets{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
   .preset{min-height:44px;padding:10px 8px;font-size:13px}
 }
+@media(max-width:640px){
+  .shell{width:100%!important;padding:8px 8px 28px!important}
+  .hero{padding:16px!important;border-radius:22px}
+  .mobile-tab-menu,.tabs,.toolbar-row,.presets,.controls,.mode-switch,.card,.panel,.tablebox{max-width:100%;min-width:0}
+  .toolbar-row{gap:16px!important}
+  .mobile-tab-trigger{min-height:56px;padding:10px 16px!important}
+  .presets{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;padding:8px!important;border-radius:20px}
+  .preset{min-width:0;min-height:48px;padding:10px 8px!important;font-size:15px;overflow:hidden;text-overflow:ellipsis}
+  .controls{grid-template-columns:1fr!important;gap:12px!important;padding:16px!important;border-radius:22px;overflow:hidden}
+  .controls .field{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;width:100%;min-width:0!important;overflow:hidden}
+  .controls .field label{font-size:12px!important;letter-spacing:.08em;text-align:left}
+  .controls input[type=date]{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;inline-size:100%;max-inline-size:100%;min-inline-size:0;box-sizing:border-box;min-height:50px;padding:0 14px!important;border-radius:16px;font-size:16px;overflow:hidden;-webkit-appearance:none;appearance:none}
+  .controls .ghost{width:100%!important;max-width:100%!important;min-height:52px;border-radius:16px}
+  .card,.panel{padding:16px!important;border-radius:22px}
+  .mode-switch{padding:8px!important;gap:8px!important}
+}
+@media(max-width:380px){
+  .shell{padding:8px 6px 24px!important}
+  .hero,.card,.panel{padding:14px!important}
+  .presets{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .preset{font-size:14px}
+}
 </style>
 </head>
 <body class="locked">
