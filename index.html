@@ -57,6 +57,32 @@ body.is-loading-data #refresh{opacity:.78}
   .controls{grid-template-columns:1fr!important}
 }
 </style>
+<style>
+/* UI-only overrides: temporary product focus, mobile cleanup, compact loading. */
+.tab[data-tab="metrika"],.tab[data-tab="direct"]{display:none!important}
+.tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.loadline{display:none!important}
+.loading-backdrop{position:fixed;inset:0;z-index:25;display:none;place-items:center;background:rgba(5,8,10,.48);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+body.is-loading-data:not(.locked) .loading-backdrop{display:grid}
+body.is-loading-data:not(.locked) .shell{filter:blur(7px);pointer-events:none;user-select:none}
+.loading-ring{--progress:8;width:min(38vw,168px);height:min(38vw,168px);border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) calc(var(--progress)*1%),rgba(255,255,255,.09) 0);box-shadow:0 0 0 1px rgba(212,255,51,.16),0 26px 80px rgba(0,0,0,.42),0 0 48px rgba(212,255,51,.16);position:relative}
+.loading-ring:before{content:"";position:absolute;inset:9px;border-radius:inherit;background:linear-gradient(180deg,#151b21,#0b0e11);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.loading-ring strong{position:relative;z-index:1;color:#f4ffcc;font-size:clamp(25px,7vw,42px);letter-spacing:-.06em;line-height:1}
+.collapsible-panel>.head{align-items:center}
+.collapse-toggle{border:1px solid rgba(212,255,51,.22);background:rgba(212,255,51,.07);color:#f4ffcc;border-radius:999px;padding:9px 12px;font:inherit;font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap}
+.collapse-toggle:hover,.collapse-toggle:focus-visible{border-color:rgba(212,255,51,.44);background:rgba(212,255,51,.12);outline:none}
+.collapsible-panel.is-collapsed>:not(.head){display:none!important}
+.collapsible-panel.is-collapsed{padding-bottom:16px}
+.collapsible-panel.is-collapsed .head{margin-bottom:0}
+@media(max-width:640px){
+  .signal{display:none!important}
+  .mobile-tab-trigger{grid-template-columns:auto minmax(0,1fr) auto!important}
+  .mobile-tab-trigger>span:not(.mobile-tab-burger){display:none!important}
+  .tabs{grid-template-columns:1fr!important}
+  .tabs.mobile-open .tab[data-tab="metrika"],.tabs.mobile-open .tab[data-tab="direct"]{display:none!important}
+  .loading-ring{width:146px;height:146px}
+}
+</style>
 </head>
 <body class="locked">
 <section class="auth-screen" id="auth-screen" aria-label="Вход в дашборд"><div class="auth-card"><div class="auth-mark" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 184 147" fill="none"><path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#D4FF33"></path></svg></div><h2>Вход в аналитику</h2><p>Данные ГРУЗАП скрыты до ввода пароля. До входа дашборд не отправляет запросы в n8n.</p><form class="auth-form" id="auth-form"><label for="auth-password">Пароль</label><input class="auth-input" id="auth-password" name="password" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Введите пароль"><button class="auth-submit" type="submit">Открыть дашборд</button><p class="auth-error" id="auth-error" role="alert"></p></form><div class="auth-note">Доступ сохраняется только в текущей вкладке браузера.</div></div></section><div class="shell"><section class="hero"><div class="hero-top"><div class="brand"><div class="mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 184 147" fill="none"><path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#D4FF33"></path></svg></div><div><p class="eyebrow">Единая панель трафика и продукта</p><h1>ГРУЗАП Аналитика</h1><p class="subtitle">AppMetrica, Яндекс Метрика, Яндекс Директ и новый финансовый блок в одном спокойном интерфейсе без лишнего шума.</p></div></div><div class="chips"><div class="chip"><span class="dot"></span><span id="status-text">Идёт загрузка данных</span></div><div class="chip" id="source-chip">AppMetrica</div></div></div><div class="tabs" role="tablist" aria-label="Источники аналитики"><button class="tab active" data-tab="appmetrica" role="tab" aria-selected="true"><b>ГРУЗАП Приложение (поиск грузов)</b><span>События приложения, установки и география</span></button><button class="tab" data-tab="metrika" role="tab" aria-selected="false"><b>Яндекс Метрика</b><span>Сессии сайта, качество трафика и переходы в Telegram</span></button><button class="tab" data-tab="direct" role="tab" aria-selected="false"><b>Яндекс Директ</b><span>Расход, клики, конверсии и эффективность рекламы</span></button><button class="tab" data-tab="finance" role="tab" aria-selected="false"><b>ГРУЗАП Финансы</b><span>AppMetrica и Ю-Касса: интерес к оплате, выручка и статусы платежей</span></button></div><div class="toolbar-row"><div class="presets"><button class="preset" data-preset="today">Сегодня</button><button class="preset active" data-preset="yesterday">Вчера</button><button class="preset" data-preset="week">7 дней</button><button class="preset" data-preset="month">30 дней</button><button class="preset" data-preset="quarter">Квартал</button></div><div class="controls"><div class="field"><label for="date-from">С</label><input id="date-from" type="date"></div><div class="field"><label for="date-to">По</label><input id="date-to" type="date"></div><button class="ghost" id="refresh" type="button">Обновить</button><button class="primary" id="analysis" type="button" hidden>ИИ-разбор</button></div></div><div class="signal"><div class="signal-main"><strong id="period-label">Период не выбран</strong><span id="period-note">Готово к загрузке данных</span></div><div class="signal-side"><span class="badge" id="mode-pill">Источник готовится</span><span class="badge" id="active-pill">Вкладка: AppMetrica</span></div></div></section><main class="dashboard" id="content"></main></div><div class="overlay" id="overlay" aria-hidden="true"><div class="modal"><div class="modalhead"><div><h3 id="modal-title">ИИ-разбор</h3><div class="modalsub" id="modal-sub">Источник и период</div></div><button class="close" id="close" type="button" aria-label="Закрыть">×</button></div><div class="modalbody" id="modal-body"></div></div></div>
@@ -348,6 +374,121 @@ init();
     updateMobileTabLabel();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setupMobileTabs);else setupMobileTabs();
+})();
+</script>
+<script>
+(function(){
+  const hiddenTabs=new Set(['metrika','direct']);
+  function ensureLoadingOverlay(){
+    let overlay=document.getElementById('data-loading-overlay');
+    if(overlay)return overlay;
+    overlay=document.createElement('div');
+    overlay.className='loading-backdrop';
+    overlay.id='data-loading-overlay';
+    overlay.setAttribute('aria-hidden','true');
+    overlay.innerHTML='<div class="loading-ring" id="data-loading-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="8" aria-label="Загрузка данных"><strong id="data-loading-percent">8%</strong></div>';
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+  function setLoadingProgress(value){
+    const percent=Math.max(0,Math.min(100,Math.round(value)));
+    const ring=document.getElementById('data-loading-ring');
+    const text=document.getElementById('data-loading-percent');
+    if(ring){
+      ring.style.setProperty('--progress',percent);
+      ring.setAttribute('aria-valuenow',String(percent));
+    }
+    if(text)text.textContent=percent+'%';
+  }
+  function progressValue(){
+    const elapsed=Date.now()-(state.loadingStartedAt||Date.now());
+    const estimate=Math.max(1,state.loadingEstimateMs||35000);
+    return Math.min(94,8+elapsed/estimate*86);
+  }
+  window.startLoading=function(requestId){
+    const profile=loadingProfile();
+    state.loadingEstimateMs=profile.estimate;
+    state.loadingStartedAt=Date.now();
+    if(state.loadingTimer)clearInterval(state.loadingTimer);
+    if(state.loadingHideTimer)clearTimeout(state.loadingHideTimer);
+    const overlay=ensureLoadingOverlay();
+    overlay.setAttribute('aria-hidden','false');
+    document.body.classList.add('is-loading-data');
+    setLoadingProgress(8);
+    state.loadingTimer=setInterval(()=>{if(requestId===state.requestSeq)setLoadingProgress(progressValue())},220);
+  };
+  window.stopLoading=function(ok,requestId){
+    if(requestId!==state.requestSeq)return;
+    if(state.loadingTimer){clearInterval(state.loadingTimer);state.loadingTimer=null}
+    setLoadingProgress(ok?100:0);
+    state.loadingHideTimer=setTimeout(()=>{
+      if(requestId!==state.requestSeq)return;
+      const overlay=ensureLoadingOverlay();
+      overlay.setAttribute('aria-hidden','true');
+      document.body.classList.remove('is-loading-data');
+    },ok?420:900);
+  };
+  function syncVisibleTabs(){
+    document.querySelectorAll('.tab').forEach(button=>{
+      const hidden=hiddenTabs.has(button.dataset.tab);
+      button.hidden=hidden;
+      if(hidden)button.setAttribute('aria-hidden','true');
+      else button.removeAttribute('aria-hidden');
+    });
+    if(window.state&&hiddenTabs.has(state.tab)){
+      state.tab='appmetrica';
+      document.querySelectorAll('.tab').forEach(button=>{
+        const active=button.dataset.tab===state.tab;
+        button.classList.toggle('active',active);
+        button.setAttribute('aria-selected',active?'true':'false');
+      });
+    }
+    const label=document.getElementById('mobile-tab-label');
+    const active=document.querySelector('.tab.active:not([hidden])');
+    if(label&&active)label.textContent=active.dataset.mobileLabel||active.textContent.trim();
+  }
+  function enhanceCollapsiblePanels(){
+    document.querySelectorAll('#content .panel').forEach((panel,index)=>{
+      if(!panel.querySelector('.tablebox'))return;
+      const head=panel.querySelector(':scope > .head');
+      if(!head||head.querySelector('.collapse-toggle'))return;
+      panel.classList.add('collapsible-panel','is-collapsed');
+      const title=head.querySelector('h2')?.textContent?.trim()||'Большой блок';
+      const button=document.createElement('button');
+      button.type='button';
+      button.className='collapse-toggle';
+      button.textContent='Развернуть';
+      button.setAttribute('aria-expanded','false');
+      button.setAttribute('aria-label','Развернуть блок: '+title);
+      button.addEventListener('click',()=>{
+        const collapsed=panel.classList.toggle('is-collapsed');
+        button.textContent=collapsed?'Развернуть':'Свернуть';
+        button.setAttribute('aria-expanded',collapsed?'false':'true');
+        button.setAttribute('aria-label',(collapsed?'Развернуть блок: ':'Свернуть блок: ')+title);
+      });
+      head.appendChild(button);
+    });
+  }
+  function applyFrontendOnlyTweaks(){
+    syncVisibleTabs();
+    enhanceCollapsiblePanels();
+  }
+  const originalRender=window.render;
+  if(typeof originalRender==='function'){
+    window.render=function(){
+      originalRender();
+      applyFrontendOnlyTweaks();
+    };
+  }
+  const originalSetupMobileTabs=window.setupMobileTabs;
+  if(typeof originalSetupMobileTabs==='function'){
+    window.setupMobileTabs=function(){
+      originalSetupMobileTabs();
+      applyFrontendOnlyTweaks();
+    };
+  }
+  document.addEventListener('DOMContentLoaded',applyFrontendOnlyTweaks);
+  applyFrontendOnlyTweaks();
 })();
 </script>
 </body>
