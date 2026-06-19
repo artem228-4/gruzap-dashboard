@@ -435,7 +435,7 @@ init();
       if(hidden)button.setAttribute('aria-hidden','true');
       else button.removeAttribute('aria-hidden');
     });
-    if(window.state&&hiddenTabs.has(state.tab)){
+    if(typeof state!=='undefined'&&hiddenTabs.has(state.tab)){
       state.tab='appmetrica';
       document.querySelectorAll('.tab').forEach(button=>{
         const active=button.dataset.tab===state.tab;
