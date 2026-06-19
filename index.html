@@ -24,6 +24,39 @@ body.is-loading-data #refresh{opacity:.78}
 @keyframes loadPulse{70%{box-shadow:0 0 0 8px rgba(212,255,51,0)}100%{box-shadow:0 0 0 0 rgba(212,255,51,0)}}
 @media(max-width:640px){.signal-side{grid-template-columns:1fr!important}.loadline-head{display:grid}.loadline-time{white-space:normal}.loadline{padding:13px}}
 </style>
+<style>
+.mobile-tab-menu{display:none}
+.mobile-tab-trigger{width:100%;min-height:54px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));color:var(--text);font:inherit;cursor:pointer;display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:10px 14px;text-align:left}
+.mobile-tab-trigger span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1}
+.mobile-tab-trigger strong{font-size:15px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mobile-tab-trigger:focus-visible{outline:2px solid rgba(212,255,51,.6);outline-offset:3px}
+.mobile-tab-burger{width:34px;height:34px;border-radius:12px;border:1px solid rgba(212,255,51,.22);background:rgba(212,255,51,.08);display:grid;place-items:center;gap:3px;padding:8px}
+.mobile-tab-burger i{display:block;width:14px;height:2px;border-radius:999px;background:var(--accent)}
+.mobile-tab-chevron{width:9px;height:9px;border-right:2px solid #dfe8c1;border-bottom:2px solid #dfe8c1;transform:rotate(45deg);transition:.18s ease}
+.mobile-tab-trigger[aria-expanded=true] .mobile-tab-chevron{transform:rotate(225deg)}
+@media(max-width:640px){
+  .mobile-tab-menu{display:block}
+  .tabs{display:none!important}
+  .tabs.mobile-open{display:grid!important;grid-template-columns:1fr!important;gap:8px;padding:8px;border-radius:18px;background:rgba(255,255,255,.035);box-shadow:0 18px 38px rgba(0,0,0,.22)}
+  .tabs.mobile-open .tab{min-height:48px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-radius:14px}
+  .tabs.mobile-open .tab b,.tabs.mobile-open .tab span{display:none}
+  .tabs.mobile-open .tab:before{content:attr(data-mobile-label);font-size:14px;font-weight:900;line-height:1.2;color:#fff}
+  .tabs.mobile-open .tab.active:after{content:"Выбрано";font-size:11px;font-weight:900;color:#142000;background:var(--accent);border-radius:999px;padding:6px 8px;white-space:nowrap}
+  .toolbar-row{gap:10px}
+  .presets{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:5px;padding:6px;border-radius:18px}
+  .preset{width:100%;min-height:42px;padding:9px 3px;border-radius:12px;font-size:12px;line-height:1.1;white-space:nowrap}
+  .controls{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px;padding:10px;border-radius:18px}
+  .controls .field{min-width:0;width:100%}
+  .controls .field label{font-size:10px;letter-spacing:.08em}
+  .controls input[type=date]{width:100%;min-width:0;min-height:42px;padding:0 10px;border-radius:13px;font-size:14px}
+  .controls .ghost{grid-column:1/-1;min-height:46px;width:100%;justify-content:center}
+  .controls .primary[hidden]{display:none!important}
+}
+@media(max-width:370px){
+  .presets{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .controls{grid-template-columns:1fr!important}
+}
+</style>
 </head>
 <body class="locked">
 <section class="auth-screen" id="auth-screen" aria-label="Вход в дашборд"><div class="auth-card"><div class="auth-mark" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 184 147" fill="none"><path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#D4FF33"></path></svg></div><h2>Вход в аналитику</h2><p>Данные ГРУЗАП скрыты до ввода пароля. До входа дашборд не отправляет запросы в n8n.</p><form class="auth-form" id="auth-form"><label for="auth-password">Пароль</label><input class="auth-input" id="auth-password" name="password" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Введите пароль"><button class="auth-submit" type="submit">Открыть дашборд</button><p class="auth-error" id="auth-error" role="alert"></p></form><div class="auth-note">Доступ сохраняется только в текущей вкладке браузера.</div></div></section><div class="shell"><section class="hero"><div class="hero-top"><div class="brand"><div class="mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 184 147" fill="none"><path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#D4FF33"></path></svg></div><div><p class="eyebrow">Единая панель трафика и продукта</p><h1>ГРУЗАП Аналитика</h1><p class="subtitle">AppMetrica, Яндекс Метрика, Яндекс Директ и новый финансовый блок в одном спокойном интерфейсе без лишнего шума.</p></div></div><div class="chips"><div class="chip"><span class="dot"></span><span id="status-text">Идёт загрузка данных</span></div><div class="chip" id="source-chip">AppMetrica</div></div></div><div class="tabs" role="tablist" aria-label="Источники аналитики"><button class="tab active" data-tab="appmetrica" role="tab" aria-selected="true"><b>ГРУЗАП Приложение (поиск грузов)</b><span>События приложения, установки и география</span></button><button class="tab" data-tab="metrika" role="tab" aria-selected="false"><b>Яндекс Метрика</b><span>Сессии сайта, качество трафика и переходы в Telegram</span></button><button class="tab" data-tab="direct" role="tab" aria-selected="false"><b>Яндекс Директ</b><span>Расход, клики, конверсии и эффективность рекламы</span></button><button class="tab" data-tab="finance" role="tab" aria-selected="false"><b>ГРУЗАП Финансы</b><span>AppMetrica и Ю-Касса: интерес к оплате, выручка и статусы платежей</span></button></div><div class="toolbar-row"><div class="presets"><button class="preset" data-preset="today">Сегодня</button><button class="preset active" data-preset="yesterday">Вчера</button><button class="preset" data-preset="week">7 дней</button><button class="preset" data-preset="month">30 дней</button><button class="preset" data-preset="quarter">Квартал</button></div><div class="controls"><div class="field"><label for="date-from">С</label><input id="date-from" type="date"></div><div class="field"><label for="date-to">По</label><input id="date-to" type="date"></div><button class="ghost" id="refresh" type="button">Обновить</button><button class="primary" id="analysis" type="button" hidden>ИИ-разбор</button></div></div><div class="signal"><div class="signal-main"><strong id="period-label">Период не выбран</strong><span id="period-note">Готово к загрузке данных</span></div><div class="signal-side"><span class="badge" id="mode-pill">Источник готовится</span><span class="badge" id="active-pill">Вкладка: AppMetrica</span></div></div></section><main class="dashboard" id="content"></main></div><div class="overlay" id="overlay" aria-hidden="true"><div class="modal"><div class="modalhead"><div><h3 id="modal-title">ИИ-разбор</h3><div class="modalsub" id="modal-sub">Источник и период</div></div><button class="close" id="close" type="button" aria-label="Закрыть">×</button></div><div class="modalbody" id="modal-body"></div></div></div>
@@ -271,6 +304,51 @@ function initAuth(){const form=document.getElementById('auth-form');const input=
 function bind(){document.querySelectorAll('.tab').forEach(button=>button.addEventListener('click',()=>{state.tab=button.dataset.tab;document.querySelectorAll('.tab').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-selected',active?'true':'false')});render();refreshData()}));document.querySelectorAll('.preset').forEach(button=>button.addEventListener('click',()=>setPreset(button.dataset.preset)));document.getElementById('date-from').addEventListener('change',customRange);document.getElementById('date-to').addEventListener('change',customRange);document.getElementById('refresh').addEventListener('click',refreshData);document.getElementById('analysis').addEventListener('click',openAnalysis);document.getElementById('content').addEventListener('click',event=>{const mode=event.target.closest('[data-app-mode]');if(mode){state.appMode=mode.dataset.appMode;if(state.errorRetryTimer){clearTimeout(state.errorRetryTimer);state.errorRetryTimer=null}render();refreshData();return}const kind=event.target.closest('[data-error-kind]');if(kind){state.errorKind=kind.dataset.errorKind;render();return}const detail=event.target.closest('[data-error-detail]');if(detail){showErrorDetail(detail.dataset.errorDetail)}});document.getElementById('close').addEventListener('click',hideModal);document.getElementById('overlay').addEventListener('click',event=>{if(event.target===document.getElementById('overlay'))hideModal()});document.addEventListener('keydown',event=>{if(event.key==='Escape')hideModal()})}
 function init(){initAuth()}
 init();
+</script>
+<script>
+(function(){
+  const compactLabels={appmetrica:'Приложение',metrika:'Яндекс Метрика',direct:'Яндекс Директ',finance:'Финансы'};
+  function updateMobileTabLabel(){
+    const active=document.querySelector('.tab.active');
+    const label=document.getElementById('mobile-tab-label');
+    if(label&&active)label.textContent=active.dataset.mobileLabel||compactLabels[active.dataset.tab]||active.textContent.trim();
+  }
+  function closeMobileTabs(){
+    const tabs=document.getElementById('source-tabs');
+    const trigger=document.getElementById('mobile-tab-trigger');
+    if(tabs)tabs.classList.remove('mobile-open');
+    if(trigger)trigger.setAttribute('aria-expanded','false');
+  }
+  function setupMobileTabs(){
+    const tabs=document.querySelector('.tabs');
+    if(!tabs||document.getElementById('mobile-tab-trigger'))return;
+    tabs.id=tabs.id||'source-tabs';
+    tabs.querySelectorAll('.tab').forEach(button=>{
+      button.dataset.mobileLabel=button.dataset.mobileLabel||compactLabels[button.dataset.tab]||button.querySelector('b')?.textContent.trim()||'Раздел';
+    });
+    const menu=document.createElement('div');
+    menu.className='mobile-tab-menu';
+    menu.innerHTML='<button class="mobile-tab-trigger" id="mobile-tab-trigger" type="button" aria-expanded="false" aria-controls="'+tabs.id+'"><span class="mobile-tab-burger" aria-hidden="true"><i></i><i></i><i></i></span><span>Раздел</span><strong id="mobile-tab-label">Приложение</strong><i class="mobile-tab-chevron" aria-hidden="true"></i></button>';
+    tabs.parentNode.insertBefore(menu,tabs);
+    const trigger=document.getElementById('mobile-tab-trigger');
+    trigger.addEventListener('click',()=>{
+      const open=!tabs.classList.contains('mobile-open');
+      tabs.classList.toggle('mobile-open',open);
+      trigger.setAttribute('aria-expanded',open?'true':'false');
+    });
+    tabs.addEventListener('click',event=>{
+      if(event.target.closest('.tab'))setTimeout(()=>{updateMobileTabLabel();closeMobileTabs()},0);
+    });
+    document.addEventListener('click',event=>{
+      if(window.matchMedia('(max-width: 640px)').matches&&!menu.contains(event.target)&&!tabs.contains(event.target))closeMobileTabs();
+    });
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape')closeMobileTabs();
+    });
+    updateMobileTabLabel();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setupMobileTabs);else setupMobileTabs();
+})();
 </script>
 </body>
 </html>
