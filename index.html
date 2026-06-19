@@ -82,6 +82,17 @@ body.is-loading-data:not(.locked) .shell{filter:blur(7px);pointer-events:none;us
   .tabs.mobile-open .tab[data-tab="metrika"],.tabs.mobile-open .tab[data-tab="direct"]{display:none!important}
   .loading-ring{width:146px;height:146px}
 }
+@media(max-width:520px){
+  .controls{grid-template-columns:1fr!important;gap:10px!important;padding:12px!important}
+  .controls .field{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:10px}
+  .controls .field label{font-size:11px;letter-spacing:.08em;text-align:left}
+  .controls input[type=date]{min-height:48px;padding:0 14px;border-radius:15px;font-size:16px;text-align:left}
+  .controls .ghost{grid-column:auto!important;min-height:48px;border-radius:15px}
+}
+@media(max-width:430px){
+  .presets{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  .preset{min-height:44px;padding:10px 8px;font-size:13px}
+}
 </style>
 </head>
 <body class="locked">
