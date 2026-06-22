@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -238,7 +238,7 @@ body.is-loading-data #refresh{opacity:.78}
 
 /* ===== mobile tab menu ===== */
 .mobile-tab-menu{display:none}
-.mobile-tab-trigger{width:100%;min-height:54px;border:1px solid var(--line);border-radius:var(--r-3);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));color:var(--text);font:inherit;cursor:pointer;display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;align-items:center;gap:var(--s-3);padding:var(--s-2) var(--s-4);text-align:left}
+.mobile-tab-trigger{width:100%;min-height:54px;border:1px solid var(--line);border-radius:var(--r-3);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));color:var(--text);font:inherit;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--s-3);padding:var(--s-2) var(--s-4);text-align:left}
 .mobile-tab-trigger>span:not(.mobile-tab-burger){font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);line-height:1}
 .mobile-tab-trigger strong{font-size:15px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
 .mobile-tab-trigger:focus-visible{outline:2px solid rgba(212,255,51,.6);outline-offset:3px}
@@ -382,8 +382,11 @@ body:not(.locked) .auth-screen{display:none}
   .preset{width:100%;min-height:46px;padding:var(--s-2) var(--s-1);font-size:13px;justify-content:center;text-align:center}
   .controls{display:grid!important;grid-template-columns:1fr 1fr;gap:var(--s-3);width:100%;padding:var(--s-4)}
   .controls .field{min-width:0;width:100%}
-  .controls input[type=date]{width:100%;min-height:48px}
-  .controls .ghost{grid-column:1/-1;width:100%;min-height:48px}
+  .controls input[type=date]{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;inline-size:100%;max-inline-size:100%;min-inline-size:0;box-sizing:border-box;height:50px!important;min-height:50px!important;max-height:50px!important;line-height:50px!important;padding:0 var(--s-4)!important;border-radius:var(--r-2);font-size:16px;text-align:center!important;overflow:hidden;-webkit-appearance:none;appearance:none}
+  .controls input[type=date]::-webkit-date-and-time-value{display:block;height:50px;min-height:50px;line-height:50px;text-align:center;padding:0;margin:0}
+  .controls input[type=date]::-webkit-datetime-edit{display:flex;align-items:center;justify-content:center;height:50px;min-height:50px;line-height:50px;padding:0;margin:0}
+  .controls input[type=date]::-webkit-datetime-edit-fields-wrapper{display:flex;align-items:center;justify-content:center;height:50px;padding:0;margin:0}
+  .controls .ghost{grid-column:1/-1;width:100%;min-height:52px;height:52px}
   .mode-switch{display:grid!important;grid-template-columns:1fr 1fr;width:100%}
   .mode-btn{width:100%}
   .card,.panel{padding:var(--s-4)}
@@ -686,11 +689,11 @@ init();
     if(!tabs||document.getElementById('mobile-tab-trigger'))return;
     tabs.id=tabs.id||'source-tabs';
     tabs.querySelectorAll('.tab').forEach(button=>{
-      button.dataset.mobileLabel=button.dataset.mobileLabel||compactLabels[button.dataset.tab]||button.querySelector('b')?.textContent.trim()||'Раздел';
+      button.dataset.mobileLabel=button.dataset.mobileLabel||compactLabels[button.dataset.tab]||button.querySelector('b')?.textContent.trim()||'Приложение';
     });
     const menu=document.createElement('div');
     menu.className='mobile-tab-menu';
-    menu.innerHTML='<button class="mobile-tab-trigger" id="mobile-tab-trigger" type="button" aria-expanded="false" aria-controls="'+tabs.id+'"><span class="mobile-tab-burger" aria-hidden="true"><i></i><i></i><i></i></span><span>Раздел</span><strong id="mobile-tab-label">Приложение</strong><i class="mobile-tab-chevron" aria-hidden="true"></i></button>';
+    menu.innerHTML='<button class="mobile-tab-trigger" id="mobile-tab-trigger" type="button" aria-expanded="false" aria-controls="'+tabs.id+'"><span class="mobile-tab-burger" aria-hidden="true"><i></i><i></i><i></i></span><strong id="mobile-tab-label">Приложение</strong><i class="mobile-tab-chevron" aria-hidden="true"></i></button>';
     tabs.parentNode.insertBefore(menu,tabs);
     const trigger=document.getElementById('mobile-tab-trigger');
     trigger.addEventListener('click',()=>{
@@ -829,7 +832,4 @@ init();
 </script>
 </body>
 </html>
-
-
-
 
