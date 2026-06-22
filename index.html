@@ -408,12 +408,12 @@ body:not(.locked) .auth-screen{display:none}
   .payment-notes span{border-radius:var(--r-2)}
 }
 @media(max-width:400px){
-  .shell{padding:var(--s-2) var(--s-1) var(--s-6)}
-  .hero,.card,.panel{padding:var(--s-3)}
+  .shell{padding:var(--s-2) var(--s-2) var(--s-6)}
+  .hero,.card,.panel{padding:14px}
   .presets{grid-template-columns:repeat(2,minmax(0,1fr))}
   .error-filters{grid-template-columns:repeat(3,minmax(0,1fr));display:grid}
   .error-filter{justify-content:center}
-  .controls{grid-template-columns:1fr}
+  .controls{grid-template-columns:1fr;padding:14px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
@@ -832,4 +832,3 @@ init();
 </script>
 </body>
 </html>
-
