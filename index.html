@@ -453,6 +453,10 @@ body:not(.locked) .auth-screen{display:none}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
   .dashboard>*{animation:none}
 }
+/* User-facing finance cleanup: keep service diagnostics out of the dashboard and prevent stretched empty panels. */
+.two{align-items:start}
+.finance-plan{grid-template-columns:minmax(0,1fr)}
+.finance-plan>article:nth-child(2){display:none!important}
 </style>
 </head>
 <body class="locked">
