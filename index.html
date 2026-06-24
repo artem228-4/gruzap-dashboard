@@ -588,8 +588,8 @@ body:not(.locked) .auth-screen{display:none}
 /* Finance-first polish: first visible section is money, no service chips in the hero money card. */
 .tab[data-tab="finance"]{order:-1}
 .preset[data-preset="this_month"]{order:-1}
-.payment-hero{align-items:start}
-.payment-hero>.panel{align-self:start}
+.payment-hero{align-items:start!important}
+.payment-hero>.panel,.payment-hero .money-panel{align-self:start!important;min-height:0!important}
 .money-panel .money-focus{margin:var(--s-2) 0 0}
 .user-money-panel{display:grid;gap:var(--s-4)}
 .user-money-tariffs{display:grid;gap:var(--s-3);padding-top:var(--s-4);border-top:1px solid var(--line-2)}
@@ -599,6 +599,8 @@ body:not(.locked) .auth-screen{display:none}
 .user-money-tariffs .tariff-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--s-3)}
 .user-money-tariffs .tariff-card{min-height:0;padding:var(--s-4)}
 .user-money-tariffs .tariff-card strong{font-size:clamp(26px,3vw,36px)}
+.finance-tariff-saas:empty{display:none!important}
+.finance-tariff-saas>article{align-self:start}
 .money-panel .money-desktop-badge,
 .money-panel .money-desktop-notes,
 .money-panel .money-desktop-warnings,
@@ -1076,7 +1078,17 @@ init();
   function mergeFinanceUserMoneyAndTariffs(){
     const userMoneyPanel=document.querySelector('#content .finance-plan > article:first-child');
     const tariffPanel=document.querySelector('#content .finance-tariff-saas > article:first-child');
-    if(!userMoneyPanel||!tariffPanel||userMoneyPanel.querySelector('.user-money-tariffs'))return;
+    if(!userMoneyPanel||!tariffPanel){
+      const emptySection=document.querySelector('#content .finance-tariff-saas');
+      if(emptySection&&!emptySection.children.length)emptySection.remove();
+      return;
+    }
+    if(userMoneyPanel.querySelector('.user-money-tariffs')){
+      tariffPanel.remove();
+      const existingSection=document.querySelector('#content .finance-tariff-saas');
+      if(existingSection&&!existingSection.children.length)existingSection.remove();
+      return;
+    }
     const grid=tariffPanel.querySelector('.tariff-grid');
     if(!grid)return;
     userMoneyPanel.classList.add('user-money-panel');
@@ -1112,11 +1124,18 @@ init();
     });
   }
   window.normalizeProductCopy=normalizeProductCopy;
+  let financeTweakLock=false;
   function applyFrontendOnlyTweaks(){
-    syncVisibleTabs();
-    mergeFinanceUserMoneyAndTariffs();
-    enhanceCollapsiblePanels();
-    normalizeProductCopy();
+    if(financeTweakLock)return;
+    financeTweakLock=true;
+    try{
+      syncVisibleTabs();
+      mergeFinanceUserMoneyAndTariffs();
+      enhanceCollapsiblePanels();
+      normalizeProductCopy();
+    }finally{
+      financeTweakLock=false;
+    }
   }
   const originalRender=window.render;
   if(typeof originalRender==='function'){
@@ -1133,6 +1152,19 @@ init();
     };
   }
   document.addEventListener('DOMContentLoaded',applyFrontendOnlyTweaks);
+  const contentRoot=document.getElementById('content');
+  if(contentRoot&&'MutationObserver'in window){
+    let scheduled=false;
+    new MutationObserver(()=>{
+      if(scheduled||financeTweakLock)return;
+      scheduled=true;
+      requestAnimationFrame(()=>{
+        scheduled=false;
+        applyFrontendOnlyTweaks();
+      });
+    }).observe(contentRoot,{childList:true});
+  }
+  setTimeout(applyFrontendOnlyTweaks,250);
   applyFrontendOnlyTweaks();
 })();
 </script>
