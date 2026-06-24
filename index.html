@@ -588,10 +588,27 @@ body:not(.locked) .auth-screen{display:none}
 /* Finance-first polish: first visible section is money, no service chips in the hero money card. */
 .tab[data-tab="finance"]{order:-1}
 .preset[data-preset="this_month"]{order:-1}
+.payment-hero{align-items:start}
+.payment-hero>.panel{align-self:start}
+.money-panel{display:grid;gap:var(--s-4)}
+.money-panel .money-focus{margin:var(--s-2) 0 0}
+.money-tariffs{display:grid;gap:var(--s-3);padding-top:var(--s-4);border-top:1px solid var(--line-2)}
+.money-tariffs-head{display:flex;justify-content:space-between;gap:var(--s-3);align-items:flex-start;flex-wrap:wrap}
+.money-tariffs-head h3{margin:0;font-size:17px;letter-spacing:-.02em}
+.money-tariffs-head p{margin:var(--s-1) 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+.money-tariffs .tariff-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--s-3)}
+.money-tariffs .tariff-card{min-height:0;padding:var(--s-4)}
+.money-tariffs .tariff-card strong{font-size:clamp(26px,3vw,36px)}
 .money-panel .money-desktop-badge,
 .money-panel .money-desktop-notes,
 .money-panel .money-desktop-warnings,
 .money-panel .money-mobile-meta{display:none!important}
+@media(max-width:640px){
+  .money-panel{gap:var(--s-3)}
+  .money-tariffs{padding-top:var(--s-3);gap:var(--s-2)}
+  .money-tariffs .tariff-grid{grid-template-columns:1fr}
+  .money-tariffs .tariff-card{padding:var(--s-3)}
+}
 </style>
 </head>
 <body class="locked">
@@ -1056,6 +1073,21 @@ init();
       head.appendChild(button);
     });
   }
+  function mergeFinanceMoneyAndTariffs(){
+    const moneyPanel=document.querySelector('#content .money-panel');
+    const tariffPanel=document.querySelector('#content .finance-tariff-saas > article:first-child');
+    if(!moneyPanel||!tariffPanel||moneyPanel.querySelector('.money-tariffs'))return;
+    const grid=tariffPanel.querySelector('.tariff-grid');
+    if(!grid)return;
+    const block=document.createElement('div');
+    block.className='money-tariffs';
+    block.innerHTML='<div class="money-tariffs-head"><div><h3>Подписки по тарифам</h3><p>Неделя, месяц и год рядом с деньгами: без отдельной пустой панели.</p></div></div>';
+    block.appendChild(grid.cloneNode(true));
+    moneyPanel.appendChild(block);
+    const section=tariffPanel.closest('.finance-tariff-saas');
+    tariffPanel.remove();
+    if(section&&!section.children.length)section.remove();
+  }
   function normalizeProductCopy(root=document){
     const host=root instanceof Document?root.body:root;
     if(!host)return;
@@ -1081,6 +1113,7 @@ init();
   window.normalizeProductCopy=normalizeProductCopy;
   function applyFrontendOnlyTweaks(){
     syncVisibleTabs();
+    mergeFinanceMoneyAndTariffs();
     enhanceCollapsiblePanels();
     normalizeProductCopy();
   }
