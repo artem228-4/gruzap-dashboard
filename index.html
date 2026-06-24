@@ -599,6 +599,12 @@ body:not(.locked) .auth-screen{display:none}
 .user-money-tariffs .tariff-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--s-3)}
 .user-money-tariffs .tariff-card{min-height:0;padding:var(--s-4)}
 .user-money-tariffs .tariff-card strong{font-size:clamp(26px,3vw,36px)}
+.user-money-saas{display:grid;gap:var(--s-3);padding-top:var(--s-4);border-top:1px solid var(--line-2)}
+.user-money-saas-head{display:flex;justify-content:space-between;gap:var(--s-3);align-items:flex-start;flex-wrap:wrap}
+.user-money-saas-head h3{margin:0;font-size:17px;letter-spacing:-.02em}
+.user-money-saas-head p{margin:var(--s-1) 0 0;color:var(--muted);font-size:13px;line-height:1.45}
+.user-money-saas .metric-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--s-3)}
+.user-money-saas .formula-box{display:none}
 .finance-tariff-saas:empty{display:none!important}
 .finance-tariff-saas>article{align-self:start}
 .money-panel .money-desktop-badge,
@@ -610,6 +616,8 @@ body:not(.locked) .auth-screen{display:none}
   .user-money-tariffs{padding-top:var(--s-3);gap:var(--s-2)}
   .user-money-tariffs .tariff-grid{grid-template-columns:1fr}
   .user-money-tariffs .tariff-card{padding:var(--s-3)}
+  .user-money-saas{padding-top:var(--s-3);gap:var(--s-2)}
+  .user-money-saas .metric-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -1080,6 +1088,7 @@ init();
   function mergeFinanceUserMoneyAndTariffs(){
     const userMoneyPanel=document.querySelector('#content .finance-plan > article:first-child');
     const tariffPanel=document.querySelector('#content .finance-tariff-saas > article:first-child');
+    const saasPanel=document.querySelector('#content .finance-tariff-saas > article:nth-child(2)');
     if(!userMoneyPanel||!tariffPanel){
       const emptySection=document.querySelector('#content .finance-tariff-saas');
       if(emptySection&&!emptySection.children.length)emptySection.remove();
@@ -1087,6 +1096,19 @@ init();
     }
     if(userMoneyPanel.querySelector('.user-money-tariffs')){
       tariffPanel.remove();
+      if(saasPanel&&!userMoneyPanel.querySelector('.user-money-saas')){
+        const saasGrid=saasPanel.querySelector('.metric-grid');
+        if(saasGrid){
+          const saasBlock=document.createElement('div');
+          saasBlock.className='user-money-saas';
+          saasBlock.innerHTML='<div class="user-money-saas-head"><div><h3>SaaS, DAU/MAU и удержание</h3><p>Повторные оплаты, удержание, отток и активная аудитория приложения.</p></div></div>';
+          saasBlock.appendChild(saasGrid.cloneNode(true));
+          const formula=saasPanel.querySelector('.formula-box');
+          if(formula)saasBlock.appendChild(formula.cloneNode(true));
+          userMoneyPanel.appendChild(saasBlock);
+        }
+      }
+      if(saasPanel)saasPanel.remove();
       const existingSection=document.querySelector('#content .finance-tariff-saas');
       if(existingSection&&!existingSection.children.length)existingSection.remove();
       return;
@@ -1099,8 +1121,19 @@ init();
     block.innerHTML='<div class="user-money-tariffs-head"><div><h3>Подписки по тарифам</h3><p>Неделя, месяц и год рядом с деньгами по пользователям.</p></div></div>';
     block.appendChild(grid.cloneNode(true));
     userMoneyPanel.appendChild(block);
+    const saasGrid=saasPanel?.querySelector('.metric-grid');
+    if(saasGrid){
+      const saasBlock=document.createElement('div');
+      saasBlock.className='user-money-saas';
+      saasBlock.innerHTML='<div class="user-money-saas-head"><div><h3>SaaS, DAU/MAU и удержание</h3><p>Повторные оплаты, удержание, отток и активная аудитория приложения.</p></div></div>';
+      saasBlock.appendChild(saasGrid.cloneNode(true));
+      const formula=saasPanel.querySelector('.formula-box');
+      if(formula)saasBlock.appendChild(formula.cloneNode(true));
+      userMoneyPanel.appendChild(saasBlock);
+    }
     const section=tariffPanel.closest('.finance-tariff-saas');
     tariffPanel.remove();
+    if(saasPanel)saasPanel.remove();
     if(section&&!section.children.length)section.remove();
   }
   function normalizeProductCopy(root=document){
