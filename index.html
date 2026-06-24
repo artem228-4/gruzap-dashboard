@@ -1054,12 +1054,14 @@ init();
     if(label&&active)label.textContent=active.dataset.mobileLabel||active.textContent.trim();
   }
   function enhanceCollapsiblePanels(){
+    const collapsibleTitles=new Set(['Выручка по дням','Возвраты по дням']);
     document.querySelectorAll('#content .panel').forEach((panel,index)=>{
-      if(!panel.querySelector('.tablebox'))return;
       const head=panel.querySelector(':scope > .head');
+      const title=head?.querySelector('h2')?.textContent?.trim()||'Большой блок';
+      const shouldCollapse=panel.querySelector('.tablebox')||collapsibleTitles.has(title);
+      if(!shouldCollapse)return;
       if(!head||head.querySelector('.collapse-toggle'))return;
       panel.classList.add('collapsible-panel','is-collapsed');
-      const title=head.querySelector('h2')?.textContent?.trim()||'Большой блок';
       const button=document.createElement('button');
       button.type='button';
       button.className='collapse-toggle';
