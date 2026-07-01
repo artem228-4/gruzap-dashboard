@@ -1255,6 +1255,245 @@ body.locked .mobile-bottom-nav{display:none!important}
   .mobile-finance-period{max-width:38%}
   .mobile-finance-hero b{font-size:clamp(30px,9.8vw,40px)}
 }
+
+/* Mobile app-shell v3: concept-level finance screen, not squeezed desktop. */
+.mobile-app-topbar{display:none}
+@media(max-width:640px){
+  body.mobile-finance-active:not(.locked){
+    background:radial-gradient(circle at 8% 0%, rgba(191,255,0,.16), transparent 32%), linear-gradient(180deg,#111920 0%,#060909 100%);
+  }
+  body.mobile-finance-active:not(.locked) .shell{
+    padding:env(safe-area-inset-top) 8px calc(88px + env(safe-area-inset-bottom))!important;
+    gap:16px!important;
+    background:linear-gradient(180deg,rgba(255,255,255,.032),transparent 24%), linear-gradient(180deg,#131a22 0%,#070b0d 100%);
+  }
+  body.mobile-finance-active:not(.locked) .shell::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px);
+    background-size:100% 8px;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,black 16%,black 84%,transparent);
+    mask-image:linear-gradient(to bottom,transparent,black 16%,black 84%,transparent);
+  }
+  body.mobile-finance-active:not(.locked) .hero{
+    position:sticky;
+    top:0;
+    z-index:24;
+    display:grid!important;
+    gap:16px!important;
+    margin:0 -8px!important;
+    padding:8px 8px 16px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:linear-gradient(180deg,rgba(18,25,30,.98),rgba(18,25,30,.84) 80%,transparent)!important;
+    box-shadow:none!important;
+    -webkit-backdrop-filter:blur(16px);
+    backdrop-filter:blur(16px);
+  }
+  body.mobile-finance-active:not(.locked) .hero-top,
+  body.mobile-finance-active:not(.locked) .subtitle,
+  body.mobile-finance-active:not(.locked) .chips,
+  body.mobile-finance-active:not(.locked) .tabs,
+  body.mobile-finance-active:not(.locked) .toolbar-row,
+  body.mobile-finance-active:not(.locked) .signal{
+    display:none!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    min-width:0;
+  }
+  .mobile-app-brand{min-width:0;display:flex;align-items:center;gap:16px}
+  .mobile-app-logo{
+    flex:0 0 auto;
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    background:rgba(191,255,0,.14);
+    border:1px solid rgba(191,255,0,.38);
+    box-shadow:0 16px 40px rgba(191,255,0,.08), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .mobile-app-title{min-width:0;display:grid;gap:8px}
+  .mobile-app-title strong{
+    color:#fff;
+    font-size:24px;
+    line-height:1;
+    letter-spacing:-.04em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .mobile-app-title span{color:var(--muted);font-size:12px;line-height:1;font-weight:900}
+  .mobile-app-refresh{
+    flex:0 0 auto;
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.055);
+    color:var(--accent);
+    display:grid;
+    place-items:center;
+    font-size:20px;
+    font-weight:900;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-control{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:8px!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-refresh{display:none!important}
+  body.mobile-finance-active:not(.locked) .mobile-period-open{
+    min-height:56px!important;
+    border-radius:24px!important;
+    padding:8px 16px!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-copy{
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:8px;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-copy span{display:none!important}
+  body.mobile-finance-active:not(.locked) .mobile-period-copy strong{color:#fff;font-size:15px;line-height:1;font-weight:950}
+  body.mobile-finance-active:not(.locked) .mobile-period-copy small{color:var(--muted);font-size:12px;line-height:1;font-weight:900;white-space:nowrap}
+  body.mobile-finance-active:not(.locked) #content{display:block!important}
+  body.mobile-finance-active:not(.locked) #content > .cards,
+  body.mobile-finance-active:not(.locked) #content > .payment-hero,
+  body.mobile-finance-active:not(.locked) #content > .finance-plan,
+  body.mobile-finance-active:not(.locked) #content > .finance-tariff-saas,
+  body.mobile-finance-active:not(.locked) #content > .two,
+  body.mobile-finance-active:not(.locked) #content > .panel{display:none!important}
+  body.mobile-finance-active:not(.locked) .mobile-finance-cockpit{
+    display:grid!important;
+    gap:16px!important;
+    animation:fadeUp .22s ease both;
+  }
+  .mf-hero-card,.mf-kpi,.mf-sections{
+    min-width:0;
+    border:1px solid rgba(244,255,204,.13);
+    background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.03));
+    box-shadow:0 24px 56px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .mf-hero-card{
+    position:relative;
+    overflow:hidden;
+    min-height:184px;
+    border-radius:32px;
+    padding:24px;
+    background:radial-gradient(circle at 88% 8%, rgba(191,255,0,.24), transparent 34%), linear-gradient(145deg,rgba(191,255,0,.15),rgba(255,255,255,.05) 58%,rgba(255,255,255,.026));
+    border-color:rgba(191,255,0,.32);
+  }
+  .mf-hero-card::after{
+    content:"";
+    position:absolute;
+    right:-56px;
+    bottom:-72px;
+    width:168px;
+    height:168px;
+    border-radius:48px;
+    transform:rotate(18deg);
+    border:1px solid rgba(191,255,0,.16);
+    background:rgba(191,255,0,.035);
+  }
+  .mf-hero-copy{position:relative;z-index:1;display:grid;gap:8px;max-width:280px}
+  .mf-hero-copy span,.mf-kpi span,.mf-split span,.mf-mini-grid span,.mf-chart-head span{
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:11px;
+    line-height:1.2;
+    font-weight:1000;
+  }
+  .mf-hero-copy strong{
+    color:var(--accent);
+    font-size:clamp(42px,13vw,52px);
+    line-height:.98;
+    letter-spacing:-.06em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  .mf-hero-copy p{margin:0;color:#dce6dd;font-size:14px;line-height:1.45;font-weight:820}
+  .mf-bento{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .mf-kpi{
+    min-height:128px;
+    border-radius:24px;
+    padding:16px;
+    display:grid;
+    align-content:space-between;
+    gap:16px;
+  }
+  .mf-kpi-accent{background:linear-gradient(145deg,rgba(191,255,0,.14),rgba(255,255,255,.045));border-color:rgba(191,255,0,.28)}
+  .mf-kpi strong{
+    display:block;
+    color:#fff;
+    font-size:clamp(26px,8vw,34px);
+    line-height:1;
+    letter-spacing:-.05em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  .mf-kpi-accent strong{color:var(--accent)}
+  .mf-kpi-cyan strong{color:var(--cyan)}
+  .mf-kpi-amber strong{color:var(--yellow)}
+  .mf-kpi p{margin:0;color:#d7dfd9;font-size:12px;line-height:1.35;font-weight:850}
+  .mf-sections{border-radius:32px;padding:8px}
+  .mf-segment{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0;margin:0 0 8px}
+  .mf-segment button{
+    min-width:0;
+    min-height:44px;
+    border:0;
+    border-radius:16px;
+    background:transparent;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:1000;
+  }
+  .mf-segment button.active{color:#172006;background:var(--accent);box-shadow:0 12px 28px rgba(191,255,0,.16)}
+  .mf-panel{display:none;padding:8px}
+  .mf-panel.active{display:grid;gap:8px}
+  .mf-split,.mf-row,.mf-empty{
+    min-width:0;
+    border:1px solid rgba(244,255,204,.09);
+    background:rgba(255,255,255,.045);
+    border-radius:24px;
+    padding:16px;
+  }
+  .mf-split{display:grid;gap:16px}
+  .mf-split strong{display:block;margin-top:8px;color:#fff;font-size:30px;line-height:1;letter-spacing:-.05em;white-space:nowrap;font-weight:1000}
+  .mf-split p{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:1.45;font-weight:800}
+  .mf-mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .mf-mini-grid div{min-width:0;border-radius:16px;padding:16px;background:rgba(255,255,255,.04);border:1px solid rgba(244,255,204,.08)}
+  .mf-mini-grid b{display:block;color:var(--accent);font-size:24px;line-height:1;white-space:nowrap;font-weight:1000}
+  .mf-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px}
+  .mf-row strong{display:block;color:#fff;font-size:15px;line-height:1.2;font-weight:950}
+  .mf-row span{display:block;margin-top:8px;color:var(--muted);font-size:12px;line-height:1.3;font-weight:800}
+  .mf-row i{display:block;height:8px;margin-top:8px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--green))}
+  .mf-row b{color:var(--accent);font-size:20px;line-height:1;white-space:nowrap;font-weight:1000}
+  .mf-chart-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0 16px}
+  .mf-chart-head b{color:var(--muted);font-size:12px;white-space:nowrap}
+  .mf-bars{height:128px;display:flex;align-items:end;gap:8px}
+  .mf-bar{min-width:0;flex:1 1 0;display:grid;align-items:end;gap:8px}
+  .mf-bar i{display:block;width:100%;min-height:16px;border-radius:12px 12px 6px 6px;background:linear-gradient(180deg,var(--accent),rgba(191,255,0,.18))}
+  .mf-bar span{color:var(--muted);font-size:10px;line-height:1;text-align:center;font-weight:850}
+  .mf-empty{color:var(--muted);font-size:13px;line-height:1.4;font-weight:850}
+}
+@media(max-width:360px){
+  body.mobile-finance-active:not(.locked) .shell{padding-left:8px!important;padding-right:8px!important}
+  .mobile-app-title strong{font-size:22px}
+  .mf-hero-card{padding:16px}
+  .mf-bento{gap:8px}
+  .mf-kpi{padding:16px}
+  .mf-hero-copy strong{font-size:40px}
+  .mf-kpi strong{font-size:24px}
+}
 </style>
 </head>
 <body class="locked">
@@ -1480,6 +1719,8 @@ function mobileFinanceCockpit(ctx) {
   const value = unavailable ? '—' : money(cleanAfterRefunds || cleanRevenue || s.gross_revenue || 0);
   const paidValue = unavailable ? '—' : money(s.gross_revenue || 0);
   const period = range(state.from, state.to);
+  const nowrap = (value) => String(value == null || value === '' ? '—' : value).replace(/\s/g, '&nbsp;');
+  const shortMoney = (value) => unavailable ? '—' : nowrap(money(value));
   const payingValue = userIdReady ? nfmt(payingUsers) : 'н/д';
   const arppuValue = userIdReady && arppu != null ? money(arppu) : 'н/д';
   const repeatValue = unit.repeat_payers != null ? nfmt(unit.repeat_payers) : (unit.repeat_payer_percent != null ? pct(unit.repeat_payer_percent, 1) : 'н/д');
@@ -1488,15 +1729,25 @@ function mobileFinanceCockpit(ctx) {
   const audienceValue = dau != null && mau != null ? `${nfmt(dau)} / ${nfmt(mau)}` : (dauMau != null ? pct(dauMau, 1) : 'н/д');
   const rows = (y.series || []).filter((item) => num(item.revenue) || num(item.refunds)).slice(-7);
   const maxRevenue = Math.max(...rows.map((item) => num(item.revenue)), 1);
+  const tariffRows = (y.tariffs || []).filter((item) => item.count || item.amount || item.net_amount);
+  const tariffTotal = Math.max(...tariffRows.map((item) => num(item.net_after_refunds || item.net_amount || item.amount)), 1);
+  const tariffCards = tariffRows.length
+    ? tariffRows.slice(0, 3).map((item) => {
+      const amount = num(item.net_after_refunds || item.net_amount || item.amount);
+      const share = item.revenue_share_percent == null ? Math.round(amount / tariffTotal * 100) : Math.round(num(item.revenue_share_percent));
+      return `<div class="mf-row"><div><strong>${esc(item.label || 'Тариф')}</strong><span>${nfmt(item.count)} оплат${item.users == null ? '' : ` · ${nfmt(item.users)} пользователей`}</span><i style="width:${Math.max(8, Math.min(100, share))}%"></i></div><b>${shortMoney(amount)}</b></div>`;
+    }).join('')
+    : '<div class="mf-empty">Тарифы появятся после разметки платежей.</div>';
   const bars = rows.length
     ? rows.map((item) => {
       const revenue = num(item.revenue);
-      const height = Math.max(8, Math.round((revenue / maxRevenue) * 88));
-      const label = String(item.label || item.date || '—').slice(5) || '—';
-      return `<div class="mobile-bar" title="${esc(label)}: ${money(revenue)}"><i style="height:${height}px"></i><span>${esc(label)}</span></div>`;
+      const height = Math.max(16, Math.round((revenue / maxRevenue) * 96));
+      const rawLabel = String(item.label || item.date || '—');
+      const label = rawLabel === '—' ? '—' : rawLabel.slice(-5);
+      return `<div class="mf-bar" title="${esc(label)}: ${money(revenue)}"><i style="height:${height}px"></i><span>${esc(label)}</span></div>`;
     }).join('')
-    : '<div class="mobile-finance-more">Дневная динамика появится после ответа Ю-Кассы.</div>';
-  return `<section class="mobile-finance-cockpit" aria-label="Мобильная сводка финансов"><article class="mobile-finance-main"><div class="mobile-finance-head"><div class="mobile-finance-title"><span>Финансы</span><strong>Итог периода</strong></div><div class="mobile-finance-period">${esc(period)}</div></div><div class="mobile-finance-hero"><b>${value}</b><span>${unavailable ? 'Ю-Касса не ответила. Не считаем это нулём.' : 'После комиссии и возвратов.'}</span></div><div class="mobile-finance-grid"><div class="mobile-finance-tile"><small>Оплачено</small><b>${paidValue}</b><span>${unavailable ? 'Источник недоступен' : `${nfmt(s.successful_payments)} оплат`}</span></div><div class="mobile-finance-tile"><small>Платящие</small><b>${payingValue}</b><span>уникальные пользователи</span></div><div class="mobile-finance-tile"><small>Доход</small><b>${arppuValue}</b><span>на платящего</span></div><div class="mobile-finance-tile"><small>Повторные</small><b>${repeatValue}</b><span>вернулись к оплате</span></div></div></article><article class="mobile-finance-link"><div class="mobile-chart-head"><h3>Связка с приложением</h3><small>${linkUnavailable ? 'нет ответа' : 'воронка'}</small></div><div class="mobile-link-row"><div class="mobile-link-cell"><span>интерес</span><b>${interestValue}</b></div><div class="mobile-link-cell"><span>оплаты</span><b>${unavailable ? '—' : nfmt(s.successful_payments)}</b></div><div class="mobile-link-cell"><span>конверсия</span><b>${conversionValue}</b></div></div></article><article class="mobile-finance-chart"><div class="mobile-chart-head"><h3>Деньги по дням</h3><small>${audienceValue === 'н/д' ? 'выручка' : `DAU / MAU: ${audienceValue}`}</small></div><div class="mobile-bars">${bars}</div></article></section>`;
+    : '<div class="mf-empty">Динамика появится после ответа Ю-Кассы.</div>';
+  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card"><div class="mf-hero-copy"><span>Итог периода</span><strong>${nowrap(value)}</strong><p>${unavailable ? 'Ю-Касса не ответила, поэтому не показываем нули как факт.' : 'Чистые деньги после комиссии и возвратов.'}</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели"><article class="mf-kpi mf-kpi-accent"><span>Оплачено</span><strong>${nowrap(paidValue)}</strong><p>${unavailable ? 'Источник недоступен' : `${nfmt(s.successful_payments)} успешных оплат`}</p></article><article class="mf-kpi"><span>Платящие</span><strong>${nowrap(payingValue)}</strong><p>уникальные пользователи</p></article><article class="mf-kpi mf-kpi-cyan"><span>Доход</span><strong>${nowrap(arppuValue)}</strong><p>на платящего</p></article><article class="mf-kpi mf-kpi-amber"><span>Повторные</span><strong>${nowrap(repeatValue)}</strong><p>вернулись к оплате</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="summary">Итог</button><button type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-panel active" data-mf-view="summary"><div class="mf-split"><div><span>Связка с приложением</span><strong>${nowrap(conversionValue)}</strong><p>${linkUnavailable ? 'Клики приложения сейчас не пришли.' : 'Интерес к оплате → фактическая оплата.'}</p></div><div class="mf-mini-grid"><div><b>${nowrap(interestValue)}</b><span>интерес</span></div><div><b>${unavailable ? '—' : nowrap(nfmt(s.successful_payments))}</b><span>оплаты</span></div></div></div><div class="mf-split"><div><span>DAU / MAU</span><strong>${nowrap(audienceValue)}</strong><p>Если аудитория не пришла, не подменяем её нулями.</p></div></div></div><div class="mf-panel" data-mf-view="tariffs">${tariffCards}</div><div class="mf-panel" data-mf-view="trend"><div class="mf-chart-head"><span>Деньги по дням</span><b>${esc(period)}</b></div><div class="mf-bars">${bars}</div></div></article></section>`;
 }
 function financeWarningRu(code) {
   const map = {
@@ -1896,6 +2147,48 @@ init();
       button.classList.toggle('active',!!active);
     });
   }
+  function mobileScreenMeta(){
+    if(state.tab==='finance')return{title:'Финансы',subtitle:mobilePeriodTitle().toLowerCase()};
+    if(state.tab==='appmetrica'&&state.appMode==='errors')return{title:'Ошибки',subtitle:'Android 1.0.18+'};
+    if(state.tab==='appmetrica')return{title:'Приложение',subtitle:'поиск грузов'};
+    if(state.tab==='metrika')return{title:'Метрика',subtitle:'сайт и переходы'};
+    if(state.tab==='direct')return{title:'Директ',subtitle:'реклама'};
+    return{title:'ГРУЗАП',subtitle:'аналитика'};
+  }
+  function setupMobileAppTopbar(){
+    if(document.getElementById('mobile-app-topbar'))return;
+    const hero=document.querySelector('.hero');
+    if(!hero)return;
+    const topbar=document.createElement('div');
+    topbar.className='mobile-app-topbar';
+    topbar.id='mobile-app-topbar';
+    topbar.innerHTML='<div class="mobile-app-brand"><div class="mobile-app-logo" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 184 147" fill="none"><path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#D4FF33"></path></svg></div><div class="mobile-app-title"><strong id="mobile-app-title">Финансы</strong><span id="mobile-app-subtitle">текущий месяц</span></div></div><button class="mobile-app-refresh" id="mobile-app-refresh" type="button" aria-label="Обновить данные">↻</button>';
+    hero.insertBefore(topbar,hero.firstChild);
+    document.getElementById('mobile-app-refresh')?.addEventListener('click',()=>refreshData({force:true}));
+  }
+  function syncMobileShellMode(){
+    const financeActive=state.tab==='finance';
+    document.body.classList.toggle('mobile-finance-active',financeActive);
+    const meta=mobileScreenMeta();
+    const title=document.getElementById('mobile-app-title');
+    const subtitle=document.getElementById('mobile-app-subtitle');
+    if(title)title.textContent=meta.title;
+    if(subtitle)subtitle.textContent=meta.subtitle;
+  }
+  function setupMobileFinanceSegments(){
+    const content=document.getElementById('content');
+    if(!content||content.dataset.mfSegmentsBound==='1')return;
+    content.dataset.mfSegmentsBound='1';
+    content.addEventListener('click',event=>{
+      const button=event.target.closest('[data-mf-panel]');
+      if(!button)return;
+      const shell=button.closest('.mobile-finance-cockpit');
+      if(!shell)return;
+      const target=button.dataset.mfPanel;
+      shell.querySelectorAll('[data-mf-panel]').forEach(item=>item.classList.toggle('active',item===button));
+      shell.querySelectorAll('[data-mf-view]').forEach(item=>item.classList.toggle('active',item.dataset.mfView===target));
+    });
+  }
   function setupMobileBottomNav(){
     if(document.getElementById('mobile-bottom-nav'))return;
     const nav=document.createElement('nav');
@@ -1936,8 +2229,11 @@ init();
     financeTweakLock=true;
     try{
       syncVisibleTabs();
+      setupMobileAppTopbar();
+      syncMobileShellMode();
       setupMobilePeriodControl();
       syncMobilePeriodControl();
+      setupMobileFinanceSegments();
       setupMobileBottomNav();
       syncMobileBottomNav();
       mergeFinanceUserMoneyAndTariffs();
