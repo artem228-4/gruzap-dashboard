@@ -897,7 +897,7 @@ body:not(.locked) .auth-screen{display:none}
 <script>
 const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboard',analytics:'https://n8n-dev.gruzapp.team/webhook/gruzap-analytics'};
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
-const state={tab:'finance',appMode:'overview',financeMode:'yookassa',errorKind:'all',errorRetryTimer:null,errorRetryCount:0,loadingTimer:null,loadingHideTimer:null,loadingStartedAt:0,loadingEstimateMs:35000,requestSeq:0,mode:'legacy',data:{appmetrica:null,metrika:null,direct:null,finance:null},from:null,to:null};
+const state={tab:'finance',appMode:'overview',financeMode:'yookassa',errorKind:'all',errorRetryTimer:null,errorRetryCount:0,loadingTimer:null,loadingHideTimer:null,loadingWatchdog:null,loadingStartedAt:0,loadingEstimateMs:35000,requestSeq:0,mode:'legacy',data:{appmetrica:null,metrika:null,direct:null,finance:null},from:null,to:null};
 const viewCache=new Map();
 const num=v=>{const n=Number(v);return Number.isFinite(n)?n:0};
 const d0=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
@@ -1221,7 +1221,7 @@ function setActiveTab(tab){state.tab=tab;document.querySelectorAll('.tab').forEa
 function mergeDashboardData(next){Object.entries(next||{}).forEach(([key,value])=>{if(value!==null&&value!==undefined)state.data[key]=value})}
 function showCachedView(){const key=cacheKey();if(!key||!viewCache.has(key))return false;mergeDashboardData(viewCache.get(key));render();const note=document.getElementById('period-note');if(note)note.textContent='Показаны ранее загруженные данные. Для свежего запроса нажмите «Обновить».';return true}
 function loadCurrentView(){if(!showCachedView())refreshData()}
-async function refreshData(options={}){const force=!!options.force;const key=cacheKey();if(!force&&showCachedView())return;const button=document.getElementById('refresh');const requestId=++state.requestSeq;let ok=false;if(button)button.disabled=true;const periodNote=document.getElementById('period-note');if(periodNote)periodNote.textContent='Запрос ушёл в n8n, ждём данные...';startLoading(requestId);try{const response=await fetch(ENDPOINTS.dashboard,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(dashboardPayload())});if(!response.ok)throw new Error(`HTTP ${response.status}`);const payload=await readJsonUtf8(response);if(requestId!==state.requestSeq)return;const normalized=normResponse(payload);state.mode=normalized.mode;mergeDashboardData(normalized.data);if(key)viewCache.set(key,normalized.data);ok=true}catch(error){console.error(error)}finally{if(requestId!==state.requestSeq)return;if(button)button.disabled=false;render();stopLoading(ok,requestId)}}
+async function refreshData(options={}){const force=!!options.force;const key=cacheKey();if(!force&&showCachedView())return;const button=document.getElementById('refresh');const requestId=++state.requestSeq;let ok=false;let renderOk=true;const controller=typeof AbortController!=='undefined'?new AbortController():null;const timeout=setTimeout(()=>{if(requestId===state.requestSeq&&controller)controller.abort()},90000);if(button)button.disabled=true;const periodNote=document.getElementById('period-note');if(periodNote)periodNote.textContent='Запрос ушёл в n8n, ждём данные...';startLoading(requestId);try{const response=await fetch(ENDPOINTS.dashboard,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(dashboardPayload()),signal:controller?controller.signal:undefined});if(!response.ok)throw new Error(`HTTP ${response.status}`);const payload=await readJsonUtf8(response);if(requestId!==state.requestSeq)return;const normalized=normResponse(payload);state.mode=normalized.mode;mergeDashboardData(normalized.data);if(key)viewCache.set(key,normalized.data);ok=true}catch(error){console.error(error)}finally{clearTimeout(timeout);if(requestId!==state.requestSeq)return;if(button)button.disabled=false;try{render()}catch(error){renderOk=false;ok=false;console.error(error)}stopLoading(ok&&renderOk,requestId)}}
 const md=text=>String(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/^###\s+(.+)$/gm,'<p><strong>$1</strong></p>').replace(/^##\s+(.+)$/gm,'<p><strong>$1</strong></p>').replace(/^#\s+(.+)$/gm,'<p><strong>$1</strong></p>').replace(/^[-•]\s+(.+)$/gm,'<p>• $1</p>').replace(/\n\n+/g,'</p><p>').replace(/\n/g,'<br>');
 function showModal(content,title,sub){document.getElementById('modal-title').textContent=title;document.getElementById('modal-sub').textContent=sub;document.getElementById('modal-body').innerHTML=content;document.getElementById('overlay').classList.add('show');document.getElementById('overlay').setAttribute('aria-hidden','false');if(window.normalizeProductCopy)window.normalizeProductCopy(document.getElementById('overlay'))}
 function hideModal(){document.getElementById('overlay').classList.remove('show');document.getElementById('overlay').setAttribute('aria-hidden','true')}
@@ -1319,15 +1319,23 @@ init();
     state.loadingStartedAt=Date.now();
     if(state.loadingTimer)clearInterval(state.loadingTimer);
     if(state.loadingHideTimer)clearTimeout(state.loadingHideTimer);
+    if(state.loadingWatchdog)clearTimeout(state.loadingWatchdog);
     const overlay=ensureLoadingOverlay();
     overlay.setAttribute('aria-hidden','false');
     document.body.classList.add('is-loading-data');
     setLoadingProgress(8);
     state.loadingTimer=setInterval(()=>{if(requestId===state.requestSeq)setLoadingProgress(progressValue())},220);
+    state.loadingWatchdog=setTimeout(()=>{
+      if(requestId===state.requestSeq&&document.body.classList.contains('is-loading-data')){
+        console.warn('Загрузка остановлена защитным таймером: источник отвечает слишком долго.');
+        window.stopLoading(false,requestId);
+      }
+    },95000);
   };
   window.stopLoading=function(ok,requestId){
     if(requestId!==state.requestSeq)return;
     if(state.loadingTimer){clearInterval(state.loadingTimer);state.loadingTimer=null}
+    if(state.loadingWatchdog){clearTimeout(state.loadingWatchdog);state.loadingWatchdog=null}
     setLoadingProgress(ok?100:0);
     state.loadingHideTimer=setTimeout(()=>{
       if(requestId!==state.requestSeq)return;
