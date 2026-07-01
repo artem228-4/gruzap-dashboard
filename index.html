@@ -443,11 +443,11 @@ body:not(.locked) .auth-screen{display:none}
 }
 @media(max-width:400px){
   .shell{padding:var(--s-2) var(--s-2) var(--s-6)}
-  .hero,.card,.panel{padding:14px}
+  .hero,.card,.panel{padding:var(--s-4)}
   .presets{grid-template-columns:repeat(2,minmax(0,1fr))}
   .error-filters{grid-template-columns:repeat(3,minmax(0,1fr));display:grid}
   .error-filter{justify-content:center}
-  .controls{grid-template-columns:1fr;padding:14px}
+  .controls{grid-template-columns:1fr;padding:var(--s-4)}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
@@ -618,6 +618,277 @@ body:not(.locked) .auth-screen{display:none}
   .user-money-tariffs .tariff-card{padding:var(--s-3)}
   .user-money-saas{padding-top:var(--s-3);gap:var(--s-2)}
   .user-money-saas .metric-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .brand,
+  .hero-top,
+  .toolbar-row,
+  .controls,
+  .head,
+  .mobile-tab-trigger{
+    gap:16px!important;
+  }
+  .presets,
+  .mode-switch,
+  .tabs.mobile-open,
+  .payment-notes,
+  .truth-list,
+  .rows,
+  .stack,
+  .user-money-panel,
+  .user-money-tariffs,
+  .user-money-saas{
+    gap:8px!important;
+  }
+  .tabs.mobile-open .tab,
+  .chip,
+  .badge,
+  .pill,
+  .preset,
+  .ghost,
+  .primary,
+  .mode-btn,
+  .error-filter,
+  .detail-btn,
+  .collapse-toggle{
+    padding:8px 16px!important;
+  }
+  .hero,
+  .card,
+  .panel,
+  .controls,
+  .presets,
+  .mode-switch,
+  .mobile-tab-trigger,
+  .empty{
+    padding:16px!important;
+  }
+  .user-money-tariffs,
+  .user-money-saas{
+    padding-top:16px!important;
+  }
+}
+/* Mobile finance cockpit: app-like first screen, strict 8px spacing only. */
+.mobile-finance-cockpit{display:none}
+@media(max-width:640px){
+  .finance-kpi-cards,
+  .payment-hero{display:none!important}
+  .mobile-finance-cockpit{
+    display:grid;
+    gap:16px;
+  }
+  .mobile-finance-main,
+  .mobile-finance-link,
+  .mobile-finance-chart{
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(25,31,40,.98),rgba(16,22,29,.98));
+    border-radius:24px;
+    padding:16px;
+    box-shadow:var(--shadow-sm);
+    overflow:hidden;
+  }
+  .mobile-finance-main{
+    position:relative;
+    display:grid;
+    gap:16px;
+  }
+  .mobile-finance-main::before{
+    content:"";
+    position:absolute;
+    inset:0 auto auto 0;
+    width:80px;
+    height:4px;
+    background:linear-gradient(90deg,var(--accent),transparent);
+  }
+  .mobile-finance-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+    padding-top:8px;
+  }
+  .mobile-finance-title{
+    display:grid;
+    gap:8px;
+    min-width:0;
+  }
+  .mobile-finance-title span,
+  .mobile-finance-tile small,
+  .mobile-finance-chart small{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.12em;
+    line-height:1.2;
+    text-transform:uppercase;
+  }
+  .mobile-finance-title strong{
+    color:#fff;
+    font-size:20px;
+    line-height:1.15;
+    letter-spacing:-.03em;
+  }
+  .mobile-finance-period{
+    flex:0 0 auto;
+    border:1px solid rgba(212,255,51,.24);
+    border-radius:999px;
+    background:rgba(212,255,51,.08);
+    color:#f4ffcc;
+    font-size:11px;
+    font-weight:900;
+    line-height:1.2;
+    padding:8px 16px;
+    white-space:nowrap;
+  }
+  .mobile-finance-hero{
+    display:grid;
+    gap:8px;
+  }
+  .mobile-finance-hero b{
+    color:var(--accent);
+    display:block;
+    font-size:clamp(40px,11vw,48px);
+    font-weight:900;
+    letter-spacing:-.06em;
+    line-height:1;
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .mobile-finance-hero span{
+    color:#c8d1da;
+    font-size:13px;
+    line-height:1.45;
+  }
+  .mobile-finance-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .mobile-finance-tile{
+    border:1px solid var(--line-2);
+    background:rgba(255,255,255,.035);
+    border-radius:16px;
+    display:grid;
+    gap:8px;
+    min-height:96px;
+    padding:16px;
+  }
+  .mobile-finance-tile b{
+    color:#f6ffe2;
+    font-size:clamp(20px,6.4vw,28px);
+    font-weight:900;
+    letter-spacing:-.045em;
+    line-height:1.04;
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .mobile-finance-tile span{
+    color:#c8d1da;
+    font-size:12px;
+    line-height:1.35;
+  }
+  .mobile-finance-link{
+    display:grid;
+    gap:16px;
+  }
+  .mobile-link-row{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+  }
+  .mobile-link-cell{
+    border:1px solid var(--line-2);
+    border-radius:16px;
+    padding:16px;
+    background:rgba(255,255,255,.028);
+    display:grid;
+    gap:8px;
+    min-width:0;
+  }
+  .mobile-link-cell b{
+    color:#fff;
+    font-size:22px;
+    line-height:1;
+    letter-spacing:-.04em;
+    white-space:nowrap;
+  }
+  .mobile-link-cell span{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.08em;
+    line-height:1.25;
+    text-transform:uppercase;
+  }
+  .mobile-finance-chart{
+    display:grid;
+    gap:16px;
+  }
+  .mobile-chart-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .mobile-chart-head h3{
+    margin:0;
+    color:#fff;
+    font-size:16px;
+    line-height:1.2;
+  }
+  .mobile-bars{
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+    height:104px;
+    padding-top:16px;
+  }
+  .mobile-bar{
+    flex:1 1 0;
+    min-width:0;
+    display:grid;
+    align-items:end;
+    gap:8px;
+    height:100%;
+  }
+  .mobile-bar i{
+    display:block;
+    min-height:8px;
+    border-radius:999px 999px 8px 8px;
+    background:linear-gradient(180deg,var(--accent),rgba(111,220,149,.72));
+    box-shadow:0 0 16px rgba(212,255,51,.18);
+  }
+  .mobile-bar span{
+    color:var(--muted);
+    font-size:10px;
+    line-height:1;
+    text-align:center;
+    white-space:nowrap;
+  }
+  .mobile-finance-more{
+    color:#dfe8c1;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:rgba(255,255,255,.035);
+    padding:16px;
+    text-align:center;
+    font-size:13px;
+    font-weight:900;
+    line-height:1.25;
+  }
+}
+@media(max-width:380px){
+  .mobile-finance-main,
+  .mobile-finance-link,
+  .mobile-finance-chart,
+  .mobile-link-cell,
+  .mobile-finance-more{
+    padding:16px;
+  }
+  .mobile-finance-tile{padding:8px}
+  .mobile-link-row{grid-template-columns:1fr}
+  .mobile-finance-hero b{font-size:clamp(36px,10.5vw,42px)}
+  .mobile-finance-tile b{font-size:clamp(17px,5.4vw,22px)}
 }
 </style>
 </head>
@@ -838,6 +1109,27 @@ function stopLoading(ok,requestId){if(requestId!==state.requestSeq)return;if(sta
 function appView(data){if(!data)return `<section class="empty"><h3>Приложение пока не ответило</h3><p>После ответа источника сюда автоматически подтянутся события приложения, география и установки.</p></section>`;const maxGeo=Math.max(...data.geo.map(item=>item.drivers),1);const maxSource=Math.max(...data.sources.map(item=>item.installs),1);const events=data.events.slice().sort((a,b)=>b.total_events-a.total_events);const funnel=[['Открыл фильтр',data.summary.open_filter],['Открыл заявку',data.summary.open_order],['Нажал на телефон',data.summary.phone_tap]];return `<section class="cards">${card('Активные водители',nfmt(data.summary.active_users),'Максимум уникальных водителей по ключевым событиям.',`${nfmt(data.summary.total_events)} действий за период`,'var(--accent)')}${card('Установки',nfmt(data.installs_total),'Сумма установок по всем источникам приложения.',data.sources.length?`Источников: ${nfmt(data.sources.length)}`:'Разбивка появится после ответа источника','var(--cyan)')}${card('Регистрации',nfmt(data.summary.registrations),'Сколько водителей дошли до регистрации.',`${pct(data.summary.phone_conversion)} дошли до звонка`,'var(--green)')}${card('Переход в звонок',pct(data.summary.phone_conversion),'Конверсия из просмотра заявки в нажатие на телефон.',`${nfmt(data.summary.phone_tap)} звонков из ${nfmt(data.summary.open_order)} просмотров`,'var(--yellow)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Продуктовая воронка</h2><p>Путь водителя от открытия фильтра до контакта по заявке.</p></div><div class="badge">Ключевой путь</div></div><div class="stack">${funnel.map((row,index,list)=>{const prev=index?list[index-1][1]:row[1];const share=index&&prev?`${Math.round(row[1]/prev*100)}% от предыдущего шага`:'Стартовый шаг';return bar(row[0],row[1],Math.max(...list.map(item=>item[1]),1),'',share,`${nfmt(row[1])} уникальных водителей. Подпись справа показывает, сколько пользователей дошло до этого этапа относительно предыдущего шага.`)}).join('')}</div></article><article class="panel"><div class="head"><div><h2>Маршруты поиска</h2><p>Как распределяется интерес между межгородом и городскими направлениями.</p></div><div class="badge">Структура спроса</div></div>${split(data.summary.route_intercity_percent,'Межгород','Город')}</article></section><section class="half"><article class="panel"><div class="head"><div><h2>География активации</h2><p>Города, где приложение используется активнее всего.</p></div><div class="badge">Города</div></div><div class="rows">${data.geo.length?data.geo.map(item=>bar(item.city,item.drivers,maxGeo,'',nfmt(item.drivers),`${nfmt(item.drivers)} активных водителей из этого города за выбранный период.`)).join(''):'<div class="empty"><h3>Нет географии</h3><p>После ответа источника здесь появится разбивка по городам.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Источники установок</h2><p>Каналы, которые приводят установки приложения.</p></div><div class="badge">Установки</div></div><div class="rows">${data.sources.length?data.sources.map(item=>bar(item.name,item.installs,maxSource,'cyan',nfmt(item.installs),`${nfmt(item.installs)} установок из этого источника. Полоса показывает долю относительно самого сильного источника.`)).join(''):'<div class="empty"><h3>Нет источников</h3><p>Разбивка появится после ответа ветки с установками.</p></div>'}</div></article></section><article class="panel"><div class="head"><div><h2>Топ событий приложения</h2><p>Сырые продуктовые события для детальной проверки активности.</p></div><div class="badge">${nfmt(events.length)} событий</div></div><div class="tablebox"><table><thead><tr><th>Событие</th><th class="num">Уникальные водители</th><th class="num">Всего действий</th></tr></thead><tbody>${events.map(item=>`<tr><td>${item.event_name}</td><td class="num">${nfmt(item.unique_devices)}</td><td class="num">${nfmt(item.total_events)}</td></tr>`).join('')}</tbody></table></div></article>`}
 function metrikaView(data){if(!data)return `<section class="empty"><h3>Яндекс Метрика ещё не пришла в боевой ответ</h3><p>Интерфейс уже готов и ждёт объект <strong>metrika</strong> со сводкой, рядом по дням, источниками и переходами в Telegram.</p></section>`;const maxSource=Math.max(...data.sources.map(item=>item.visits),1);const maxBot=Math.max(...data.bot_pages.map(item=>item.visits),1);return `<section class="cards">${card('Сессии сайта',nfmt(data.summary.sessions),'Все визиты за выбранный период.',`${nfmt(data.summary.users)} пользователей`,'var(--cyan)')}${card('Показатель отказов',pct(data.summary.bounce_rate,1),'Чем ниже показатель, тем лучше совпадение трафика и посадочной страницы.',data.summary.bounce_rate>60?'Нужно улучшать качество трафика':'Поведение выглядит устойчиво',data.summary.bounce_rate>60?'var(--red)':'var(--green)')}${card('Средняя сессия',mins(data.summary.avg_session_min),'Среднее время визита на сайте.','Показывает глубину внимания к сайту','var(--yellow)')}${card('Переходы в Telegram',pct(data.summary.bot_activation_percent),'Доля переходов в Telegram от общего объёма сессий.',`${nfmt(data.summary.bot_sessions)} сессий`,'var(--accent)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Динамика сессий по дням</h2><p>Спокойный список по дням вместо шумной шкалы снизу.</p></div><div class="badge">По дням</div></div>${days(data.series,'visits','cyan','Сессии сайта за день')}</article><article class="panel"><div class="head"><div><h2>Качество веб-потока</h2><p>Быстрый слой для оценки интереса и качества посадки.</p></div><div class="badge">Сводка</div></div><div class="stats"><div class="stat"><b>${nfmt(data.summary.sessions)}</b><span>Всего сессий в Яндекс Метрике за выбранный период.</span></div><div class="stat"><b>${pct(data.summary.bounce_rate,1)}</b><span>Отказы. Чем ниже значение, тем лучше первая посадка.</span></div><div class="stat"><b>${mins(data.summary.avg_session_min)}</b><span>Среднее время визита и глубина внимания.</span></div></div>${data.warnings.length?`<div class="notes" style="margin-top:16px">${data.warnings.map(item=>`<div class="pill">${item}</div>`).join('')}</div>`:''}</article></section><section class="half"><article class="panel"><div class="head"><div><h2>Источники веб-трафика</h2><p>Какие каналы формируют посещаемость сайта.</p></div><div class="badge">Источники</div></div><div class="rows">${data.sources.length?data.sources.map(item=>bar(item.name,item.visits,maxSource,'cyan',`${nfmt(item.visits)} визитов`,`${nfmt(item.visits)} визитов и ${nfmt(item.users)} пользователей из этого источника за период.`)).join(''):'<div class="empty"><h3>Нет источников</h3><p>Как только ветка Метрики вернёт список источников, список заполнится автоматически.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Переходы в Telegram</h2><p>Страницы, с которых люди чаще всего уходят в Telegram.</p></div><div class="badge">Точки входа</div></div><div class="rows">${data.bot_pages.length?data.bot_pages.map(item=>bar(item.name,item.visits,maxBot,'yellow',`${nfmt(item.visits)} визитов`,`${nfmt(item.visits)} визитов и ${nfmt(item.users)} пользователей по этой точке входа в Telegram.`)).join(''):'<div class="empty"><h3>За выбранный период переходов не найдено</h3><p>Это не ошибка. Метрика по фильтру Telegram и t.me вернула ноль строк, поэтому блок остаётся честно пустым.</p></div>'}</div></article></section>`}
 function directView(data){if(!data)return `<section class="empty"><h3>Яндекс Директ ещё не пришёл в боевой ответ</h3><p>Интерфейс уже готов и ждёт объект <strong>direct</strong> со сводкой и дневным рядом.</p></section>`;const rows=data.daily.length?data.daily:[];return `<section class="cards">${card('Расход',money(data.summary.spend),'Общий рекламный расход за период.',data.summary.cpa?`Цена конверсии ${money(data.summary.cpa)}`:'Цена конверсии пока не определена','var(--green)')}${card('Показы',nfmt(data.summary.impressions),'Сколько раз объявления были показаны аудитории.',`${nfmt(data.summary.clicks)} кликов`,'var(--cyan)')}${card('CTR',pct(data.summary.ctr,2),'Отношение кликов к показам.',data.summary.ctr<1?'Стоит усилить креатив или семантику':'Показатель в рабочем диапазоне',data.summary.ctr<1?'var(--red)':'var(--accent)')}${card('Конверсии',nfmt(data.summary.conversions),'Целевые действия из рекламного трафика.',data.summary.cpa?`Цена конверсии ${money(data.summary.cpa)}`:'Пока без расчёта цены','var(--yellow)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Динамика расхода по дням</h2><p>Дневной ряд без перегруженной нижней шкалы.</p></div><div class="badge">Расход по дням</div></div>${days(rows.map(item=>({...item,label:item.date.slice(5)})),'spend','','Расход за день',value=>money(value))}</article><article class="panel"><div class="head"><div><h2>Эффективность закупки</h2><p>Короткий срез по стоимости трафика и результату.</p></div><div class="badge">Эффективность</div></div><div class="stats"><div class="stat"><b>${money(data.summary.avg_cpc)}</b><span>Средняя цена клика в рекламном трафике.</span></div><div class="stat"><b>${pct(data.summary.cr,2)}</b><span>Конверсия из клика в целевое действие.</span></div><div class="stat"><b>${data.summary.cpa?money(data.summary.cpa):'н/д'}</b><span>Средняя стоимость конверсии.</span></div></div>${data.warnings.length?`<div class="notes" style="margin-top:16px">${data.warnings.map(item=>`<div class="pill">${item}</div>`).join('')}</div>`:''}</article></section><article class="panel"><div class="head"><div><h2>Таблица по дням</h2><p>Дневные значения выровнены по числам и читаются ровно на десктопе и на телефоне.</p></div><div class="badge">${nfmt(rows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Дата</th><th class="num">Расход</th><th class="num">Показы</th><th class="num">Клики</th><th class="num">CTR</th><th class="num">CPC</th><th class="num">Конверсии</th><th class="num">CPA</th></tr></thead><tbody>${rows.length?rows.map(item=>`<tr><td>${item.date}</td><td class="num">${money(item.spend)}</td><td class="num">${nfmt(item.impressions)}</td><td class="num">${nfmt(item.clicks)}</td><td class="num">${pct(item.ctr,2)}</td><td class="num">${money(item.avg_cpc)}</td><td class="num">${nfmt(item.conversions)}</td><td class="num">${item.cpa?money(item.cpa):'н/д'}</td></tr>`).join(''):'<tr><td colspan="8">Дневной ряд пока пуст. После публикации обновлённой ветки данные появятся автоматически.</td></tr>'}</tbody></table></div></article>`}function financeModeSwitch(){return ''}
+function mobileFinanceCockpit(ctx) {
+  const { y, s, unavailable, cleanRevenue, cleanAfterRefunds, link, linkUnavailable, userIdReady, payingUsers, arppu, dau, mau, dauMau } = ctx;
+  const value = unavailable ? '—' : money(cleanAfterRefunds || cleanRevenue || s.gross_revenue);
+  const period = range(state.from, state.to);
+  const payingValue = userIdReady ? nfmt(payingUsers) : 'н/д';
+  const arppuValue = userIdReady && arppu != null ? money(arppu) : 'н/д';
+  const interestValue = linkUnavailable || link.payment_interest_users == null ? '—' : nfmt(link.payment_interest_users);
+  const conversionValue = userIdReady && link.payment_interest_users ? pct((payingUsers / Math.max(link.payment_interest_users, 1)) * 100, 1) : (linkUnavailable || link.conversion_percent == null ? 'н/д' : pct(link.conversion_percent, 1));
+  const audienceValue = dau != null && mau != null ? `${nfmt(dau)} / ${nfmt(mau)}` : (dauMau != null ? pct(dauMau, 1) : 'н/д');
+  const rows = (y.series || []).filter((item) => num(item.revenue) || num(item.refunds)).slice(-8);
+  const maxRevenue = Math.max(...rows.map((item) => num(item.revenue)), 1);
+  const bars = rows.length
+    ? rows.map((item) => {
+      const revenue = num(item.revenue);
+      const height = Math.max(8, Math.round((revenue / maxRevenue) * 88));
+      const label = String(item.label || item.date || '—').slice(5) || '—';
+      return `<div class="mobile-bar" title="${esc(label)}: ${money(revenue)}"><i style="height:${height}px"></i><span>${esc(label)}</span></div>`;
+    }).join('')
+    : '<div class="mobile-finance-more">Дневная динамика появится после ответа Ю-Кассы.</div>';
+  return `<section class="mobile-finance-cockpit" aria-label="Мобильная сводка финансов"><article class="mobile-finance-main"><div class="mobile-finance-head"><div class="mobile-finance-title"><span>Финансы</span><strong>Чистый результат</strong></div><div class="mobile-finance-period">${esc(period)}</div></div><div class="mobile-finance-hero"><b>${value}</b><span>${unavailable ? 'Ю-Касса не ответила. Не считаем это нулём.' : 'После комиссии и возвратов за выбранный период.'}</span></div><div class="mobile-finance-grid"><div class="mobile-finance-tile"><small>Оплачено</small><b>${unavailable ? '—' : money(s.gross_revenue)}</b><span>${unavailable ? 'Источник недоступен' : `${nfmt(s.successful_payments)} оплат`}</span></div><div class="mobile-finance-tile"><small>К зачислению</small><b>${unavailable ? '—' : money(cleanRevenue)}</b><span>${s.income_known ? 'после комиссии' : 'до комиссии'}</span></div><div class="mobile-finance-tile"><small>Платящих</small><b>${payingValue}</b><span>уникальные пользователи</span></div><div class="mobile-finance-tile"><small>На платящего</small><b>${arppuValue}</b><span>после возвратов</span></div></div></article><article class="mobile-finance-link"><div class="mobile-chart-head"><h3>Связка с приложением</h3><small>${linkUnavailable ? 'нет ответа' : 'воронка'}</small></div><div class="mobile-link-row"><div class="mobile-link-cell"><span>интерес</span><b>${interestValue}</b></div><div class="mobile-link-cell"><span>оплаты</span><b>${unavailable ? '—' : nfmt(s.successful_payments)}</b></div><div class="mobile-link-cell"><span>конверсия</span><b>${conversionValue}</b></div></div></article><article class="mobile-finance-chart"><div class="mobile-chart-head"><h3>Деньги по дням</h3><small>${audienceValue === 'н/д' ? 'выручка' : `DAU / MAU: ${audienceValue}`}</small></div><div class="mobile-bars">${bars}</div></article><div class="mobile-finance-more">Подробности ниже: пользователи, тарифы, удержание, статусы и платежи.</div></section>`;
+}
 function financeWarningRu(code) {
   const map = {
     no_yookassa_payments: 'Ю-Касса ответила: за выбранный период платежи не найдены.',
@@ -863,7 +1155,7 @@ function financeWarningRu(code) {
   const linkCount = (value) => linkUnavailable || value == null ? '—' : nfmt(value);
   const linkPercent = (value) => linkUnavailable || value == null ? 'н/д' : pct(value, 1);
   const linkNote = linkUnavailable
-    ? '<div class="notes" style="margin-top:14px"><div class="pill">Приложение не ответило по кликам. Оплаты ниже реальные, но конверсию из клика сейчас считать нельзя.</div></div>'
+    ? '<div class="notes" style="margin-top:16px"><div class="pill">Приложение не ответило по кликам. Оплаты ниже реальные, но конверсию из клика сейчас считать нельзя.</div></div>'
     : '';
   const maxMethod = Math.max(...y.methods.map((item) => item.amount), 1);
   const maxProduct = Math.max(...y.products.map((item) => item.amount), 1);
@@ -906,8 +1198,8 @@ function financeWarningRu(code) {
     { title: linkUnavailable ? 'Приложение не ответило по кликам' : 'Факт: интерес к оплате в приложении', text: linkUnavailable ? 'Сейчас не считаем связку кликов с оплатой: Приложение не дошло до сервера, поэтому это не ноль кликов.' : `${linkCount(link.payment_interest_users)} уникальных водителей проявили интерес, ${linkCount(link.payment_taps_total)} нажатий всего.`, warn: linkUnavailable },
     { title: tariffsReady ? 'Факт: тарифы размечены' : 'Нужно для тарифов и источников', text: tariffsReady ? `${nfmt(tariffRows.length)} тарифных группы пришли из платежей. Доли считаются по чистой выручке.` : 'Передавать период тарифа, цену тарифа, номер заказа, источник, кампанию и экран оплаты. Неизвестный источник и органику не распределяем вручную.', warn: !tariffsReady },
   ];
+  const mobileCockpit = mobileFinanceCockpit({ y, s, unavailable, cleanRevenue, cleanAfterRefunds, link, linkUnavailable, userIdReady, payingUsers, arppu, dau, mau, dauMau });
 
-  return `<section class="cards">${card('Оплачено', moneyOrDash(s.gross_revenue), 'Только платежи со статусом «Оплачен» и признаком оплаты.', unavailable ? 'Данные не получены' : `${countOrDash(s.successful_payments)} успешных оплат`, 'var(--accent)')}${card('К зачислению', moneyOrDash(cleanRevenue), s.income_known ? 'Сумма после комиссии, если Ю-Касса её передала.' : 'Оценка по сумме платежей, без комиссии.', incomeNote, 'var(--green)')}${card('После возвратов', moneyOrDash(cleanAfterRefunds), 'Чистая сумма к зачислению минус возвраты за выбранный период.', s.refunded_amount > 0 ? `Возвраты: ${money(s.refunded_amount)}` : 'Возвратов нет', 'var(--cyan)')}${card('Средний платёж', moneyOrDash(s.average_check), 'Средняя сумма одной успешной оплаты. Это не средний доход на пользователя.', unavailable ? 'Ю-Касса не ответила' : `${countOrDash(s.successful_payments)} оплат в расчёте`, 'var(--yellow)')}</section><section class="payment-hero"><article class="panel money-panel"><div class="head"><div><h2>Деньги по Ю-Кассе</h2><p class="money-desktop-note">Реальные деньги от Ю-Кассы: оплаты, ожидание, отмены и возвраты.</p></div><div class="badge money-desktop-badge">До ${nfmt(s.page_limit)} платежей</div></div><div class="money-focus"><strong>${moneyOrDash(cleanAfterRefunds || cleanRevenue || s.gross_revenue)}</strong><span class="money-desktop-copy">${unavailable ? unavailableNote : `Чистый результат за период ${range(state.from, state.to)}: сумма к зачислению минус возвраты. Ожидание подтверждения деньгами не считается.`}</span><span class="money-mobile-copy">${mobileMoneyCopy}</span></div><div class="money-mobile-meta">${mobilePaymentMeta}</div><div class="payment-notes money-desktop-notes"><span>Платежей в периоде: ${countOrDash(s.period_payments_loaded)}</span><span>Возвраты: ${moneyOrDash(s.refunded_amount)}</span></div>${warnings.length ? `<div class="notes money-desktop-warnings">${warnings.map((item) => `<div class="pill">${financeWarningRu(item)}</div>`).join('')}</div>` : ''}</article><article class="panel"><div class="head"><div><h2>Связка с приложением</h2><p>Сколько людей проявили интерес к оплате и сколько оплат пришло от Ю-Кассы.</p></div><div class="badge">${linkUnavailable ? 'Приложение недоступно' : 'Воронка денег'}</div></div><div class="stats"><div class="stat"><b>${linkCount(link.payment_interest_users)}</b><span>${linkUnavailable ? 'Клики приложения не загрузились, поэтому это не ноль пользователей.' : 'Уникальные водители с интересом к оплате. Повторные нажатия одного водителя не раздувают эту цифру.'}</span></div><div class="stat"><b>${countOrDash(s.successful_payments)}</b><span>Успешные оплаты, подтверждённые Ю-Кассой. Это платежи, а не уникальные плательщики.</span></div><div class="stat"><b>${userIdReady && link.payment_interest_users ? pct((payingUsers / link.payment_interest_users) * 100, 1) : linkPercent(link.conversion_percent)}</b><span>${userIdReady ? 'Конверсия уникальных заинтересованных пользователей в платящих.' : 'Пока приближённо: оплаты делятся на уникальные клики, нужен идентификатор пользователя в платеже.'}</span></div></div><div class="payment-notes" style="margin-top:14px"><span>Нажатий всего: ${linkCount(link.payment_taps_total)}</span><span>Из нажатий в оплату: ${linkPercent(link.tap_to_payment_percent)}</span></div>${linkNote}</article></section><section class="finance-plan"><article class="panel"><div class="head"><div><h2>Деньги по пользователям</h2><p>То, что просил руководитель: не просто платежи, а сколько людей принесли деньги и сколько приносит один платящий пользователь.</p></div><div class="badge">${userIdReady ? 'идентификатор найден' : 'Ждём идентификатор'}</div></div><div class="metric-grid"><div class="metric-tile"><small>Платящие пользователи</small><b>${valueOrNeed(payingUsers)}</b><span>Уникальные пользователи, которые оплатили в периоде.</span></div><div class="metric-tile"><small>Доход на платящего</small><b>${moneyOrNeed(arppu)}</b><span>Чистая выручка после возвратов / платящие пользователи.</span></div><div class="metric-tile"><small>LTV</small><b>${moneyOrNeed(unit.average_ltv)}</b><span>Средняя выручка на платящего пользователя по загруженной истории платежей.</span></div></div></article><article class="panel"><div class="head"><div><h2>Качество данных</h2><p>Разделяет факты, предположения и то, что надо добавить в приложение и сервер.</p></div><div class="badge">Без догадок</div></div><div class="truth-list">${truthRows.map((item) => `<div class="truth-row ${item.warn ? 'warn' : ''}"><span class="truth-dot"></span><div><b>${esc(item.title)}</b><span>${esc(item.text)}</span></div></div>`).join('')}</div></article></section><section class="two finance-tariff-saas"><article class="panel"><div class="head"><div><h2>Подписки по тарифам</h2><p>300 ₽ = неделя, 900 ₽ = месяц, 9 900 ₽ = год. Точно считаем только после разметки тарифа в платеже.</p></div><div class="badge">${tariffRows.length ? 'Тарифы пришли' : 'Нужна разметка'}</div></div><div class="tariff-grid">${tariffCards}</div></article><article class="panel"><div class="head"><div><h2>SaaS, DAU/MAU и удержание</h2><p>Повторные оплаты, удержание, отток и активная аудитория приложения. Если отдельной аудитории нет в ответе, не подменяем её нулями.</p></div><div class="badge">SaaS-слой</div></div><div class="metric-grid"><div class="metric-tile wait"><small>Повторные плательщики</small><b>${valueOrNeed(unit.repeat_payers)}</b><span>${repeatPercent == null ? 'Нужна история по пользователю.' : `Доля повторных оплат: ${pct(repeatPercent, 1)}.`}</span></div><div class="metric-tile wait"><small>Удержание</small><b>${percentOrNeed(retentionRate)}</b><span>Платившие в прошлом месяце, которые вернулись в текущем.</span></div><div class="metric-tile wait"><small>Отток</small><b>${percentOrNeed(churnRate)}</b><span>Доля платящих прошлого месяца, которые не вернулись в текущем.</span></div><div class="metric-tile wait"><small>DAU / MAU</small><b>${audienceReady ? percentOrNeed(dauMau, 'н/д') : '<span class="value-missing">н/д</span>'}</b><span>${audienceReady ? `DAU: ${dau == null ? 'н/д' : nfmt(dau)}, MAU: ${mau == null ? 'н/д' : nfmt(mau)}.` : 'Аудитория приложения ещё не передаётся в финансовый ответ.'}</span></div></div><div class="formula-box" style="margin-top:16px"><strong>SaaS-модель:</strong><span>чистая выручка, платящие пользователи, доход на платящего, LTV, повторные оплаты, удержание, отток и DAU/MAU. Если нет аудитории или истории по пользователю, блок показывает “н/д”, а не выдумывает цифры.</span></div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Статусы платежей</h2><p>Ожидание подтверждения видно отдельно и не попадает в выручку.</p></div><div class="badge">Статусы</div></div><div class="rows">${y.statuses.length ? y.statuses.map((item) => bar(item.label, item.count, maxStatus, item.status === 'succeeded' ? 'green' : '', `${nfmt(item.count)} платежей`, `${item.label}: ${nfmt(item.count)} платежей на сумму ${money(item.amount)}.`)).join('') : `<div class="empty"><h3>${unavailable ? 'Статусы не получены' : 'Статусы не пришли'}</h3><p>${unavailable ? 'Сервер не получил ответ Ю-Кассы, поэтому статусы пока неизвестны.' : 'Когда Ю-Касса вернёт платежи, здесь появится разбивка по статусам.'}</p></div>`}</div></article><article class="panel"><div class="head"><div><h2>Способы оплаты</h2><p>Какими методами водители реально оплачивают заказ.</p></div><div class="badge">${nfmt(y.methods.length)} способов</div></div><div class="rows">${y.methods.length ? y.methods.map((item) => bar(item.label, item.amount, maxMethod, 'cyan', money(item.amount), `${item.label}: ${nfmt(item.count)} оплат на сумму ${money(item.amount)}.`)).join('') : `<div class="empty"><h3>${unavailable ? 'Способы не получены' : 'Способы оплаты не пришли'}</h3><p>${unavailable ? 'Провайдер не ответил, поэтому способы оплаты пока неизвестны.' : 'Данные появятся после первой успешной выгрузки Ю-Кассы.'}</p></div>`}</div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Выручка по продуктам</h2><p>Разбивка работает точно, когда сервер передаёт тариф, продукт или экран оплаты в разметке платежа.</p></div><div class="badge">Продукты</div></div><div class="rows">${productRows.length ? productRows.map((item) => bar(esc(item.product), item.amount, maxProduct, 'green', money(item.amount), `${esc(item.product)}: ${nfmt(item.count)} оплат на сумму ${money(item.amount)}. Источник: ${esc(item.source)}.`)).join('') : '<div class="empty"><h3>Нет разметки платежей</h3><p>Передайте тариф, продукт, внутренний номер заказа и источник в разметке платежа, и здесь появится выручка по продуктам.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Возвраты</h2><p>Сумма и количество возвратов за выбранный период.</p></div><div class="badge">${nfmt(s.refunds_count)} возвратов</div></div><div class="stats"><div class="stat"><b>${moneyOrDash(s.refunded_amount)}</b><span>Сумма возвратов за период.</span></div><div class="stat"><b>${countOrDash(s.refunds_count)}</b><span>Количество возвратов из отдельной выгрузки Ю-Кассы.</span></div><div class="stat"><b>${s.gross_revenue ? pct((s.refunded_amount / s.gross_revenue) * 100, 1) : '0%'}</b><span>Доля возвратов от оплаченной суммы.</span></div></div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Выручка по дням</h2><p>Когда фактически приходили успешные оплаты.</p></div><div class="badge">По дням</div></div>${days(y.series, 'revenue', 'green', 'Выручка за день', (value) => money(value))}</article><article class="panel"><div class="head"><div><h2>Возвраты по дням</h2><p>Когда деньги уходили обратно клиентам.</p></div><div class="badge">Возвраты</div></div>${days(y.series, 'refunds', '', 'Возвраты за день', (value) => money(value))}</article></section><article class="panel"><div class="head"><div><h2>Последние платежи</h2><p>Без персональных данных: только хвост платежа, время, статус, способ, продукт и сумма.</p></div><div class="badge">${nfmt(recentRows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Платёж</th><th>Дата</th><th>Статус</th><th>Способ</th><th>Продукт</th><th class="num">Сумма</th><th class="num">Возврат</th></tr></thead><tbody>${recentRows.length ? recentRows.map((item) => `<tr><td>…${esc(item.id_tail)}</td><td>${dateTimeRu(item.captured_at || item.created_at)}</td><td>${esc(item.status_label)}</td><td>${esc(item.method_label)}</td><td>${esc(item.product_label)}</td><td class="num">${money(item.amount)}</td><td class="num">${item.refunded_amount ? money(item.refunded_amount) : '—'}</td></tr>`).join('') : `<tr><td colspan="7">${unavailable ? 'Платежи не загружены: сервер не получил ответ Ю-Кассы.' : 'Платежей за выбранный период нет.'}</td></tr>`}</tbody></table></div></article><article class="panel"><div class="head"><div><h2>Последние возвраты</h2><p>Отдельный контроль возвратов из Ю-Кассы.</p></div><div class="badge">${nfmt(refundRows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Возврат</th><th>Платёж</th><th>Дата</th><th>Статус</th><th class="num">Сумма</th></tr></thead><tbody>${refundRows.length ? refundRows.map((item) => `<tr><td>…${esc(item.id_tail)}</td><td>…${esc(item.payment_tail)}</td><td>${dateTimeRu(item.created_at)}</td><td>${esc(item.status)}</td><td class="num">${money(item.amount)}</td></tr>`).join('') : '<tr><td colspan="5">Возвратов за выбранный период нет.</td></tr>'}</tbody></table></div></article>`;
 }function financeView(data){return financeYookassaView(data?.yookassa)}
 function financeAppMetricaView(data){if(!data)return `<section class="empty"><h3>ГРУЗАП Финансы ещё не пришли в боевой ответ</h3><p>Финансовый блок ждёт объект <strong>finance</strong> из приложения с интересом к оплате, точками входа и динамикой по дням.</p></section>`;const channels=data.channels.length?data.channels:[];const maxChannel=Math.max(...channels.map(item=>item.total_events),1);const funnel=[['Активные водители',data.summary.from_active_percent],['Регистрации в оплате',data.summary.from_registration_percent],['Нажатия на оплату',data.summary.card_share_percent+data.summary.profile_share_percent]];return `<section class="cards">${card('Уникальные водители с интересом к оплате',nfmt(data.summary.payment_interest_users),'Сколько водителей хотя бы раз нажали на оплату в приложении.',`${pct(data.summary.from_registration_percent,1)} от регистраций`,'var(--accent)')}${card('Всего нажатий на оплату',nfmt(data.summary.payment_taps_total),'Все нажатия на оплату из карточки и профиля за период.',`${nfmt(data.summary.taps_per_user,2)} нажатия на одного заинтересованного`,'var(--cyan)')}${card('Из карточки заявки',pct(data.summary.card_share_percent,1),'Доля всех платёжных нажатий, которые начинаются из карточки.',`${pct(data.summary.profile_share_percent,1)} приходится на профиль`,'var(--green)')}${card('От активных водителей',pct(data.summary.from_active_percent,1),'Доля активных водителей, которые дошли до платёжного намерения.',`${pct(data.summary.from_registration_percent,1)} от регистраций`,'var(--yellow)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Точки входа в оплату</h2><p>Где именно пользователи чаще всего начинают платёжный сценарий.</p></div><div class="badge">Приложение</div></div><div class="rows">${channels.length?channels.map(item=>bar(item.name,item.total_events,maxChannel,'green',`${nfmt(item.total_events)} нажатий`,`${nfmt(item.unique_devices)} уникальных водителей и ${nfmt(item.total_events)} нажатий по этой точке входа.`)).join(''):'<div class="empty"><h3>Нет финансовых событий</h3><p>Как только источник вернёт платежные события, блок заполнится автоматически.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Финансовая динамика по дням</h2><p>Как меняется интерес к оплате в выбранном периоде.</p></div><div class="badge">По дням</div></div>${days(data.series,'total_events','green','Нажатия на оплату за день')}</article></section><section class="two"><article class="panel"><div class="head"><div><h2>Конверсия в платёжное намерение</h2><p>Не выручка, а доля тех, кто дошёл до клика на оплату.</p></div><div class="badge">Воронка</div></div><div class="stats"><div class="stat"><b>${pct(data.summary.from_registration_percent,1)}</b><span>От регистраций к интересу к оплате.</span></div><div class="stat"><b>${pct(data.summary.from_active_percent,1)}</b><span>От активных водителей к интересу к оплате.</span></div><div class="stat"><b>${nfmt(data.summary.taps_per_user,2)}</b><span>Сколько в среднем нажатий приходится на одного заинтересованного водителя.</span></div></div>${data.warnings.length?`<div class="notes" style="margin-top:16px">${data.warnings.map(item=>`<div class="pill">${item}</div>`).join('')}</div>`:''}</article><article class="panel"><div class="head"><div><h2>Сравнение каналов оплаты</h2><p>Карточка заявки против профиля как вход в монетизацию.</p></div><div class="badge">Сплит</div></div>${split(data.summary.card_share_percent,'Карточка заявки','Профиль')}</article></section><article class="panel"><div class="head"><div><h2>Таблица платежных событий</h2><p>Уникальные водители и суммарные нажатия по каждой финансовой точке входа.</p></div><div class="badge">${nfmt(channels.length)} строки</div></div><div class="tablebox"><table><thead><tr><th>Точка входа</th><th class="num">Уникальные водители</th><th class="num">Всего нажатий</th></tr></thead><tbody>${channels.length?channels.map(item=>`<tr><td>${item.name}</td><td class="num">${nfmt(item.unique_devices)}</td><td class="num">${nfmt(item.total_events)}</td></tr>`).join(''):'<tr><td colspan="3">Пока нет платежных событий за выбранный период.</td></tr>'}</tbody></table></div></article>`}
 
@@ -1063,10 +1355,12 @@ init();
   }
   function enhanceCollapsiblePanels(){
     const collapsibleTitles=new Set(['Выручка по дням','Возвраты по дням']);
+    const mobileFinanceTitles=new Set(['Деньги по пользователям','Статусы платежей','Способы оплаты','Выручка по продуктам','Возвраты','Последние платежи','Последние возвраты']);
+    const isMobile=window.matchMedia('(max-width: 640px)').matches;
     document.querySelectorAll('#content .panel').forEach((panel,index)=>{
       const head=panel.querySelector(':scope > .head');
       const title=head?.querySelector('h2')?.textContent?.trim()||'Большой блок';
-      const shouldCollapse=panel.querySelector('.tablebox')||collapsibleTitles.has(title);
+      const shouldCollapse=panel.querySelector('.tablebox')||collapsibleTitles.has(title)||(isMobile&&mobileFinanceTitles.has(title));
       if(!shouldCollapse)return;
       if(!head||head.querySelector('.collapse-toggle'))return;
       panel.classList.add('collapsible-panel','is-collapsed');
