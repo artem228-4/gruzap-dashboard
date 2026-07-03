@@ -1431,10 +1431,10 @@ body.locked .mobile-bottom-nav{display:none!important}
   .mf-hero-card::after{
     content:"";
     position:absolute;
-    right:-56px;
-    bottom:-72px;
-    width:168px;
-    height:168px;
+    right:24px;
+    bottom:-64px;
+    width:144px;
+    height:144px;
     border-radius:48px;
     transform:rotate(18deg);
     border:1px solid rgba(191,255,0,.16);
@@ -1924,7 +1924,7 @@ body.locked .mobile-bottom-nav{display:none!important}
 }
 .mf-pay-summary{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(136px,1fr));
   gap:8px;
 }
 .mf-pay-fact{
@@ -1946,7 +1946,7 @@ body.locked .mobile-bottom-nav{display:none!important}
 }
 .mf-pay-fact strong{
   color:var(--accent);
-  font-size:24px;
+  font-size:clamp(24px,6.8vw,32px);
   line-height:1;
   white-space:nowrap;
   font-weight:1000;
@@ -2046,6 +2046,9 @@ body.locked .mobile-bottom-nav{display:none!important}
   gap:8px;
   padding:16px 0 0;
 }
+.mf-chart-bars.single{
+  justify-content:center;
+}
 .mf-chart-bar{
   min-width:0;
   flex:1 1 0;
@@ -2065,6 +2068,15 @@ body.locked .mobile-bottom-nav{display:none!important}
   border-radius:16px 16px 8px 8px;
   background:linear-gradient(180deg,var(--accent),rgba(191,255,0,.18));
   box-shadow:0 12px 28px rgba(191,255,0,.12);
+}
+.mf-chart-bars.single .mf-chart-bar{
+  flex:0 0 96px;
+  max-width:96px;
+  justify-items:center;
+}
+.mf-chart-bars.single .mf-chart-bar i{
+  width:56px;
+  max-width:56px;
 }
 .mf-chart-bar span{
   color:var(--muted);
@@ -2099,6 +2111,244 @@ body.locked .mobile-bottom-nav{display:none!important}
   }
   .mf-tariff-line b{
     font-size:24px;
+  }
+}
+
+/* Mobile overflow hard gate: component-safe layout for narrow iPhone modals/cards. */
+@media(max-width:640px){
+  .mf-hero-card::after{
+    right:24px!important;
+    bottom:-40px!important;
+    width:104px!important;
+    height:104px!important;
+  }
+  .overlay{
+    padding:8px!important;
+  }
+  .modal{
+    width:min(100%,420px)!important;
+    max-height:calc(100dvh - 16px)!important;
+    border-radius:24px!important;
+  }
+  .modalhead{
+    gap:16px!important;
+    padding:16px!important;
+  }
+  .modalhead h3{
+    font-size:clamp(20px,6vw,24px)!important;
+    line-height:1.12!important;
+  }
+  .modalsub{
+    font-size:12px!important;
+    line-height:1.35!important;
+  }
+  .modalbody{
+    padding:16px!important;
+    overflow-x:hidden!important;
+  }
+  .mobile-detail-modal-content,
+  .mobile-detail-modal-content *{
+    box-sizing:border-box;
+  }
+  .mobile-detail-modal-content{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    overflow:hidden;
+  }
+  .mobile-detail-modal-content .mf-pay-summary,
+  .modalbody .mobile-detail-modal-content .mf-pay-summary{
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+  .mobile-detail-modal-content .mf-pay-fact,
+  .modalbody .mobile-detail-modal-content .mf-pay-fact{
+    min-height:0!important;
+    grid-template-columns:minmax(72px,max-content) minmax(0,1fr);
+    grid-template-areas:"label label" "value copy";
+    align-items:start;
+    column-gap:16px;
+    row-gap:8px;
+    padding:16px!important;
+  }
+  .mobile-detail-modal-content .mf-pay-fact span{
+    grid-area:label;
+  }
+  .mobile-detail-modal-content .mf-pay-fact strong{
+    grid-area:value;
+    max-width:100%;
+    font-size:clamp(28px,8vw,34px)!important;
+    line-height:1!important;
+  }
+  .mobile-detail-modal-content .mf-pay-fact small{
+    grid-area:copy;
+    min-width:0;
+    max-width:100%;
+    overflow-wrap:break-word;
+    word-break:normal;
+    hyphens:auto;
+  }
+  .mobile-detail-modal-content .mf-bento,
+  .mobile-detail-modal-content .mf-bento-compact{
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+  .mobile-detail-modal-content .mf-kpi,
+  .modalbody .mobile-detail-modal-content .mf-kpi{
+    min-height:0!important;
+    padding:16px!important;
+  }
+  .mf-kpi,
+  .mf-split,
+  .mf-mini-grid>div,
+  .mf-pay-fact,
+  .mf-tariff-line,
+  .mf-row{
+    min-width:0!important;
+    max-width:100%;
+    overflow:hidden;
+  }
+  .mobile-finance-cockpit > .mf-hero-card{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    align-content:initial!important;
+    min-height:312px!important;
+    padding:24px!important;
+  }
+  .mobile-finance-cockpit > .mf-hero-card > .mf-hero-copy{
+    position:relative!important;
+    top:auto!important;
+    bottom:auto!important;
+    transform:none!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:0!important;
+  }
+  .mobile-finance-cockpit > .mf-hero-card > .mf-hero-copy strong{
+    max-width:100%;
+    overflow:visible;
+    font-size:clamp(40px,12vw,52px)!important;
+    line-height:1!important;
+  }
+  .mobile-finance-cockpit > .mf-hero-card > .mf-hero-copy .mf-hero-actions{
+    width:100%!important;
+    max-width:328px!important;
+  }
+  .mf-kpi span,
+  .mf-kpi strong,
+  .mf-kpi p,
+  .mf-split span,
+  .mf-split strong,
+  .mf-split p,
+  .mf-mini-grid b,
+  .mf-mini-grid span,
+  .mf-row strong,
+  .mf-row span,
+  .mf-row b,
+  .mf-tariff-line strong,
+  .mf-tariff-line span,
+  .mf-pay-fact span,
+  .mf-pay-fact small{
+    min-width:0;
+    max-width:100%;
+    overflow-wrap:break-word;
+    word-break:normal;
+  }
+  .mf-bento-compact .mf-kpi strong{
+    font-size:clamp(22px,6.2vw,30px)!important;
+    line-height:1.02!important;
+    letter-spacing:-.05em;
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .mf-bento-compact .mf-kpi{
+    min-height:112px!important;
+    align-content:center!important;
+  }
+  .mf-chart-clean{
+    max-width:100%;
+    overflow:hidden;
+  }
+  .mf-chart-bars{
+    min-height:152px!important;
+    gap:8px!important;
+    overflow:hidden;
+  }
+  .mf-chart-bars.single{
+    min-height:152px!important;
+    padding-top:8px!important;
+  }
+  .mf-chart-bars.single .mf-chart-bar{
+    flex:0 0 88px!important;
+    max-width:88px!important;
+  }
+  .mf-chart-bars.single .mf-chart-bar i{
+    width:48px!important;
+    max-width:48px!important;
+    border-radius:18px 18px 10px 10px!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-control{
+    width:calc(100% - 16px)!important;
+    max-width:344px!important;
+    justify-self:center!important;
+    margin-inline:auto!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-open{
+    width:100%!important;
+    max-width:344px!important;
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    align-self:start!important;
+    padding:8px 16px!important;
+    overflow:hidden!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-copy{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-copy strong,
+  body.mobile-finance-active:not(.locked) .mobile-period-copy small{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+  .mobile-app-title strong{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    font-size:clamp(20px,6.1vw,24px)!important;
+  }
+  .mf-hero-action span{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+}
+@media(max-width:360px){
+  .mobile-app-title strong{
+    font-size:20px!important;
+    letter-spacing:-.045em!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-copy strong{
+    font-size:13px!important;
+  }
+  body.mobile-finance-active:not(.locked) .mobile-period-copy small{
+    font-size:11px!important;
   }
 }
 .insight-sheet{
@@ -2475,7 +2725,8 @@ function mobileFinanceChartHtml(series,unavailable){
   if(unavailable)return'<div class="mf-empty">Ю-Касса не ответила, поэтому динамику не показываем.</div>';
   if(!buckets.items.length)return'<div class="mf-empty">Динамика появится после успешных оплат в выбранном периоде.</div>';
   const max=Math.max(...buckets.items.map(item=>num(item.revenue)),1);
-  return `<div class="mf-chart-clean"><div class="mf-chart-head"><span>${esc(buckets.title)}</span><b>${esc(range(state.from,state.to))}</b></div><div class="mf-chart-bars">${buckets.items.map(item=>{const height=Math.max(16,Math.round(num(item.revenue)/max*144));const label=esc(item.label);const value=money(item.revenue);return `<button class="mf-chart-bar" type="button" aria-label="${label}: ${esc(value)}" title="${label}: ${esc(value)}"><i style="height:${height}px"></i><span>${label}</span><b>${esc(value)}</b></button>`}).join('')}</div></div>`;
+  const chartClass=buckets.items.length===1?'mf-chart-bars single':'mf-chart-bars';
+  return `<div class="mf-chart-clean"><div class="mf-chart-head"><span>${esc(buckets.title)}</span><b>${esc(range(state.from,state.to))}</b></div><div class="${chartClass}">${buckets.items.map(item=>{const height=Math.max(16,Math.round(num(item.revenue)/max*144));const label=esc(item.label);const value=money(item.revenue);return `<button class="mf-chart-bar" type="button" aria-label="${label}: ${esc(value)}" title="${label}: ${esc(value)}"><i style="height:${height}px"></i><span>${label}</span><b>${esc(value)}</b></button>`}).join('')}</div></div>`;
 }
 function mobileTariffRowsHtml(tariffRows,shortMoney,unavailable){
   if(unavailable)return'<div class="mf-empty">Ю-Касса не ответила, тарифы не проверены.</div>';
@@ -2505,7 +2756,7 @@ function mobileFinanceCockpit(ctx){
   const repeatPayers=unit.repeat_payers==null?null:num(unit.repeat_payers);
   const payerLabel=payerCount==null?'<b>—</b> платящих':`<b>${nowrap(nfmt(payerCount))}</b> ${pluralRu(payerCount,['платящий пользователь','платящих пользователя','платящих пользователей'])}`;
   const activeUsersRaw=appData?.summary?.active_users==null?null:num(appData.summary.active_users);
-  const activeUsersLabel=activeUsersRaw==null?'<b>—</b> активных':`<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['активный пользователь','активных пользователя','активных пользователей'])}`;
+  const activeUsersLabel=activeUsersRaw==null?'<b>—</b> пользователей':`<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['пользователь','пользователя','пользователей'])}`;
   const paymentFact=unavailable?'—':`${nfmt(paymentCount)} ${pluralRu(paymentCount,['оплата','оплаты','оплат'])}`;
   const payerFact=payerCount==null?'нужен ID':`${nfmt(payerCount)} ${pluralRu(payerCount,['платящий','платящих','платящих'])}`;
   const repeatFact=repeatPayers==null?'нужна история':`${nfmt(repeatPayers)} ${pluralRu(repeatPayers,['повторный','повторных','повторных'])}`;
@@ -2529,7 +2780,7 @@ function mobileFinanceCockpit(ctx){
   const trendTitle=comparison.label||financeComparisonLabel()||'Сравнение с предыдущим равным периодом';
   const trendChip=comparisonAllowed&&trendLabel?`<button class="mf-trend-chip ${trendTone}" type="button" data-insight="period-delta" title="${esc(trendTitle)}">${trendLabel}</button>`:'';
   const arrowIcon='<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5L12.5 10L7 15.5"/></svg>';
-  const financeDetails=`<section class="mf-clean-sheet"><div class="mf-pay-summary"><article class="mf-pay-fact"><span>Платящие</span><strong>${payerCount==null?'—':nowrap(nfmt(payerCount))}</strong><small>Один водитель считается один раз, даже если оплатил несколько раз.</small></article><article class="mf-pay-fact"><span>Оплаты</span><strong>${unavailable?'—':nowrap(nfmt(paymentCount))}</strong><small>Фактические успешные платежи Ю-Кассы.</small></article><article class="mf-pay-fact"><span>Повторные</span><strong>${repeatPayers==null?'—':nowrap(nfmt(repeatPayers))}</strong><small>Платящие пользователи с несколькими оплатами.</small></article></div><div class="mf-clean-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-clean-panel active" data-mf-view="tariffs">${tariffHtml}</div><div class="mf-clean-panel" data-mf-view="trend">${chartHtml}</div></section>`;
+  const financeDetails=`<section class="mf-clean-sheet"><div class="mf-pay-summary"><article class="mf-pay-fact"><span>Платящие</span><strong>${payerCount==null?'—':nowrap(nfmt(payerCount))}</strong><small>Один водитель — один раз, даже при нескольких оплатах.</small></article><article class="mf-pay-fact"><span>Оплаты</span><strong>${unavailable?'—':nowrap(nfmt(paymentCount))}</strong><small>Подтверждённые платежи Ю-Кассы.</small></article><article class="mf-pay-fact"><span>Повторные</span><strong>${repeatPayers==null?'—':nowrap(nfmt(repeatPayers))}</strong><small>Пользователи с несколькими оплатами.</small></article></div><div class="mf-clean-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-clean-panel active" data-mf-view="tariffs">${tariffHtml}</div><div class="mf-clean-panel" data-mf-view="trend">${chartHtml}</div></section>`;
   const analyticsDetails=`<section class="mf-bento mf-bento-compact" aria-label="Ключевые показатели аналитики"><article class="mf-kpi mf-kpi-cyan" data-insight="average-check" role="button" tabindex="0"><span>Средний чек</span><strong>${nowrap(averageCheckValue)}</strong></article><article class="mf-kpi mf-kpi-amber" data-insight="ltv" role="button" tabindex="0"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article></section><article class="mf-sections"><div class="mf-panel active"><div class="mf-split" data-insight="app-link" role="button" tabindex="0"><div><span>Связка с приложением</span><strong>${nowrap(conversionValue)}</strong><p>${linkUnavailable?'Клики приложения сейчас не пришли.':linkEstimated?'Оценка по событиям оплаты из приложения.':'Нажали оплату → фактическая оплата.'}</p></div><div class="mf-mini-grid"><div data-insight="payment-click-users" role="button" tabindex="0"><b>${nowrap(interestValue)}</b><span>нажали оплату</span></div><div data-insight="successful-payments" role="button" tabindex="0"><b>${unavailable?'—':nowrap(nfmt(paymentCount))}</b><span>оплаты</span></div></div></div><div class="mf-split" data-insight="dau-mau" role="button" tabindex="0"><div><span>DAU / MAU</span><strong>${nowrap(audienceValue)}</strong></div></div></div></article>`;
   const appDetails=mobileAppDetailsContent(appData);
   const mainText=unavailable?'<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>':'';
