@@ -2176,7 +2176,9 @@ function mobileFinanceCockpit(ctx) {
     ? tariffRows.slice(0, 3).map((item) => {
       const amount = num(item.net_after_refunds || item.net_amount || item.amount);
       const share = item.revenue_share_percent == null ? Math.round(amount / tariffTotal * 100) : Math.round(num(item.revenue_share_percent));
-      return `<div class="mf-row"><div><strong>${esc(item.label || 'Тариф')}</strong><span>${nfmt(item.count)} оплат${item.users == null ? '' : ` · ${nfmt(item.users)} пользователей`}</span><i style="width:${Math.max(8, Math.min(100, share))}%"></i></div><b>${shortMoney(amount)}</b></div>`;
+      const count = num(item.count);
+      const users = item.users == null ? null : num(item.users);
+      return `<div class="mf-row"><div><strong>${esc(item.label || 'Тариф')}</strong><span>${nfmt(count)} ${pluralRu(count,['оплата','оплаты','оплат'])}${users == null ? '' : ` · ${nfmt(users)} ${pluralRu(users,['пользователь','пользователя','пользователей'])}`}</span><i style="width:${Math.max(8, Math.min(100, share))}%"></i></div><b>${shortMoney(amount)}</b></div>`;
     }).join('')
     : '<div class="mf-empty">Тарифы появятся после разметки платежей.</div>';
   const bars = rows.length
