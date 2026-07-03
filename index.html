@@ -1490,7 +1490,7 @@ body.locked .mobile-bottom-nav{display:none!important}
     background:radial-gradient(circle at 88% 8%, rgba(255,209,94,.16), transparent 34%), linear-gradient(145deg,rgba(191,255,0,.10),rgba(255,255,255,.05) 58%,rgba(255,255,255,.026));
   }
   .mf-sections{border-radius:32px;padding:8px}
-  .mf-segment{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0;margin:0 0 8px}
+  .mf-segment{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;padding:0;margin:0 0 8px}
   .mf-segment button{
     min-width:0;
     min-height:44px;
@@ -1638,13 +1638,13 @@ body.locked .mobile-bottom-nav{display:none!important}
     z-index:2;
     display:grid;
     grid-template-columns:1fr;
-    gap:8px;
+    gap:16px;
     padding-top:8px;
-    max-width:232px;
+    width:min(264px,calc(100% - 72px));
   }
   .mf-hero-action{
     width:100%;
-    min-height:40px;
+    min-height:44px;
     min-width:0;
     display:inline-flex;
     align-items:center;
@@ -1654,7 +1654,7 @@ body.locked .mobile-bottom-nav{display:none!important}
     border-radius:999px;
     background:rgba(255,255,255,.045);
     color:#dfe8c1;
-    padding:0 8px 0 16px;
+    padding:0 10px 0 16px;
     font-size:12px;
     line-height:1;
     font-weight:900;
@@ -1745,9 +1745,9 @@ body.locked .mobile-bottom-nav{display:none!important}
   }
   .mf-hero-card{
     align-content:center;
-    min-height:200px;
+    min-height:288px;
   }
-  .mf-hero-actions{max-width:216px}
+  .mf-hero-actions{width:min(236px,calc(100% - 64px))}
   .mf-hero-action{padding-left:12px}
   .mf-bento-compact{gap:8px}
   .mf-kpi{min-height:120px}
@@ -1933,6 +1933,7 @@ const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${Str
 const parseIso=v=>{if(!v)return null;const[a,b,c]=v.split('-').map(Number);return new Date(a,(b||1)-1,c||1)};
 const same=(a,b)=>a&&b&&iso(a)===iso(b);
 const nfmt=(v,d=0)=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:d,minimumFractionDigits:d}).format(num(v));
+const pluralRu=(value,forms)=>{const n=Math.abs(Math.trunc(num(value)))%100;const n1=n%10;if(n>10&&n<20)return forms[2];if(n1>1&&n1<5)return forms[1];if(n1===1)return forms[0];return forms[2]};
 const noWrap=value=>String(value).replace(/[\s\u202F]+/g,'\u00A0');
 const money=v=>`${noWrap(nfmt(v,num(v)%1?2:0))}\u00A0₽`;
 const pct=(v,d=0)=>`${nfmt(v,d)}%`;
@@ -2198,10 +2199,15 @@ function mobileFinanceCockpit(ctx) {
   const trendTitle = comparison.label || financeComparisonLabel() || 'Сравнение с предыдущим равным периодом';
   const trendChip = comparisonAllowed && trendLabel ? `<button class="mf-trend-chip ${trendTone}" type="button" data-insight="period-delta" title="${esc(trendTitle)}">${trendLabel}</button>` : '';
   const arrowIcon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5L12.5 10L7 15.5"/></svg>';
-  const financeDetails = `<article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="summary">Итог</button><button type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-panel active" data-mf-view="summary"><div class="mf-split" data-insight="app-link" role="button" tabindex="0"><div><span>Связка с приложением</span><strong>${nowrap(conversionValue)}</strong><p>${linkUnavailable ? 'Клики приложения сейчас не пришли.' : linkEstimated ? 'Оценка по событиям оплаты из приложения.' : 'Нажали оплату → фактическая оплата.'}</p></div><div class="mf-mini-grid"><div data-insight="payment-click-users" role="button" tabindex="0"><b>${nowrap(interestValue)}</b><span>нажали оплату</span></div><div data-insight="successful-payments" role="button" tabindex="0"><b>${unavailable ? '—' : nowrap(nfmt(s.successful_payments))}</b><span>оплаты</span></div></div></div><div class="mf-split" data-insight="dau-mau" role="button" tabindex="0"><div><span>DAU / MAU</span><strong>${nowrap(audienceValue)}</strong></div></div></div><div class="mf-panel" data-mf-view="tariffs">${tariffCards}</div><div class="mf-panel" data-mf-view="trend"><div class="mf-chart-head"><span>Деньги по дням</span><b>${esc(period)}</b></div><div class="mf-bars">${bars}</div></div></article>`;
+  const paymentCount = num(s.successful_payments);
+  const paymentLabel = unavailable ? '— оплат' : `<b>${nowrap(nfmt(paymentCount))}</b> ${pluralRu(paymentCount,['оплата','оплаты','оплат'])}`;
+  const activeUsersRaw = appData?.summary?.active_users == null ? null : num(appData.summary.active_users);
+  const activeUsersLabel = activeUsersRaw == null ? '— пользователей' : `<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['пользователь','пользователя','пользователей'])}`;
+  const financeDetails = `<article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-panel active" data-mf-view="tariffs">${tariffCards}</div><div class="mf-panel" data-mf-view="trend"><div class="mf-chart-head"><span>Деньги по дням</span><b>${esc(period)}</b></div><div class="mf-bars">${bars}</div></div></article>`;
+  const analyticsDetails = `<section class="mf-bento mf-bento-compact" aria-label="Ключевые показатели аналитики"><article class="mf-kpi mf-kpi-cyan" data-insight="average-check" role="button" tabindex="0"><span>Средний чек</span><strong>${nowrap(averageCheckValue)}</strong></article><article class="mf-kpi mf-kpi-amber" data-insight="ltv" role="button" tabindex="0"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article></section><article class="mf-sections"><div class="mf-panel active"><div class="mf-split" data-insight="app-link" role="button" tabindex="0"><div><span>Связка с приложением</span><strong>${nowrap(conversionValue)}</strong><p>${linkUnavailable ? 'Клики приложения сейчас не пришли.' : linkEstimated ? 'Оценка по событиям оплаты из приложения.' : 'Нажали оплату → фактическая оплата.'}</p></div><div class="mf-mini-grid"><div data-insight="payment-click-users" role="button" tabindex="0"><b>${nowrap(interestValue)}</b><span>нажали оплату</span></div><div data-insight="successful-payments" role="button" tabindex="0"><b>${unavailable ? '—' : nowrap(nfmt(paymentCount))}</b><span>оплаты</span></div></div></div><div class="mf-split" data-insight="dau-mau" role="button" tabindex="0"><div><span>DAU / MAU</span><strong>${nowrap(audienceValue)}</strong></div></div></div></article>`;
   const appDetails = mobileAppDetailsContent(appData);
   const mainText = unavailable ? '<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>' : '';
-  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card" data-insight="money" role="button" tabindex="0">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span><b>${unavailable ? '—' : nowrap(nfmt(s.successful_payments))}</b> оплат</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>Активные пользователи</span><b>${nowrap(activeUsersValue)}</b>${arrowIcon}</button></div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template></article><section class="mf-bento mf-bento-compact" aria-label="Ключевые показатели"><article class="mf-kpi mf-kpi-cyan" data-insight="average-check" role="button" tabindex="0"><span>Средний чек</span><strong>${nowrap(averageCheckValue)}</strong></article><article class="mf-kpi mf-kpi-amber" data-insight="ltv" role="button" tabindex="0"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article></section></section>`;
+  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card" data-insight="money" role="button" tabindex="0">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${paymentLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button></div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template><template data-mobile-template="analytics">${analyticsDetails}</template></article></section>`;
 }
 function financeWarningRu(code) {
   const map = {
@@ -2351,7 +2357,7 @@ function insightCopy(key){
   return items[key]||null;
 }
 function showInsight(key){const item=insightCopy(key);if(!item)return;showModal(`<div class="insight-sheet"><p>${esc(item.body)}</p><div class="insight-formula">${esc(item.formula)}</div><p class="insight-note">${esc(item.note)}</p></div>`,item.title,item.sub)}
-function showMobileDetail(type){const template=document.querySelector(`template[data-mobile-template="${type}"]`);if(!template)return;const title=type==='app'?'Активные пользователи':'Финансовые детали';const sub=type==='app'?'Приложение, события и ошибки Android':'Итог, тарифы и динамика';showModal(`<div class="mobile-detail-modal-content">${template.innerHTML}</div>`,title,sub)}
+function showMobileDetail(type){const template=document.querySelector(`template[data-mobile-template="${type}"]`);if(!template)return;const meta={app:['Активные пользователи','Приложение, события и ошибки Android'],analytics:['Аналитика','Средний чек, LTV и связь с приложением'],finance:['Оплаты','Тарифы и динамика']};const item=meta[type]||meta.finance;showModal(`<div class="mobile-detail-modal-content">${template.innerHTML}</div>`,item[0],item[1])}
 function handleMobileDetailClick(event){const target=event.target.closest('[data-mobile-detail]');if(!target)return false;event.preventDefault();event.stopPropagation();showMobileDetail(target.dataset.mobileDetail);return true}
 function handleInsightClick(event){const target=event.target.closest('[data-insight]');if(!target)return false;showInsight(target.dataset.insight);return true}
 function hideModal(){document.getElementById('overlay').classList.remove('show');document.getElementById('overlay').setAttribute('aria-hidden','true')}
