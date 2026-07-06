@@ -1704,7 +1704,8 @@ body.locked .mobile-bottom-nav{display:none!important}
   .mf-trend-chip{
     position:absolute;
     right:24px;
-    bottom:24px;
+    top:24px;
+    bottom:auto;
     z-index:2;
     min-height:24px;
     display:inline-flex;
@@ -1721,6 +1722,7 @@ body.locked .mobile-bottom-nav{display:none!important}
     white-space:nowrap;
     font-variant-numeric:tabular-nums;
     text-shadow:0 0 16px rgba(191,255,0,.32);
+    pointer-events:none;
   }
   .mf-trend-chip.up{
     color:#92f2b4;
@@ -1744,7 +1746,8 @@ body.locked .mobile-bottom-nav{display:none!important}
 @media(max-width:360px){
   .mf-trend-chip{
     right:16px;
-    bottom:16px;
+    top:16px;
+    bottom:auto;
     padding:0 8px;
     font-size:11px;
   }
@@ -2110,6 +2113,9 @@ body.locked .mobile-bottom-nav{display:none!important}
   gap:16px;
   overflow:hidden;
 }
+.mf-line-stage{
+  position:relative;
+}
 .mf-line-chart{
   width:100%;
   height:176px;
@@ -2133,6 +2139,59 @@ body.locked .mobile-bottom-nav{display:none!important}
   fill:#f4ffcc;
   stroke:#10170f;
   stroke-width:3;
+}
+.mf-line-hit{
+  position:absolute;
+  z-index:2;
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:999px;
+  padding:0;
+  background:transparent;
+  color:transparent;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+}
+.mf-line-hit::before{
+  content:"";
+  position:absolute;
+  inset:12px;
+  border-radius:999px;
+  border:2px solid rgba(244,255,204,.72);
+  background:#10170f;
+  box-shadow:0 0 0 2px rgba(191,255,0,.12),0 8px 18px rgba(191,255,0,.18);
+}
+.mf-line-hit:hover::before,
+.mf-line-hit:focus-visible::before,
+.mf-line-hit.is-active::before{
+  border-color:var(--accent);
+  background:var(--accent);
+  box-shadow:0 0 0 6px rgba(191,255,0,.14),0 12px 28px rgba(191,255,0,.24);
+}
+.mf-chart-selected{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  min-height:48px;
+  padding:12px 16px;
+  border-radius:18px;
+  border:1px solid rgba(244,255,204,.10);
+  background:rgba(255,255,255,.045);
+}
+.mf-chart-selected span{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.2;
+  font-weight:900;
+}
+.mf-chart-selected strong{
+  color:var(--accent);
+  font-size:18px;
+  line-height:1;
+  font-weight:1000;
+  white-space:nowrap;
 }
 .mf-line-axis{
   display:flex;
@@ -2832,16 +2891,19 @@ function mobileFinanceChartHtml(series,unavailable){
   const height=160;
   const pad=16;
   const points=buckets.items.map((item,index)=>{
-    const x=buckets.items.length===1?width/2:pad+(index*(width-pad*2))/(buckets.items.length-1);
+    const rawX=buckets.items.length===1?width/2:pad+(index*(width-pad*2))/(buckets.items.length-1);
+    const x=Math.max(24,Math.min(width-24,rawX));
     const y=height-pad-((num(item.revenue)-min)/span)*(height-pad*2);
     return{item,x,y}
   });
   const line=points.map((point,index)=>`${index?'L':'M'} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(' ');
   const area=`M ${points[0].x.toFixed(1)} ${height-pad} ${points.map((point,index)=>`${index?'L':'L'} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(' ')} L ${points[points.length-1].x.toFixed(1)} ${height-pad} Z`;
   const dots=points.map(point=>`<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4"><title>${esc(point.item.label)}: ${esc(money(point.item.revenue))}</title></circle>`).join('');
+  const hitAreas=points.map((point,index)=>`<button class="mf-line-hit ${index===points.length-1?'is-active':''}" type="button" data-chart-label="${esc(point.item.label)}" data-chart-value="${esc(money(point.item.revenue))}" style="left:${(point.x/width*100).toFixed(2)}%;top:${(point.y/height*100).toFixed(2)}%" aria-label="${esc(point.item.label)}: ${esc(money(point.item.revenue))}"></button>`).join('');
   const first=points[0]?.item?.label||'';
   const last=points[points.length-1]?.item?.label||first;
-  return `<div class="mf-chart-clean mf-line-card"><div class="mf-chart-head"><span>${esc(buckets.title)}</span><b>${esc(range(state.from,state.to))}</b></div><svg class="mf-line-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(buckets.title)}: ${esc(range(state.from,state.to))}" preserveAspectRatio="none"><path class="mf-line-area" d="${area}"></path><path class="mf-line-path" d="${line}"></path><g class="mf-line-dots">${dots}</g></svg><div class="mf-line-axis"><span>${esc(first)}</span><span>${esc(last)}</span></div></div>`;
+  const selected=points[points.length-1]?.item||points[0]?.item;
+  return `<div class="mf-chart-clean mf-line-card"><div class="mf-chart-head"><span>${esc(buckets.title)}</span><b>${esc(range(state.from,state.to))}</b></div><div class="mf-line-stage"><svg class="mf-line-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(buckets.title)}: ${esc(range(state.from,state.to))}" preserveAspectRatio="none"><path class="mf-line-area" d="${area}"></path><path class="mf-line-path" d="${line}"></path><g class="mf-line-dots">${dots}</g></svg>${hitAreas}</div><div class="mf-chart-selected" aria-live="polite"><span>${esc(selected?.label||last)}</span><strong>${esc(money(selected?.revenue||0))}</strong></div><div class="mf-line-axis"><span>${esc(first)}</span><span>${esc(last)}</span></div></div>`;
 }
 function mobileTariffRowsHtml(tariffRows,shortMoney,unavailable){
   if(unavailable)return'<div class="mf-empty">Ю-Касса не ответила, тарифы не проверены.</div>';
@@ -2871,14 +2933,20 @@ function mobileAppDetailsContent(app){
   if(!app)return'<div class="mf-empty">События приложения ещё не пришли в этот ответ.</div>';
   const summary=app.summary||{};
   const growth=Array.isArray(app.growth_sources)?app.growth_sources:[];
+  const installSources=Array.isArray(app.sources)?app.sources:[];
   const platforms=Array.isArray(app.platforms)?app.platforms:[];
   const versions=Array.isArray(app.versions)?app.versions:[];
   const maxGrowth=Math.max(...growth.map(item=>item.installs),1);
+  const maxInstallSource=Math.max(...installSources.map(item=>item.installs),1);
   const maxPlatform=Math.max(...platforms.map(item=>item.users),1);
   const maxVersion=Math.max(...versions.map(item=>item.users||item.sessions),1);
   const sessions=num(summary.sessions_total||app.sessions_total);
   const allActive=summary.all_time_active_users==null?app.all_time_active_users:summary.all_time_active_users;
-  const sourceRows=growth.length?growth.slice(0,12).map(item=>{const label=item.source&&item.source!=='—'?`${item.traffic} · ${item.source}`:item.traffic;const share=item.share_percent==null?'':` · ${pct(item.share_percent,1)}`;return `<div class="mf-row"><div><strong>${esc(label)}</strong><span>${nfmt(item.installs)} установок${share}</span><i style="width:${Math.max(8,Math.round(item.installs/maxGrowth*100))}%"></i></div><b>${nowrap(nfmt(item.installs))}</b></div>`}).join(''):'<div class="mf-empty">Ждём точную связку Метрики и приложения.</div>';
+  const sourceRows=growth.length
+    ? growth.slice(0,13).map(item=>{const label=item.source&&item.source!=='—'?`${item.traffic} · ${item.source}`:item.traffic;const share=item.share_percent==null?'':` · ${pct(item.share_percent,1)}`;return `<div class="mf-row"><div><strong>${esc(label)}</strong><span>${nfmt(item.installs)} установок${share}</span><i style="width:${Math.max(8,Math.round(item.installs/maxGrowth*100))}%"></i></div><b>${nowrap(nfmt(item.installs))}</b></div>`}).join('')
+    : installSources.length
+      ? installSources.slice(0,12).map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.installs)} установок · источник приложения</span><i style="width:${Math.max(8,Math.round(item.installs/maxInstallSource*100))}%"></i></div><b>${nowrap(nfmt(item.installs))}</b></div>`).join('')
+      : '<div class="mf-empty">Источники установок появятся после ответа приложения.</div>';
   const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(item.users/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
   const versionRows=versions.length?versions.slice(0,8).map(item=>{const value=item.users||item.sessions;const detail=item.sessions?`${nfmt(item.sessions)} сессий`:`${nfmt(item.users)} пользователей`;return `<div class="mf-row"><div><strong>Версия ${esc(item.version)}</strong><span>${detail}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
   return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не зарегистрировались</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
@@ -3077,6 +3145,7 @@ function showMobileDetail(type){
   showModal(`<div class="mobile-detail-modal-content">${template.innerHTML}</div>`,item[0],item[1]);
 }
 function handleMobileDetailClick(event){const target=event.target.closest('[data-mobile-detail]');if(!target)return false;event.preventDefault();event.stopPropagation();showMobileDetail(target.dataset.mobileDetail);return true}
+function handleChartPointClick(event){const target=event.target.closest('[data-chart-label][data-chart-value]');if(!target)return false;event.preventDefault();event.stopPropagation();const card=target.closest('.mf-line-card');if(!card)return true;card.querySelectorAll('[data-chart-label]').forEach(item=>item.classList.toggle('is-active',item===target));const selected=card.querySelector('.mf-chart-selected');if(selected)selected.innerHTML=`<span>${esc(target.dataset.chartLabel||'День')}</span><strong>${esc(target.dataset.chartValue||'—')}</strong>`;return true}
 function handleInsightClick(event){return false}
 function hideModal(){document.getElementById('overlay').classList.remove('show');document.getElementById('overlay').setAttribute('aria-hidden','true')}
 async function openAnalysis(){const data=current();const meta=META[state.tab];const errorsMode=state.tab==='appmetrica'&&state.appMode==='errors';const analysisTab=errorsMode?'appmetrica_errors_android':state.tab;const analysisLabel=errorsMode?'Ошибки Android':meta.label;const analysisData=errorsMode?(data?.errors||null):data;if(!analysisData){showModal('<div class="empty"><h3>Пока нечего разбирать</h3><p>Источник ещё не отдал данные для этого раздела.</p></div>','ИИ-разбор',`${analysisLabel} · ${range(state.from,state.to)}`);return}if(errorsMode&&analysisData.status==='preparing'){showModal('<div class="empty"><h3>Выгрузка ошибок ещё готовится</h3><p>Источник сначала подготавливает файл. Обновите данные чуть позже, и ИИ-разбор станет доступен.</p></div>','ИИ-разбор',`${analysisLabel} · ${range(state.from,state.to)}`);return}const onlyApp=state.mode==='legacy'&&state.tab==='appmetrica'&&!errorsMode;const unsupported=state.mode==='legacy'&&state.tab!=='appmetrica';if(unsupported){showModal('<div class="empty"><h3>Пока разбор доступен только для приложения</h3><p>Для этой вкладки источник ещё не начал отдавать данные в сценарий аналитики.</p></div>','ИИ-разбор',`${analysisLabel} · ${range(state.from,state.to)}`);return}showModal('<div class="loading"><div class="spin"></div><div>Готовлю аналитический вывод...</div></div>','ИИ-разбор',`${analysisLabel} · ${range(state.from,state.to)}`);try{const body=onlyApp?{date_from:iso(state.from),date_to:iso(state.to),data:analysisData.events}:{tab:analysisTab,date_from:iso(state.from),date_to:iso(state.to),data:analysisData};const response=await fetch(ENDPOINTS.analytics,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!response.ok)throw new Error(`HTTP ${response.status}`);const payload=await readJsonUtf8(response);const text=payload.text||payload.output||payload.report_markdown||payload.analysis_text||JSON.stringify(payload,null,2);showModal(`<div class="md"><p>${md(text)}</p></div>`,'ИИ-разбор',`${analysisLabel} · ${range(state.from,state.to)}`)}catch(error){showModal(`<div class="empty"><h3>Не удалось получить разбор</h3><p>${error.message}</p></div>`,'ИИ-разбор',`${analysisLabel} · ${range(state.from,state.to)}`)}}
@@ -3121,7 +3190,7 @@ function authOk(){try{return sessionStorage.getItem(AUTH_STORAGE_KEY)==='1'}catc
 function rememberAuth(){try{sessionStorage.setItem(AUTH_STORAGE_KEY,'1')}catch{}}
 function unlockDashboard(){document.body.classList.remove('locked');const screen=document.getElementById('auth-screen');if(screen)screen.setAttribute('aria-hidden','true');if(!eventsBound){bind();eventsBound=true}setActiveTab('finance');setPreset('this_month',{force:false})}
 function initAuth(){const form=document.getElementById('auth-form');const input=document.getElementById('auth-password');const error=document.getElementById('auth-error');if(authOk()){unlockDashboard();return}if(input)input.focus();if(!form)return;form.addEventListener('submit',event=>{event.preventDefault();const value=(input?.value||'').trim();if(value===AUTH_PASSWORD){if(error)error.textContent='';rememberAuth();unlockDashboard();return}if(error)error.textContent='Пароль не подошёл. Проверьте цифры и попробуйте ещё раз.';if(input){input.select();input.focus()}})}
-function bind(){document.querySelectorAll('.tab').forEach(button=>button.addEventListener('click',()=>{const nextTab=button.dataset.tab;setActiveTab(nextTab);if(nextTab==='finance'){setPreset('this_month',{force:false});return}render();loadCurrentView()}));document.querySelectorAll('.preset').forEach(button=>button.addEventListener('click',()=>setPreset(button.dataset.preset,{force:true})));document.getElementById('date-from').addEventListener('change',customRange);document.getElementById('date-to').addEventListener('change',customRange);document.getElementById('refresh').addEventListener('click',()=>refreshData({force:true}));document.getElementById('analysis').addEventListener('click',openAnalysis);document.getElementById('content').addEventListener('click',event=>{if(handleMobileDetailClick(event))return;if(handleInsightClick(event))return;const mode=event.target.closest('[data-app-mode]');if(mode){state.appMode=mode.dataset.appMode;if(state.errorRetryTimer){clearTimeout(state.errorRetryTimer);state.errorRetryTimer=null}render();loadCurrentView();return}const kind=event.target.closest('[data-error-kind]');if(kind){state.errorKind=kind.dataset.errorKind;render();return}const detail=event.target.closest('[data-error-detail]');if(detail){showErrorDetail(detail.dataset.errorDetail)}});document.getElementById('close').addEventListener('click',hideModal);document.getElementById('overlay').addEventListener('click',event=>{if(event.target===document.getElementById('overlay')){hideModal();return}if(handleMobileDetailClick(event))return;if(handleInsightClick(event))return});document.addEventListener('keydown',event=>{if(event.key==='Escape')hideModal();if((event.key==='Enter'||event.key===' ')&&event.target?.closest?.('[data-mobile-detail]')){event.preventDefault();showMobileDetail(event.target.closest('[data-mobile-detail]').dataset.mobileDetail)}})}
+function bind(){document.querySelectorAll('.tab').forEach(button=>button.addEventListener('click',()=>{const nextTab=button.dataset.tab;setActiveTab(nextTab);if(nextTab==='finance'){setPreset('this_month',{force:false});return}render();loadCurrentView()}));document.querySelectorAll('.preset').forEach(button=>button.addEventListener('click',()=>setPreset(button.dataset.preset,{force:true})));document.getElementById('date-from').addEventListener('change',customRange);document.getElementById('date-to').addEventListener('change',customRange);document.getElementById('refresh').addEventListener('click',()=>refreshData({force:true}));document.getElementById('analysis').addEventListener('click',openAnalysis);document.getElementById('content').addEventListener('click',event=>{if(handleChartPointClick(event))return;if(handleMobileDetailClick(event))return;if(handleInsightClick(event))return;const mode=event.target.closest('[data-app-mode]');if(mode){state.appMode=mode.dataset.appMode;if(state.errorRetryTimer){clearTimeout(state.errorRetryTimer);state.errorRetryTimer=null}render();loadCurrentView();return}const kind=event.target.closest('[data-error-kind]');if(kind){state.errorKind=kind.dataset.errorKind;render();return}const detail=event.target.closest('[data-error-detail]');if(detail){showErrorDetail(detail.dataset.errorDetail)}});document.getElementById('close').addEventListener('click',hideModal);document.getElementById('overlay').addEventListener('click',event=>{if(event.target===document.getElementById('overlay')){hideModal();return}if(handleChartPointClick(event))return;if(handleMobileDetailClick(event))return;if(handleInsightClick(event))return});document.addEventListener('keydown',event=>{if(event.key==='Escape')hideModal();if((event.key==='Enter'||event.key===' ')&&event.target?.closest?.('[data-mobile-detail]')){event.preventDefault();showMobileDetail(event.target.closest('[data-mobile-detail]').dataset.mobileDetail)}})}
 function init(){initAuth()}
 init();
 </script>
