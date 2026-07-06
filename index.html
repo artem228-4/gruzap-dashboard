@@ -3274,7 +3274,8 @@ function showErrorDetail(index){const data=current();const rows=errorRows(data);
 function render(){header();const data=current();const allData=state.data;document.getElementById('content').innerHTML=state.tab==='appmetrica'?appModeSwitch()+(state.appMode==='errors'?appErrorsView(data):appView(data)):state.tab==='metrika'?metrikaView(data):state.tab==='direct'?directView(data):financeView(allData.finance,allData)+mobileUnifiedSections(allData)}
 const utf8Decoder=new TextDecoder('utf-8');
 const readJsonUtf8=async response=>JSON.parse(utf8Decoder.decode(await response.arrayBuffer()));
-function requestedSources(){if(state.tab==='finance')return['appmetrica_finance','yookassa','appmetrica_overview','metrika'];if(state.tab==='metrika')return['metrika'];if(state.tab==='direct')return['direct'];if(state.tab==='appmetrica'&&state.appMode==='errors')return['appmetrica_errors'];return['appmetrica_overview']}
+function isLongFinancePeriod(){return state.tab==='finance'&&state.from&&state.to&&(activePresetKey()==='year'||inclusiveDays(state.from,state.to)>120)}
+function requestedSources(){if(state.tab==='finance'){const sources=['appmetrica_finance','yookassa','appmetrica_overview'];if(!isLongFinancePeriod())sources.push('metrika');return sources}if(state.tab==='metrika')return['metrika'];if(state.tab==='direct')return['direct'];if(state.tab==='appmetrica'&&state.appMode==='errors')return['appmetrica_errors'];return['appmetrica_overview']}
 function dashboardPayload(){return{date_from:iso(state.from),date_to:iso(state.to),tab:state.tab,app_mode:state.appMode,requested_sources:requestedSources()}}
 function addMonthsClamped(date,delta){const base=new Date(date.getFullYear(),date.getMonth()+delta,1);const last=new Date(base.getFullYear(),base.getMonth()+1,0).getDate();base.setDate(Math.min(date.getDate(),last));return d0(base)}
 function activePresetKey(){return state.preset||document.querySelector('.preset.active')?.dataset?.preset||'custom'}
@@ -3327,6 +3328,7 @@ function customRange(){
   if(note)note.textContent='Нажмите «Обновить», чтобы загрузить выбранный период.';
 }
 function setPreset(key,options={}){
+  if(key==='quarter')key='year';
   const today=d0(new Date());
   const yesterday=shift(today,-1);
   const force=options.force!==false;
