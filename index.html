@@ -1527,6 +1527,62 @@ body.locked .mobile-bottom-nav{display:none!important}
   .mf-row span{display:block;margin-top:8px;color:var(--muted);font-size:12px;line-height:1.3;font-weight:800}
   .mf-row i{display:block;height:8px;margin-top:8px;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--green))}
   .mf-row b{color:var(--accent);font-size:20px;line-height:1;white-space:nowrap;font-weight:1000}
+  .growth-source-table{
+    min-width:0;
+    overflow:hidden;
+    border:1px solid rgba(244,255,204,.09);
+    border-radius:24px;
+    background:rgba(255,255,255,.035);
+  }
+  .growth-source-row{
+    display:grid;
+    grid-template-columns:minmax(96px,1.08fr) minmax(112px,1.2fr) minmax(72px,.64fr) minmax(56px,.52fr);
+    align-items:center;
+    gap:8px;
+    min-width:0;
+    padding:16px;
+    border-bottom:1px solid rgba(244,255,204,.07);
+    color:#dfe7de;
+    font-size:12px;
+    line-height:1.25;
+    font-weight:850;
+  }
+  .growth-source-row:last-child{border-bottom:0}
+  .growth-source-row span,
+  .growth-source-row strong{
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+  .growth-source-row strong{color:#fff;font-weight:950}
+  .growth-source-row b,
+  .growth-source-row em{
+    min-width:0;
+    color:#f6ffe1;
+    font-style:normal;
+    text-align:right;
+    white-space:nowrap;
+    font-weight:950;
+  }
+  .growth-source-row b{color:var(--accent)}
+  .growth-source-head{
+    background:rgba(255,255,255,.035);
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:10px;
+  }
+  .growth-source-head strong,
+  .growth-source-head b,
+  .growth-source-head em{color:var(--muted)}
+  .growth-source-total{
+    background:rgba(191,255,0,.07);
+    font-weight:1000;
+  }
+  .growth-source-table.is-compact .growth-source-row{
+    grid-template-columns:minmax(84px,1.05fr) minmax(92px,1.1fr) minmax(56px,.6fr) minmax(48px,.52fr);
+    padding:8px;
+    font-size:11px;
+  }
   .mf-chart-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0 16px}
   .mf-chart-head b{color:var(--muted);font-size:12px;white-space:nowrap}
   .mf-bars{height:128px;display:flex;align-items:end;gap:8px}
@@ -2453,6 +2509,77 @@ body.locked .mobile-bottom-nav{display:none!important}
     font-size:11px!important;
   }
 }
+.growth-source-table{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid rgba(244,255,204,.09);
+  border-radius:24px;
+  background:rgba(255,255,255,.035);
+}
+.growth-source-row{
+  display:grid;
+  grid-template-columns:minmax(96px,1.08fr) minmax(112px,1.2fr) minmax(72px,.64fr) minmax(56px,.52fr);
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  padding:16px;
+  border-bottom:1px solid rgba(244,255,204,.07);
+  color:#dfe7de;
+  font-size:12px;
+  line-height:1.25;
+  font-weight:850;
+}
+.growth-source-row:last-child{border-bottom:0}
+.growth-source-row span,
+.growth-source-row strong{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+.growth-source-row strong{color:#fff;font-weight:950}
+.growth-source-row b,
+.growth-source-row em{
+  min-width:0;
+  color:#f6ffe1;
+  font-style:normal;
+  text-align:right;
+  white-space:nowrap;
+  font-weight:950;
+}
+.growth-source-row b{color:var(--accent)}
+.growth-source-head{
+  background:rgba(255,255,255,.035);
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:10px;
+}
+.growth-source-head strong,
+.growth-source-head b,
+.growth-source-head em{color:var(--muted)}
+.growth-source-total{
+  background:rgba(191,255,0,.07);
+  font-weight:1000;
+}
+.growth-source-table.is-compact .growth-source-row{
+  grid-template-columns:minmax(84px,1.05fr) minmax(92px,1.1fr) minmax(56px,.6fr) minmax(48px,.52fr);
+  padding:8px;
+  font-size:11px;
+}
+@media(max-width:640px){
+  .growth-source-row{
+    grid-template-columns:minmax(84px,1.05fr) minmax(92px,1.1fr) minmax(56px,.6fr) minmax(48px,.52fr);
+    padding:8px;
+    font-size:11px;
+  }
+}
+@media(max-width:360px){
+  .growth-source-table.is-compact .growth-source-row{
+    grid-template-columns:minmax(72px,1fr) minmax(84px,1fr) minmax(48px,.58fr) minmax(44px,.5fr);
+  }
+  .growth-source-row{
+    grid-template-columns:minmax(72px,1fr) minmax(84px,1fr) minmax(48px,.58fr) minmax(44px,.5fr);
+  }
+}
 .insight-sheet{
   display:grid;
   gap:16px;
@@ -2545,7 +2672,33 @@ function normalizeGrowthSourceRows(raw){
       installs:firstNumber(item,['installs','installations','users','count','value','total'])||0,
       share_percent:item.share_percent==null&&item.share==null&&item.percent==null?null:num(item.share_percent??item.share??item.percent)
     }
-  }).filter(item=>item.installs>0).sort((a,b)=>b.installs-a.installs)
+  }).filter(item=>item.installs>0)
+}
+function growthSourceLabels(item){
+  const rawTraffic=String(item?.traffic||'').trim();
+  const rawSource=String(item?.source||'').trim();
+  const trafficLower=rawTraffic.toLowerCase();
+  const sourceLower=rawSource.toLowerCase();
+  const isUnknown=/^(неизвестно|unknown|organic|органика)$/.test(trafficLower);
+  const isOrganic=/^(органика|organic|unknown \/ organic)$/.test(sourceLower);
+  if(isUnknown&&isOrganic)return{traffic:'Неизвестно / органика',source:'Unknown / organic'};
+  return{traffic:rawTraffic||'Неизвестно / органика',source:rawSource||'Unknown / organic'};
+}
+function growthSourceShare(item,total){
+  if(item?.share_percent!=null)return num(item.share_percent);
+  const installs=num(item?.installs);
+  return total?installs/total*100:0;
+}
+function growthSourcesTableHtml(rows,totalInstalls,compact=false){
+  const list=Array.isArray(rows)?rows.filter(item=>num(item.installs)>0):[];
+  if(!list.length)return'<div class="mf-empty growth-source-empty">Источники пока не загружены.</div>';
+  const total=totalInstalls?num(totalInstalls):list.reduce((sum,item)=>sum+num(item.installs),0);
+  const body=list.slice(0,13).map(item=>{
+    const labels=growthSourceLabels(item);
+    const installs=num(item.installs);
+    return `<div class="growth-source-row" role="row"><span>${esc(labels.traffic)}</span><strong>${esc(labels.source)}</strong><b>${nfmt(installs)}</b><em>${pct(growthSourceShare(item,total),1)}</em></div>`;
+  }).join('');
+  return `<div class="growth-source-table ${compact?'is-compact':''}" role="table" aria-label="Источники установок"><div class="growth-source-row growth-source-head" role="row"><span>Трафик</span><strong>Источник</strong><b>Установки</b><em>Доля</em></div>${body}<div class="growth-source-row growth-source-total" role="row"><span></span><strong>Итого</strong><b>${nfmt(total)}</b><em>100%</em></div></div>`;
 }
 function normApp(raw){
   if(!raw)return null;
@@ -2767,6 +2920,18 @@ function mobileAppDetailsContent(app){const nowrap=value=>String(value==null||va
 function mobileAppCollapsible(app){const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');const active=app?nowrap(nfmt(app.summary.active_users)):'—';return `<details class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-fold"><summary><div class="mf-fold-title"><span>Активные пользователи</span><small>Сессии, платформы и версии</small></div><span class="mf-fold-control"><strong class="mf-fold-value">${active}</strong><span class="mf-fold-chevron" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M5.5 7.5L10 12L14.5 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></summary><div class="mf-fold-body">${mobileAppDetailsContent(app)}</div></details>`}
 function mobileUnifiedSections(allData){return ''}
 function appView(data){if(!data)return `<section class="empty"><h3>Приложение пока не ответило</h3><p>После ответа источника сюда автоматически подтянутся события приложения, география и установки.</p></section>`;const maxGeo=Math.max(...data.geo.map(item=>item.drivers),1);const maxSource=Math.max(...data.sources.map(item=>item.installs),1);const events=data.events.slice().sort((a,b)=>b.total_events-a.total_events);const funnel=[['Открыл фильтр',data.summary.open_filter],['Открыл заявку',data.summary.open_order],['Нажал на телефон',data.summary.phone_tap]];const mobileApp=mobileAppCockpit(data);return `${mobileApp}<section class="cards">${card('Активные водители',nfmt(data.summary.active_users),'Максимум уникальных водителей по ключевым событиям.',`${nfmt(data.summary.total_events)} действий за период`,'var(--accent)')}${card('Установки',nfmt(data.installs_total),'Сумма установок по всем источникам приложения.',data.sources.length?`Источников: ${nfmt(data.sources.length)}`:'Разбивка появится после ответа источника','var(--cyan)')}${card('Регистрации',nfmt(data.summary.registrations),'Сколько водителей дошли до регистрации.',`${pct(data.summary.phone_conversion)} дошли до звонка`,'var(--green)')}${card('Переход в звонок',pct(data.summary.phone_conversion),'Конверсия из просмотра заявки в нажатие на телефон.',`${nfmt(data.summary.phone_tap)} звонков из ${nfmt(data.summary.open_order)} просмотров`,'var(--yellow)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Продуктовая воронка</h2><p>Путь водителя от открытия фильтра до контакта по заявке.</p></div><div class="badge">Ключевой путь</div></div><div class="stack">${funnel.map((row,index,list)=>{const prev=index?list[index-1][1]:row[1];const share=index&&prev?`${Math.round(row[1]/prev*100)}% от предыдущего шага`:'Стартовый шаг';return bar(row[0],row[1],Math.max(...list.map(item=>item[1]),1),'',share,`${nfmt(row[1])} уникальных водителей. Подпись справа показывает, сколько пользователей дошло до этого этапа относительно предыдущего шага.`)}).join('')}</div></article><article class="panel"><div class="head"><div><h2>Маршруты поиска</h2><p>Как распределяется интерес между межгородом и городскими направлениями.</p></div><div class="badge">Структура спроса</div></div>${split(data.summary.route_intercity_percent,'Межгород','Город')}</article></section><section class="half"><article class="panel"><div class="head"><div><h2>География активации</h2><p>Города, где приложение используется активнее всего.</p></div><div class="badge">Города</div></div><div class="rows">${data.geo.length?data.geo.map(item=>bar(item.city,item.drivers,maxGeo,'',nfmt(item.drivers),`${nfmt(item.drivers)} активных водителей из этого города за выбранный период.`)).join(''):'<div class="empty"><h3>Нет географии</h3><p>После ответа источника здесь появится разбивка по городам.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Источники установок</h2><p>Каналы, которые приводят установки приложения.</p></div><div class="badge">Установки</div></div><div class="rows">${data.sources.length?data.sources.map(item=>bar(item.name,item.installs,maxSource,'cyan',nfmt(item.installs),`${nfmt(item.installs)} установок из этого источника. Полоса показывает долю относительно самого сильного источника.`)).join(''):'<div class="empty"><h3>Нет источников</h3><p>Разбивка появится после ответа ветки с установками.</p></div>'}</div></article></section><article class="panel"><div class="head"><div><h2>Топ событий приложения</h2><p>Сырые продуктовые события для детальной проверки активности.</p></div><div class="badge">${nfmt(events.length)} событий</div></div><div class="tablebox"><table><thead><tr><th>Событие</th><th class="num">Уникальные водители</th><th class="num">Всего действий</th></tr></thead><tbody>${events.map(item=>`<tr><td>${item.event_name}</td><td class="num">${nfmt(item.unique_devices)}</td><td class="num">${nfmt(item.total_events)}</td></tr>`).join('')}</tbody></table></div></article>`}
+function appView(data){
+  if(!data)return `<section class="empty"><h3>Приложение пока не ответило</h3><p>После ответа источника сюда автоматически подтянутся события приложения, география и установки.</p></section>`;
+  const maxGeo=Math.max(...data.geo.map(item=>item.drivers),1);
+  const events=data.events.slice().sort((a,b)=>b.total_events-a.total_events);
+  const funnel=[['Открыл фильтр',data.summary.open_filter],['Открыл заявку',data.summary.open_order],['Нажал на телефон',data.summary.phone_tap]];
+  const mobileApp=mobileAppCockpit(data);
+  const growthRows=Array.isArray(data.growth_sources)?data.growth_sources:[];
+  const growthCount=growthRows.length;
+  const sourceBadge=growthCount?`${nfmt(growthCount)} строк`:'Ждём связку';
+  const sourcePanel=growthSourcesTableHtml(growthRows,data.installs_total,false);
+  return `${mobileApp}<section class="cards">${card('Активные водители',nfmt(data.summary.active_users),'Максимум уникальных водителей по ключевым событиям.',`${nfmt(data.summary.total_events)} действий за период`,'var(--accent)')}${card('Установки',nfmt(data.installs_total),'Все установки AppMetrica за выбранный период.',growthCount?`Строк источников: ${nfmt(growthCount)}`:'Связка источников пока не пришла','var(--cyan)')}${card('Регистрации',nfmt(data.summary.registrations),'Сколько водителей дошли до регистрации.',`${pct(data.summary.phone_conversion)} дошли до звонка`,'var(--green)')}${card('Переход в звонок',pct(data.summary.phone_conversion),'Конверсия из просмотра заявки в нажатие на телефон.',`${nfmt(data.summary.phone_tap)} звонков из ${nfmt(data.summary.open_order)} просмотров`,'var(--yellow)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Продуктовая воронка</h2><p>Путь водителя от открытия фильтра до контакта по заявке.</p></div><div class="badge">Ключевой путь</div></div><div class="stack">${funnel.map((row,index,list)=>{const prev=index?list[index-1][1]:row[1];const share=index&&prev?`${Math.round(row[1]/prev*100)}% от предыдущего шага`:'Стартовый шаг';return bar(row[0],row[1],Math.max(...list.map(item=>item[1]),1),'',share,`${nfmt(row[1])} уникальных водителей. Подпись справа показывает, сколько пользователей дошло до этого этапа относительно предыдущего шага.`)}).join('')}</div></article><article class="panel"><div class="head"><div><h2>Маршруты поиска</h2><p>Как распределяется интерес между межгородом и городскими направлениями.</p></div><div class="badge">Структура спроса</div></div>${split(data.summary.route_intercity_percent,'Межгород','Город')}</article></section><section class="half"><article class="panel"><div class="head"><div><h2>География активации</h2><p>Города, где приложение используется активнее всего.</p></div><div class="badge">Города</div></div><div class="rows">${data.geo.length?data.geo.map(item=>bar(item.city,item.drivers,maxGeo,'',nfmt(item.drivers),`${nfmt(item.drivers)} активных водителей из этого города за выбранный период.`)).join(''):'<div class="empty"><h3>Нет географии</h3><p>После ответа источника здесь появится разбивка по городам.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Источники установок</h2><p>Источник — из Яндекс Метрики, установки — из AppMetrica. Сторы не считаем источниками трафика.</p></div><div class="badge">${sourceBadge}</div></div>${sourcePanel}</article></section><article class="panel"><div class="head"><div><h2>Топ событий приложения</h2><p>Сырые продуктовые события для детальной проверки активности.</p></div><div class="badge">${nfmt(events.length)} событий</div></div><div class="tablebox"><table><thead><tr><th>Событие</th><th class="num">Уникальные водители</th><th class="num">Всего действий</th></tr></thead><tbody>${events.map(item=>`<tr><td>${item.event_name}</td><td class="num">${nfmt(item.unique_devices)}</td><td class="num">${nfmt(item.total_events)}</td></tr>`).join('')}</tbody></table></div></article>`;
+}
 function metrikaView(data){if(!data)return `<section class="empty"><h3>Яндекс Метрика ещё не пришла в боевой ответ</h3><p>Интерфейс уже готов и ждёт объект <strong>metrika</strong> со сводкой, рядом по дням, источниками и переходами в Telegram.</p></section>`;const maxSource=Math.max(...data.sources.map(item=>item.visits),1);const maxBot=Math.max(...data.bot_pages.map(item=>item.visits),1);return `<section class="cards">${card('Сессии сайта',nfmt(data.summary.sessions),'Все визиты за выбранный период.',`${nfmt(data.summary.users)} пользователей`,'var(--cyan)')}${card('Показатель отказов',pct(data.summary.bounce_rate,1),'Чем ниже показатель, тем лучше совпадение трафика и посадочной страницы.',data.summary.bounce_rate>60?'Нужно улучшать качество трафика':'Поведение выглядит устойчиво',data.summary.bounce_rate>60?'var(--red)':'var(--green)')}${card('Средняя сессия',mins(data.summary.avg_session_min),'Среднее время визита на сайте.','Показывает глубину внимания к сайту','var(--yellow)')}${card('Переходы в Telegram',pct(data.summary.bot_activation_percent),'Доля переходов в Telegram от общего объёма сессий.',`${nfmt(data.summary.bot_sessions)} сессий`,'var(--accent)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Динамика сессий по дням</h2><p>Спокойный список по дням вместо шумной шкалы снизу.</p></div><div class="badge">По дням</div></div>${days(data.series,'visits','cyan','Сессии сайта за день')}</article><article class="panel"><div class="head"><div><h2>Качество веб-потока</h2><p>Быстрый слой для оценки интереса и качества посадки.</p></div><div class="badge">Сводка</div></div><div class="stats"><div class="stat"><b>${nfmt(data.summary.sessions)}</b><span>Всего сессий в Яндекс Метрике за выбранный период.</span></div><div class="stat"><b>${pct(data.summary.bounce_rate,1)}</b><span>Отказы. Чем ниже значение, тем лучше первая посадка.</span></div><div class="stat"><b>${mins(data.summary.avg_session_min)}</b><span>Среднее время визита и глубина внимания.</span></div></div>${data.warnings.length?`<div class="notes" style="margin-top:16px">${data.warnings.map(item=>`<div class="pill">${item}</div>`).join('')}</div>`:''}</article></section><section class="half"><article class="panel"><div class="head"><div><h2>Источники веб-трафика</h2><p>Какие каналы формируют посещаемость сайта.</p></div><div class="badge">Источники</div></div><div class="rows">${data.sources.length?data.sources.map(item=>bar(item.name,item.visits,maxSource,'cyan',`${nfmt(item.visits)} визитов`,`${nfmt(item.visits)} визитов и ${nfmt(item.users)} пользователей из этого источника за период.`)).join(''):'<div class="empty"><h3>Нет источников</h3><p>Как только ветка Метрики вернёт список источников, список заполнится автоматически.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Переходы в Telegram</h2><p>Страницы, с которых люди чаще всего уходят в Telegram.</p></div><div class="badge">Точки входа</div></div><div class="rows">${data.bot_pages.length?data.bot_pages.map(item=>bar(item.name,item.visits,maxBot,'yellow',`${nfmt(item.visits)} визитов`,`${nfmt(item.visits)} визитов и ${nfmt(item.users)} пользователей по этой точке входа в Telegram.`)).join(''):'<div class="empty"><h3>За выбранный период переходов не найдено</h3><p>Это не ошибка. Метрика по фильтру Telegram и t.me вернула ноль строк, поэтому блок остаётся честно пустым.</p></div>'}</div></article></section>`}
 function directView(data){if(!data)return `<section class="empty"><h3>Яндекс Директ ещё не пришёл в боевой ответ</h3><p>Интерфейс уже готов и ждёт объект <strong>direct</strong> со сводкой и дневным рядом.</p></section>`;const rows=data.daily.length?data.daily:[];return `<section class="cards">${card('Расход',money(data.summary.spend),'Общий рекламный расход за период.',data.summary.cpa?`Цена конверсии ${money(data.summary.cpa)}`:'Цена конверсии пока не определена','var(--green)')}${card('Показы',nfmt(data.summary.impressions),'Сколько раз объявления были показаны аудитории.',`${nfmt(data.summary.clicks)} кликов`,'var(--cyan)')}${card('CTR',pct(data.summary.ctr,2),'Отношение кликов к показам.',data.summary.ctr<1?'Стоит усилить креатив или семантику':'Показатель в рабочем диапазоне',data.summary.ctr<1?'var(--red)':'var(--accent)')}${card('Конверсии',nfmt(data.summary.conversions),'Целевые действия из рекламного трафика.',data.summary.cpa?`Цена конверсии ${money(data.summary.cpa)}`:'Пока без расчёта цены','var(--yellow)')}</section><section class="two"><article class="panel"><div class="head"><div><h2>Динамика расхода по дням</h2><p>Дневной ряд без перегруженной нижней шкалы.</p></div><div class="badge">Расход по дням</div></div>${days(rows.map(item=>({...item,label:item.date.slice(5)})),'spend','','Расход за день',value=>money(value))}</article><article class="panel"><div class="head"><div><h2>Эффективность закупки</h2><p>Короткий срез по стоимости трафика и результату.</p></div><div class="badge">Эффективность</div></div><div class="stats"><div class="stat"><b>${money(data.summary.avg_cpc)}</b><span>Средняя цена клика в рекламном трафике.</span></div><div class="stat"><b>${pct(data.summary.cr,2)}</b><span>Конверсия из клика в целевое действие.</span></div><div class="stat"><b>${data.summary.cpa?money(data.summary.cpa):'н/д'}</b><span>Средняя стоимость конверсии.</span></div></div>${data.warnings.length?`<div class="notes" style="margin-top:16px">${data.warnings.map(item=>`<div class="pill">${item}</div>`).join('')}</div>`:''}</article></section><article class="panel"><div class="head"><div><h2>Таблица по дням</h2><p>Дневные значения выровнены по числам и читаются ровно на десктопе и на телефоне.</p></div><div class="badge">${nfmt(rows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Дата</th><th class="num">Расход</th><th class="num">Показы</th><th class="num">Клики</th><th class="num">CTR</th><th class="num">CPC</th><th class="num">Конверсии</th><th class="num">CPA</th></tr></thead><tbody>${rows.length?rows.map(item=>`<tr><td>${item.date}</td><td class="num">${money(item.spend)}</td><td class="num">${nfmt(item.impressions)}</td><td class="num">${nfmt(item.clicks)}</td><td class="num">${pct(item.ctr,2)}</td><td class="num">${money(item.avg_cpc)}</td><td class="num">${nfmt(item.conversions)}</td><td class="num">${item.cpa?money(item.cpa):'н/д'}</td></tr>`).join(''):'<tr><td colspan="8">Дневной ряд пока пуст. После публикации обновлённой ветки данные появятся автоматически.</td></tr>'}</tbody></table></div></article>`}function financeModeSwitch(){return ''}
 function mobileFinanceCockpit(ctx) {
@@ -2933,20 +3098,13 @@ function mobileAppDetailsContent(app){
   if(!app)return'<div class="mf-empty">События приложения ещё не пришли в этот ответ.</div>';
   const summary=app.summary||{};
   const growth=Array.isArray(app.growth_sources)?app.growth_sources:[];
-  const installSources=Array.isArray(app.sources)?app.sources:[];
   const platforms=Array.isArray(app.platforms)?app.platforms:[];
   const versions=Array.isArray(app.versions)?app.versions:[];
-  const maxGrowth=Math.max(...growth.map(item=>item.installs),1);
-  const maxInstallSource=Math.max(...installSources.map(item=>item.installs),1);
   const maxPlatform=Math.max(...platforms.map(item=>item.users),1);
   const maxVersion=Math.max(...versions.map(item=>item.users||item.sessions),1);
   const sessions=num(summary.sessions_total||app.sessions_total);
   const allActive=summary.all_time_active_users==null?app.all_time_active_users:summary.all_time_active_users;
-  const sourceRows=growth.length
-    ? growth.slice(0,13).map(item=>{const label=item.source&&item.source!=='—'?`${item.traffic} · ${item.source}`:item.traffic;const share=item.share_percent==null?'':` · ${pct(item.share_percent,1)}`;return `<div class="mf-row"><div><strong>${esc(label)}</strong><span>${nfmt(item.installs)} установок${share}</span><i style="width:${Math.max(8,Math.round(item.installs/maxGrowth*100))}%"></i></div><b>${nowrap(nfmt(item.installs))}</b></div>`}).join('')
-    : installSources.length
-      ? installSources.slice(0,12).map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.installs)} установок · источник приложения</span><i style="width:${Math.max(8,Math.round(item.installs/maxInstallSource*100))}%"></i></div><b>${nowrap(nfmt(item.installs))}</b></div>`).join('')
-      : '<div class="mf-empty">Источники установок появятся после ответа приложения.</div>';
+  const sourceRows=growthSourcesTableHtml(growth,app.installs_total,true);
   const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(item.users/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
   const versionRows=versions.length?versions.slice(0,8).map(item=>{const value=item.users||item.sessions;const detail=item.sessions?`${nfmt(item.sessions)} сессий`:`${nfmt(item.users)} пользователей`;return `<div class="mf-row"><div><strong>Версия ${esc(item.version)}</strong><span>${detail}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
   return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не зарегистрировались</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
