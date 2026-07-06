@@ -3713,6 +3713,38 @@ init();
     document.getElementById('mobile-bottom-nav')?.remove();
   }
   window.normalizeProductCopy=normalizeProductCopy;
+  function mobileGrowthSourcesPanel(app,compact){
+    const growth=Array.isArray(app?.growth_sources)?app.growth_sources:[];
+    return growthSourcesTableHtml(growth,app?.installs_total||0,compact);
+  }
+  window.mobileAppDetailsContent=function(app){
+    const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
+    if(!app)return'<div class="mf-empty">События приложения ещё не пришли в этот ответ.</div>';
+    const summary=app.summary||{};
+    const platforms=Array.isArray(app.platforms)?app.platforms:[];
+    const versions=Array.isArray(app.versions)?app.versions:[];
+    const maxPlatform=Math.max(...platforms.map(item=>num(item.users)),1);
+    const maxVersion=Math.max(...versions.map(item=>num(item.users||item.sessions)),1);
+    const sessions=num(summary.sessions_total||app.sessions_total);
+    const allActive=summary.all_time_active_users==null?app.all_time_active_users:summary.all_time_active_users;
+    const sourceRows=mobileGrowthSourcesPanel(app,true);
+    const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(num(item.users)/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
+    const versionRows=versions.length?versions.slice(0,8).map(item=>{const value=num(item.users||item.sessions);const detail=item.sessions?`${nfmt(item.sessions)} сессий`:`${nfmt(item.users)} пользователей`;return `<div class="mf-row"><div><strong>Версия ${esc(item.version)}</strong><span>${detail}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
+    return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не зарегистрировались</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
+  };
+  window.mobileAppCockpit=function(data){
+    const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
+    const summary=data?.summary||{};
+    const sessions=num(summary.sessions_total||data?.sessions_total);
+    const allActive=summary.all_time_active_users==null?data?.all_time_active_users:summary.all_time_active_users;
+    return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения"><article class="mf-hero-card mf-app-card"><div class="mf-hero-copy"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>Установки, сессии и версии приложения.</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(data.installs_total))}</strong><p>за выбранный период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не дошли до регистрации</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section>${window.mobileAppDetailsContent(data)}</section>`;
+  };
+  if(!document.getElementById('mobile-growth-sources-guard')){
+    const guard=document.createElement('style');
+    guard.id='mobile-growth-sources-guard';
+    guard.textContent='@media(max-width:640px){.mf-hero-card::after,.mf-fold-body .mf-hero-card::after{display:none!important}.growth-source-table.is-compact{border-radius:20px}.growth-source-table.is-compact .growth-source-head{display:none!important}.growth-source-table.is-compact .growth-source-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"traffic installs" "source share";gap:4px 16px;padding:12px 8px;font-size:11px}.growth-source-table.is-compact .growth-source-row span{grid-area:traffic;color:#fff;font-size:12px;font-weight:950;overflow-wrap:anywhere}.growth-source-table.is-compact .growth-source-row strong{grid-area:source;color:var(--muted);font-size:11px;font-weight:850;overflow-wrap:anywhere}.growth-source-table.is-compact .growth-source-row b{grid-area:installs;color:var(--accent);font-size:16px;line-height:1;text-align:right}.growth-source-table.is-compact .growth-source-row em{grid-area:share;color:#f6ffe1;font-size:11px;line-height:1;text-align:right}.growth-source-table.is-compact .growth-source-total span{display:none}.growth-source-table.is-compact .growth-source-total strong{grid-area:traffic;color:#fff;font-size:12px}.growth-source-table.is-compact .growth-source-total b{font-size:16px}}';
+    document.head.appendChild(guard);
+  }
   let financeTweakLock=false;
   function applyFrontendOnlyTweaks(){
     if(financeTweakLock)return;
