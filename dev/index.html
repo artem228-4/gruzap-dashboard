@@ -1534,6 +1534,7 @@ body.locked .mobile-bottom-nav{display:none!important}
     grid-template-columns:repeat(3,minmax(0,1fr));
     gap:16px;
     align-items:start;
+    margin-top:8px;
   }
   .mf-app-summary-metric{
     min-width:0;
@@ -2438,6 +2439,7 @@ body.locked .mobile-bottom-nav{display:none!important}
   .mobile-detail-modal-content .mf-app-summary-metrics{
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
     gap:16px!important;
+    margin-top:8px!important;
   }
   .mobile-detail-modal-content .mf-app-summary-metric strong{
     font-size:clamp(22px,6.8vw,30px)!important;
@@ -2466,6 +2468,9 @@ body.locked .mobile-bottom-nav{display:none!important}
     min-height:312px!important;
     padding:24px!important;
     overflow:clip!important;
+  }
+  .mobile-finance-cockpit > .mf-hero-card.mf-hero-card-compact{
+    min-height:264px!important;
   }
   .mobile-finance-cockpit > .mf-hero-card > .mf-hero-copy{
     position:relative!important;
@@ -3198,7 +3203,7 @@ function mobileFinanceCockpit(ctx) {
   const analyticsDetails = `<section class="mf-bento mf-bento-compact mf-analytics-grid" aria-label="Ключевые показатели юнит-экономики"><article class="mf-kpi mf-kpi-amber"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article><article class="mf-kpi mf-kpi-cyan"><span>CAC</span><strong>н/д</strong></article><article class="mf-kpi"><span>Life Time</span><strong>н/д</strong></article></section><article class="mf-sections mf-analytics-ratio"><div class="mf-panel active"><div class="mf-split"><div><span>LTV / CAC</span><strong>н/д</strong><p>Окупаемость привлечения появится после связки рекламного расхода и платящих пользователей.</p></div></div></div></article>`;
   const appDetails = mobileAppDetailsContent(appData);
   const mainText = unavailable ? '<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>' : '';
-  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${paymentLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button></div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template><template data-mobile-template="analytics">${analyticsDetails}</template></article></section>`;
+  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card mf-hero-card-with-analytics">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${paymentLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button></div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template><template data-mobile-template="analytics">${analyticsDetails}</template></article></section>`;
 }
 function mobileShortDateLabel(date){
   return date.toLocaleDateString('ru-RU',{day:'numeric',month:'short'}).replace(/\./g,'');
@@ -3378,7 +3383,8 @@ function mobileFinanceCockpit(ctx){
   const mainText=unavailable?'<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>':'';
   const analyticsAction=showMobileAnalyticsEntry()?`<button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button>`:'';
   const analyticsTemplate=showMobileAnalyticsEntry()?`<template data-mobile-template="analytics">${analyticsDetails}</template>`:'';
-  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${payerLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button>${analyticsAction}</div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template>${analyticsTemplate}</article></section>`;
+  const heroAnalyticsClass=showMobileAnalyticsEntry()?'mf-hero-card-with-analytics':'mf-hero-card-compact';
+  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card ${heroAnalyticsClass}">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${payerLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button>${analyticsAction}</div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template>${analyticsTemplate}</article></section>`;
 }
 function financeWarningRu(code) {
   const map = {
