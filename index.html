@@ -3322,6 +3322,236 @@ body.locked .mobile-bottom-nav{display:none!important}
     font-weight:850;
   }
 }
+
+/* Dev desktop cockpit pass: keep the mobile product language, remove dead zones. */
+@media(min-width:641px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:clamp(560px,40vw,720px);
+    --dev-edge:32px;
+    min-height:100vh;
+    overflow-x:hidden;
+    background:
+      radial-gradient(circle at 50% -6%, rgba(191,255,0,.14), transparent 30%),
+      radial-gradient(circle at 50% 38%, rgba(63,255,175,.07), transparent 36%),
+      linear-gradient(180deg,#0f171d 0%,#070b0d 100%)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked)::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg,transparent calc(50% - var(--dev-cockpit-width)/2 - 96px), rgba(191,255,0,.035) calc(50% - var(--dev-cockpit-width)/2 - 96px), transparent calc(50% - var(--dev-cockpit-width)/2 + 16px), transparent calc(50% + var(--dev-cockpit-width)/2 - 16px), rgba(191,255,0,.035) calc(50% + var(--dev-cockpit-width)/2 - 16px), transparent calc(50% + var(--dev-cockpit-width)/2 + 96px)),
+      linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:100% 100%,100% 8px;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:var(--dev-cockpit-width)!important;
+    max-width:calc(100vw - 64px)!important;
+    min-height:auto!important;
+    margin:0 auto!important;
+    padding:40px 0 64px!important;
+    gap:24px!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.035),transparent 34%),
+      linear-gradient(180deg,rgba(19,26,34,.82),rgba(7,11,13,.86))!important;
+    border-left:1px solid rgba(244,255,204,.055);
+    border-right:1px solid rgba(244,255,204,.055);
+    box-shadow:0 0 90px rgba(0,0,0,.34);
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell::before{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    position:relative!important;
+    top:auto!important;
+    z-index:20!important;
+    display:grid!important;
+    gap:24px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    min-height:64px!important;
+    padding:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-brand{
+    gap:16px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-logo{
+    width:56px!important;
+    height:56px!important;
+    border-radius:18px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title{
+    gap:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title strong{
+    font-size:clamp(28px,2.4vw,36px)!important;
+    line-height:1!important;
+    letter-spacing:-.055em!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title span{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-refresh{
+    width:56px!important;
+    height:56px!important;
+    border-radius:18px!important;
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035))!important;
+    border-color:rgba(255,255,255,.12)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{
+    display:grid!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    gap:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+    border-radius:24px!important;
+    padding:0 24px!important;
+    border-color:rgba(244,255,204,.16)!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.032)),
+      linear-gradient(90deg,rgba(191,255,0,.055),transparent 54%)!important;
+    color:#fff!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 16px 40px rgba(0,0,0,.18)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:16px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy strong{
+    font-size:17px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy small{
+    font-size:13px!important;
+    line-height:1!important;
+    max-width:220px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-chevron{
+    width:24px!important;
+    height:24px!important;
+    display:grid!important;
+    place-items:center!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{
+    display:grid!important;
+    gap:24px!important;
+    align-content:start!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-unified-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold{
+    gap:24px!important;
+    margin:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit > .mf-hero-card{
+    min-height:auto!important;
+    padding:32px!important;
+    border-radius:36px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card{
+    min-height:auto!important;
+    border-radius:36px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card::after{
+    right:24px!important;
+    bottom:-48px!important;
+    width:168px!important;
+    height:168px!important;
+    border-radius:52px!important;
+    opacity:.86!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy{
+    display:grid!important;
+    gap:16px!important;
+    max-width:100%!important;
+    width:100%!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy span{
+    font-size:12px!important;
+    line-height:1!important;
+    letter-spacing:.14em!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{
+    font-size:clamp(58px,5vw,82px)!important;
+    line-height:.96!important;
+    max-width:100%!important;
+    white-space:nowrap!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy p{
+    max-width:440px!important;
+    margin:0!important;
+    color:#e0ebde!important;
+    font-size:16px!important;
+    line-height:1.4!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{
+    width:100%!important;
+    max-width:100%!important;
+    gap:16px!important;
+    padding-top:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action{
+    min-height:56px!important;
+    border-radius:999px!important;
+    padding:0 18px 0 24px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action span{
+    font-size:14px!important;
+    line-height:1!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{
+    width:24px!important;
+    height:24px!important;
+    flex-basis:24px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-trend-chip{
+    top:32px!important;
+    right:32px!important;
+    font-size:14px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold summary{
+    min-height:112px!important;
+    padding:24px 28px!important;
+    border-radius:32px!important;
+  }
+}
+@media(min-width:1280px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:clamp(640px,38vw,760px);
+  }
+}
+@media(min-width:1680px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:760px;
+  }
+}
 </style>
 </head>
 <body class="locked">
