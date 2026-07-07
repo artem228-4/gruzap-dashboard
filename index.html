@@ -3562,6 +3562,123 @@ body.locked .mobile-bottom-nav{display:none!important}
   }
 }
 </style>
+<style id="dev-desktop-final-pass">
+@media (min-width:641px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:min(960px,calc(100vw - 96px))!important;
+    min-height:100vh!important;
+    overflow-x:hidden!important;
+    background:radial-gradient(900px 520px at 50% 10%,rgba(191,255,0,.10),transparent 62%),radial-gradient(900px 520px at 50% 48%,rgba(88,255,187,.06),transparent 62%),linear-gradient(180deg,#0f171d 0%,#070a0c 100%)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked)::before{display:none!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:var(--dev-cockpit-width)!important;
+    max-width:var(--dev-cockpit-width)!important;
+    min-height:0!important;
+    height:auto!important;
+    margin:0 auto!important;
+    padding:48px 0 64px!important;
+    gap:24px!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    display:grid!important;
+    grid-template-rows:auto auto!important;
+    gap:24px!important;
+    margin:0!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{min-height:64px!important;padding:0!important;align-items:center!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-logo{width:56px!important;height:56px!important;border-radius:18px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title strong{font-size:clamp(30px,2.2vw,36px)!important;line-height:1!important;letter-spacing:-.055em!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-refresh{width:56px!important;height:56px!important;padding:0!important;display:grid!important;place-items:center!important;border-radius:18px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{width:100%!important;max-width:100%!important;margin:0!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 24px!important;
+    align-items:center!important;
+    gap:16px!important;
+    padding:0 24px!important;
+    border-radius:24px!important;
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.032)),linear-gradient(90deg,rgba(191,255,0,.06),transparent 56%)!important;
+    border-color:rgba(244,255,204,.16)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 16px 40px rgba(0,0,0,.16)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:24px!important;min-width:0!important;width:100%!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy strong{justify-self:start!important;text-align:left!important;font-size:18px!important;line-height:1!important;white-space:nowrap!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy small{justify-self:end!important;text-align:right!important;max-width:260px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:13px!important;line-height:1!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-chevron{display:grid!important;place-items:center!important;width:24px!important;height:24px!important;justify-self:end!important;align-self:center!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{display:grid!important;gap:24px!important;align-content:start!important;margin:0!important;padding:0!important;overflow:visible!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-unified-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold{width:100%!important;max-width:100%!important;gap:24px!important;margin:0!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit>.mf-hero-card{min-height:360px!important;padding:40px!important;border-radius:40px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card{border-radius:40px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card::after{right:48px!important;bottom:-104px!important;width:220px!important;height:220px!important;border-radius:68px!important;opacity:.42!important;pointer-events:none!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy{width:100%!important;max-width:100%!important;display:grid!important;gap:20px!important;align-content:center!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy span{font-size:13px!important;line-height:1!important;letter-spacing:.14em!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{max-width:100%!important;overflow-wrap:normal!important;white-space:nowrap!important;font-size:clamp(78px,5.7vw,108px)!important;line-height:.95!important;letter-spacing:-.075em!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy p{display:none!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{width:100%!important;max-width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;padding-top:0!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action{min-width:0!important;min-height:64px!important;padding:0 24px!important;border-radius:999px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action:nth-child(3){grid-column:1/-1!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:15px!important;line-height:1!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{width:24px!important;height:24px!important;flex:0 0 24px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-trend-chip{top:40px!important;right:40px!important;font-size:14px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold summary{min-height:104px!important;padding:24px 32px!important;border-radius:32px!important}
+}
+@media (min-width:1500px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){--dev-cockpit-width:min(1040px,calc(100vw - 160px))!important}
+}
+@media (min-width:641px) and (max-width:920px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){--dev-cockpit-width:calc(100vw - 48px)!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{padding:32px 0 48px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit>.mf-hero-card{min-height:auto!important;padding:32px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{font-size:clamp(58px,9vw,76px)!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{grid-template-columns:1fr!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action:nth-child(3){grid-column:auto!important}
+}
+@media (max-width:640px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    align-content:start!important;
+    align-items:start!important;
+    grid-template-rows:auto auto!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    grid-template-rows:auto auto!important;
+    min-height:0!important;
+    height:136px!important;
+    max-height:136px!important;
+    padding-bottom:0!important;
+    gap:16px!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    align-content:start!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{
+    margin-top:0!important;
+  }
+}
+</style>
 </head>
 <body class="locked">
 <section class="auth-screen" id="auth-screen" aria-label="Вход в дашборд"><div class="auth-card"><div class="auth-mark" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 184 147" fill="none"><path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#D4FF33"></path></svg></div><h2>Вход в аналитику</h2><p>Введите пароль, чтобы открыть аналитику ГРУЗАП.</p><form class="auth-form" id="auth-form"><label for="auth-password">Пароль</label><input class="auth-input" id="auth-password" name="password" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Введите пароль"><button class="auth-submit" type="submit">Открыть дашборд</button><p class="auth-error" id="auth-error" role="alert"></p></form><div class="auth-note">Вход запомнится до закрытия вкладки.</div></div></section><div class="shell"><section class="hero"><div class="hero-top"><div class="brand"><div class="mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 184 147" fill="none"><path d="M39.3334 0L0 67.2985V146.187H70.0017L132.229 83.9106V145.95H183.019V43.8759H79.9713V67.3253H115.659L98.6717 84.3272H23.4345V73.6535L52.7763 23.4518H183.019V0H39.3334Z" fill="#D4FF33"></path></svg></div><div><p class="eyebrow">Единая панель трафика и продукта</p><h1>ГРУЗАП Аналитика</h1><p class="subtitle">Приложение, Яндекс Метрика, Яндекс Директ и новый финансовый блок в одном спокойном интерфейсе без лишнего шума.</p></div></div><div class="chips"><div class="chip"><span class="dot"></span><span id="status-text">Идёт загрузка данных</span></div><div class="chip" id="source-chip">Приложение</div></div></div><div class="tabs" role="tablist" aria-label="Источники аналитики"><button class="tab active" data-tab="appmetrica" role="tab" aria-selected="true"><b>ГРУЗАП Приложение (поиск грузов)</b><span>События приложения, установки и география</span></button><button class="tab" data-tab="metrika" role="tab" aria-selected="false"><b>Яндекс Метрика</b><span>Сессии сайта, качество трафика и переходы в Telegram</span></button><button class="tab" data-tab="direct" role="tab" aria-selected="false"><b>Яндекс Директ</b><span>Расход, клики, конверсии и эффективность рекламы</span></button><button class="tab" data-tab="finance" role="tab" aria-selected="false"><b>ГРУЗАП Финансы</b><span>Приложение и Ю-Касса: нажатия оплаты, выручка и статусы платежей</span></button></div><div class="toolbar-row"><div class="presets"><button class="preset" data-preset="today">Сегодня</button><button class="preset active" data-preset="yesterday">Вчера</button><button class="preset" data-preset="week">7 дней</button><button class="preset" data-preset="month">30 дней</button><button class="preset" data-preset="this_month">Текущий месяц</button><button class="preset" data-preset="quarter">Квартал</button></div><div class="controls"><div class="field"><label for="date-from">С</label><input id="date-from" type="date"></div><div class="field"><label for="date-to">По</label><input id="date-to" type="date"></div><button class="ghost" id="refresh" type="button">Обновить</button><button class="primary" id="analysis" type="button" hidden>ИИ-разбор</button></div></div><div class="signal"><div class="signal-main"><strong id="period-label">Период не выбран</strong><span id="period-note">Готово к загрузке данных</span></div><div class="signal-side"><span class="badge" id="mode-pill">Источник готовится</span><span class="badge" id="active-pill">Вкладка: Приложение</span></div></div></section><main class="dashboard" id="content"></main></div><div class="overlay" id="overlay" aria-hidden="true"><div class="modal"><div class="modalhead"><div><h3 id="modal-title">ИИ-разбор</h3><div class="modalsub" id="modal-sub">Источник и период</div></div><button class="close" id="close" type="button" aria-label="Закрыть">×</button></div><div class="modalbody" id="modal-body"></div></div></div>
@@ -3570,8 +3687,8 @@ const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboar
 const PROD_HOSTS=new Set(['dashboard.gruz.app','www.dashboard.gruz.app']);
 function isProdDashboard(){return PROD_HOSTS.has(location.hostname)&&!location.pathname.replace(/\/+$/,'').startsWith('/dev')}
 function isDevDashboard(){return location.pathname.replace(/\/+$/,'').startsWith('/dev')}
-document.body.classList.add('dev-mobile-desktop');
-function showMobileAnalyticsEntry(){return true}
+if(isDevDashboard())document.body.classList.add('dev-mobile-desktop');
+function showMobileAnalyticsEntry(){return !isProdDashboard()}
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
 const state={tab:'finance',appMode:'overview',financeMode:'yookassa',errorKind:'all',preset:'this_month',errorRetryTimer:null,errorRetryCount:0,loadingTimer:null,loadingHideTimer:null,loadingWatchdog:null,loadingStartedAt:0,loadingEstimateMs:35000,requestSeq:0,financeComparisonSeq:0,mode:'legacy',data:{appmetrica:null,metrika:null,direct:null,finance:null},from:null,to:null};
 const viewCache=new Map();
@@ -4159,7 +4276,7 @@ function mobileFinanceCockpit(ctx){
   const repeatPayers=unit.repeat_payers==null?null:num(unit.repeat_payers);
   const payerLabel=payerCount==null?'<b>—</b> платящих':`<b>${nowrap(nfmt(payerCount))}</b> ${pluralRu(payerCount,['платящий пользователь','платящих пользователя','платящих пользователей'])}`;
   const activeUsersRaw=appData?.summary?.active_users==null?null:num(appData.summary.active_users);
-  const activeUsersLabel=activeUsersRaw==null?'<b>—</b> пользователей':`<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['пользователь','пользователя','пользователей'])}`;
+  const activeUsersLabel=activeUsersRaw>0?`<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['пользователь','пользователя','пользователей'])}`:'<b>—</b> пользователей';
   const paymentFact=unavailable?'—':`${nfmt(paymentCount)} ${pluralRu(paymentCount,['оплата','оплаты','оплат'])}`;
   const payerFact=payerCount==null?'нужен ID':`${nfmt(payerCount)} ${pluralRu(payerCount,['платящий','платящих','платящих'])}`;
   const repeatFact=repeatPayers==null?'нужна история':`${nfmt(repeatPayers)} ${pluralRu(repeatPayers,['повторный','повторных','повторных'])}`;
