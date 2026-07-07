@@ -4735,7 +4735,7 @@ init();
     if(section&&!section.children.length)section.remove();
   }
   function normalizeProductCopy(root=document){
-    const host=root instanceof Document?root.body:root;
+    const host=root instanceof Document?(document.getElementById('content')||root.body):root;
     if(!host)return;
     const pattern=/AppMetrica|Аппметрика|аппметрика/g;
     const phraseMap=[
@@ -4747,6 +4747,17 @@ init();
       ['уникальных водителей проявили интерес','уникальных водителей нажали оплату'],
     ];
     const applyPhrases=value=>phraseMap.reduce((text,[from,to])=>text.split(from).join(to),value);
+    const text=host.textContent||'';
+    const hasTextWork=pattern.test(text)||phraseMap.some(([from])=>text.includes(from));
+    pattern.lastIndex=0;
+    const attrNodes=host.querySelectorAll?.('[aria-label],[title]')||[];
+    const hasAttrWork=[...attrNodes].some(element=>['aria-label','title'].some(attr=>{
+      const value=element.getAttribute(attr)||'';
+      const matched=pattern.test(value)||phraseMap.some(([from])=>value.includes(from));
+      pattern.lastIndex=0;
+      return matched;
+    }));
+    if(!hasTextWork&&!hasAttrWork)return;
     const walker=document.createTreeWalker(host,NodeFilter.SHOW_TEXT);
     const nodes=[];
     let node;
@@ -4757,7 +4768,7 @@ init();
       pattern.lastIndex=0;
     }
     nodes.forEach(item=>{item.nodeValue=applyPhrases(item.nodeValue.replace(pattern,'Приложение'))});
-    host.querySelectorAll?.('[aria-label],[title]').forEach(element=>{
+    attrNodes.forEach(element=>{
       ['aria-label','title'].forEach(attr=>{
         const value=element.getAttribute(attr);
         if(value&&(pattern.test(value)||phraseMap.some(([from])=>value.includes(from))))element.setAttribute(attr,applyPhrases(value.replace(pattern,'Приложение')));
@@ -4935,7 +4946,7 @@ init();
       syncMobileBottomNav();
       mergeFinanceUserMoneyAndTariffs();
       enhanceCollapsiblePanels();
-      normalizeProductCopy();
+      normalizeProductCopy(document.getElementById('content')||document);
     }finally{
       financeTweakLock=false;
     }
