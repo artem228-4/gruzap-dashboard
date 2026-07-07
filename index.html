@@ -1489,6 +1489,80 @@ body.locked .mobile-bottom-nav{display:none!important}
   .mf-hero-card.mf-error-card{
     background:radial-gradient(circle at 88% 8%, rgba(255,209,94,.16), transparent 34%), linear-gradient(145deg,rgba(191,255,0,.10),rgba(255,255,255,.05) 58%,rgba(255,255,255,.026));
   }
+  .mf-app-summary-card{
+    min-height:216px;
+    display:grid;
+    align-content:start;
+    gap:24px;
+    padding:24px;
+  }
+  .mf-app-summary-main{
+    position:relative;
+    z-index:1;
+    display:grid;
+    gap:8px;
+    min-width:0;
+  }
+  .mf-app-summary-main span,
+  .mf-app-summary-metric span{
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:11px;
+    line-height:1.2;
+    font-weight:1000;
+  }
+  .mf-app-summary-metric span{
+    font-size:clamp(7px,2.05vw,9px);
+    letter-spacing:.04em;
+    line-height:1.1;
+    white-space:nowrap;
+  }
+  .mf-app-summary-main strong{
+    color:var(--accent);
+    font-size:clamp(52px,15vw,64px);
+    line-height:.94;
+    letter-spacing:-.065em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  .mf-app-summary-metrics{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px;
+    align-items:start;
+    margin-top:8px;
+  }
+  .mf-app-summary-metric{
+    min-width:0;
+    display:grid;
+    gap:8px;
+    align-content:start;
+    justify-items:center;
+    text-align:center;
+  }
+  .mf-app-summary-metric strong{
+    display:block;
+    color:var(--accent);
+    font-size:clamp(22px,6.8vw,32px);
+    line-height:1;
+    letter-spacing:-.055em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  .mf-app-summary-metric-cyan strong{color:var(--cyan)}
+  .mf-app-summary-metric-amber strong{color:var(--yellow)}
+  .mf-app-summary-metric p{
+    margin:0;
+    color:#d7dfd9;
+    font-size:12px;
+    line-height:1.25;
+    font-weight:900;
+  }
   .mf-sections{border-radius:32px;padding:8px}
   .mf-segment{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;padding:0;margin:0 0 8px}
   .mf-segment button{
@@ -1630,6 +1704,12 @@ body.locked .mobile-bottom-nav{display:none!important}
   .mf-kpi{padding:16px}
   .mf-hero-copy strong{font-size:40px}
   .mf-kpi strong{font-size:24px}
+  .mf-app-summary-card{padding:24px 16px;gap:24px}
+  .mf-app-summary-metrics{gap:8px}
+  .mf-app-summary-main strong{font-size:48px}
+  .mf-app-summary-metric span{font-size:7px;letter-spacing:.02em}
+  .mf-app-summary-metric strong{font-size:22px}
+  .mf-app-summary-metric p{font-size:11px}
 }
 @media(max-width:640px){
   body.mobile-period-sheet-open{overflow:hidden!important;touch-action:none}
@@ -2350,6 +2430,20 @@ body.locked .mobile-bottom-nav{display:none!important}
     grid-template-columns:1fr!important;
     gap:8px!important;
   }
+  .mobile-detail-modal-content .mf-app-summary-card{
+    min-height:216px!important;
+    padding:24px!important;
+    gap:24px!important;
+    align-content:start!important;
+  }
+  .mobile-detail-modal-content .mf-app-summary-metrics{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:16px!important;
+    margin-top:8px!important;
+  }
+  .mobile-detail-modal-content .mf-app-summary-metric strong{
+    font-size:clamp(22px,6.8vw,30px)!important;
+  }
   .mobile-detail-modal-content .mf-kpi,
   .modalbody .mobile-detail-modal-content .mf-kpi{
     min-height:0!important;
@@ -2374,6 +2468,9 @@ body.locked .mobile-bottom-nav{display:none!important}
     min-height:312px!important;
     padding:24px!important;
     overflow:clip!important;
+  }
+  .mobile-finance-cockpit > .mf-hero-card.mf-hero-card-compact{
+    min-height:264px!important;
   }
   .mobile-finance-cockpit > .mf-hero-card > .mf-hero-copy{
     position:relative!important;
@@ -2652,7 +2749,7 @@ body.locked .mobile-bottom-nav{display:none!important}
 const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboard',analytics:'https://n8n-dev.gruzapp.team/webhook/gruzap-analytics'};
 const PROD_HOSTS=new Set(['dashboard.gruz.app','www.dashboard.gruz.app']);
 function isProdDashboard(){return PROD_HOSTS.has(location.hostname)&&!location.pathname.replace(/\/+$/,'').startsWith('/dev')}
-function showMobileAnalyticsEntry(){return false}
+function showMobileAnalyticsEntry(){return !isProdDashboard()}
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
 const state={tab:'finance',appMode:'overview',financeMode:'yookassa',errorKind:'all',preset:'this_month',errorRetryTimer:null,errorRetryCount:0,loadingTimer:null,loadingHideTimer:null,loadingWatchdog:null,loadingStartedAt:0,loadingEstimateMs:35000,requestSeq:0,financeComparisonSeq:0,mode:'legacy',data:{appmetrica:null,metrika:null,direct:null,finance:null},from:null,to:null};
 const viewCache=new Map();
@@ -3106,7 +3203,7 @@ function mobileFinanceCockpit(ctx) {
   const analyticsDetails = `<section class="mf-bento mf-bento-compact mf-analytics-grid" aria-label="Ключевые показатели юнит-экономики"><article class="mf-kpi mf-kpi-amber"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article><article class="mf-kpi mf-kpi-cyan"><span>CAC</span><strong>н/д</strong></article><article class="mf-kpi"><span>Life Time</span><strong>н/д</strong></article></section><article class="mf-sections mf-analytics-ratio"><div class="mf-panel active"><div class="mf-split"><div><span>LTV / CAC</span><strong>н/д</strong><p>Окупаемость привлечения появится после связки рекламного расхода и платящих пользователей.</p></div></div></div></article>`;
   const appDetails = mobileAppDetailsContent(appData);
   const mainText = unavailable ? '<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>' : '';
-  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${paymentLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button></div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template><template data-mobile-template="analytics">${analyticsDetails}</template></article></section>`;
+  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card mf-hero-card-with-analytics">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${paymentLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button></div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template><template data-mobile-template="analytics">${analyticsDetails}</template></article></section>`;
 }
 function mobileShortDateLabel(date){
   return date.toLocaleDateString('ru-RU',{day:'numeric',month:'short'}).replace(/\./g,'');
@@ -3203,7 +3300,7 @@ function mobileAppCockpit(data){
   const summary=data?.summary||{};
   const sessions=num(summary.sessions_total||data?.sessions_total);
   const allActive=summary.all_time_active_users==null?data?.all_time_active_users:summary.all_time_active_users;
-  return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения"><article class="mf-hero-card mf-app-card"><div class="mf-hero-copy"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>Установки, сессии и версии приложения.</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(data.installs_total))}</strong><p>за выбранный период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section>${mobileAppDetailsContent(data)}</section>`;
+  return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения">${mobileAppDetailsContent(data)}</section>`;
 }
 function mobileAppDetailsContent(app){
   const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
@@ -3217,10 +3314,11 @@ function mobileAppDetailsContent(app){
   const maxVersion=Math.max(...versions.map(item=>item.users),1);
   const sessions=num(summary.sessions_total||app.sessions_total);
   const allActive=summary.all_time_active_users==null?app.all_time_active_users:summary.all_time_active_users;
+  const activeSummary=`<article class="mf-hero-card mf-app-card mf-app-summary-card" aria-label="Активные пользователи"><div class="mf-app-summary-main"><span>Активные пользователи</span><strong>${nowrap(nfmt(activeTotal))}</strong></div><div class="mf-app-summary-metrics" aria-label="Ключевые показатели активности"><div class="mf-app-summary-metric"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></div><div class="mf-app-summary-metric mf-app-summary-metric-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски':'ждём поле'}</p></div><div class="mf-app-summary-metric mf-app-summary-metric-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></div></div><div class="mf-hero-wave" aria-hidden="true"></div></article>`;
   const sourceRows=growthSourcesTableHtml(growth,app.installs_total,true);
   const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(item.users/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
   const versionRows=versions.length?versions.map(item=>{const value=num(item.users);const label=item.version==='Другие версии'?'Другие версии':`Версия ${esc(item.version)}`;return `<div class="mf-row"><div><strong>${label}</strong><span>${nfmt(value)} ${pluralRu(value,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
-  return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(activeTotal))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
+  return `${activeSummary}<article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
 }
 function mobileAppCollapsible(app){
   const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
@@ -3285,7 +3383,8 @@ function mobileFinanceCockpit(ctx){
   const mainText=unavailable?'<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>':'';
   const analyticsAction=showMobileAnalyticsEntry()?`<button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button>`:'';
   const analyticsTemplate=showMobileAnalyticsEntry()?`<template data-mobile-template="analytics">${analyticsDetails}</template>`:'';
-  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${payerLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button>${analyticsAction}</div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template>${analyticsTemplate}</article></section>`;
+  const heroAnalyticsClass=showMobileAnalyticsEntry()?'mf-hero-card-with-analytics':'mf-hero-card-compact';
+  return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card ${heroAnalyticsClass}">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${payerLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button>${analyticsAction}</div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template>${analyticsTemplate}</article></section>`;
 }
 function financeWarningRu(code) {
   const map = {
@@ -3861,17 +3960,18 @@ init();
     const maxVersion=Math.max(...versions.map(item=>num(item.users)),1);
     const sessions=num(summary.sessions_total||app.sessions_total);
     const allActive=summary.all_time_active_users==null?app.all_time_active_users:summary.all_time_active_users;
+    const activeSummary=`<article class="mf-hero-card mf-app-card mf-app-summary-card" aria-label="Активные пользователи"><div class="mf-app-summary-main"><span>Активные пользователи</span><strong>${nowrap(nfmt(activeTotal))}</strong></div><div class="mf-app-summary-metrics" aria-label="Ключевые показатели активности"><div class="mf-app-summary-metric"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></div><div class="mf-app-summary-metric mf-app-summary-metric-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски':'ждём поле'}</p></div><div class="mf-app-summary-metric mf-app-summary-metric-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></div></div><div class="mf-hero-wave" aria-hidden="true"></div></article>`;
     const sourceRows=mobileGrowthSourcesPanel(app,true);
     const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(num(item.users)/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
     const versionRows=versions.length?versions.map(item=>{const value=num(item.users);const label=item.version==='Другие версии'?'Другие версии':`Версия ${esc(item.version)}`;return `<div class="mf-row"><div><strong>${label}</strong><span>${nfmt(value)} ${pluralRu(value,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
-    return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(activeTotal))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
+    return `${activeSummary}<article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
   };
   window.mobileAppCockpit=function(data){
     const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
     const summary=data?.summary||{};
     const sessions=num(summary.sessions_total||data?.sessions_total);
     const allActive=summary.all_time_active_users==null?data?.all_time_active_users:summary.all_time_active_users;
-    return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения"><article class="mf-hero-card mf-app-card"><div class="mf-hero-copy"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>Установки, сессии и версии приложения.</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(data.installs_total))}</strong><p>за выбранный период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section>${window.mobileAppDetailsContent(data)}</section>`;
+    return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения">${window.mobileAppDetailsContent(data)}</section>`;
   };
   if(!document.getElementById('mobile-growth-sources-guard')){
     const guard=document.createElement('style');
