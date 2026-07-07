@@ -2605,6 +2605,45 @@ body.locked .mobile-bottom-nav{display:none!important}
   color:#aab8c5!important;
   font-size:13px!important;
 }
+.mf-analytics-grid{
+  align-items:stretch;
+}
+.mf-analytics-grid .mf-kpi{
+  min-width:0;
+}
+.mf-analytics-grid .mf-kpi strong,
+.mf-analytics-ratio .mf-split strong{
+  overflow-wrap:normal;
+  word-break:normal;
+  white-space:nowrap;
+}
+.mf-analytics-ratio .mf-panel{
+  display:grid;
+  gap:16px;
+}
+.mf-analytics-note{
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:16px;
+  background:rgba(255,255,255,.035);
+}
+@media(max-width:640px){
+  .modalbody .mobile-detail-modal-content .mf-analytics-grid{
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+  }
+  .modalbody .mobile-detail-modal-content .mf-analytics-grid .mf-kpi{
+    min-height:112px!important;
+    padding:16px!important;
+  }
+  .modalbody .mobile-detail-modal-content .mf-analytics-grid .mf-kpi strong{
+    font-size:28px!important;
+    line-height:1!important;
+  }
+  .modalbody .mobile-detail-modal-content .mf-analytics-ratio .mf-split strong{
+    font-size:32px!important;
+  }
+}
 </style>
 </head>
 <body class="locked">
@@ -2613,7 +2652,7 @@ body.locked .mobile-bottom-nav{display:none!important}
 const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboard',analytics:'https://n8n-dev.gruzapp.team/webhook/gruzap-analytics'};
 const PROD_HOSTS=new Set(['dashboard.gruz.app','www.dashboard.gruz.app']);
 function isProdDashboard(){return PROD_HOSTS.has(location.hostname)&&!location.pathname.replace(/\/+$/,'').startsWith('/dev')}
-function showMobileAnalyticsEntry(){return !isProdDashboard()}
+function showMobileAnalyticsEntry(){return false}
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
 const state={tab:'finance',appMode:'overview',financeMode:'yookassa',errorKind:'all',preset:'this_month',errorRetryTimer:null,errorRetryCount:0,loadingTimer:null,loadingHideTimer:null,loadingWatchdog:null,loadingStartedAt:0,loadingEstimateMs:35000,requestSeq:0,financeComparisonSeq:0,mode:'legacy',data:{appmetrica:null,metrika:null,direct:null,finance:null},from:null,to:null};
 const viewCache=new Map();
@@ -2677,6 +2716,68 @@ function normalizeGrowthSourceRows(raw){
     }
   }).filter(item=>item.installs>0)
 }
+function installSourceTrafficLabels(value){
+  const raw=String(value||'').trim();
+  const lower=raw.toLowerCase();
+  if(/taplink|таплинк/.test(lower))return{traffic:'Taplink',source:'Taplink'};
+  if(/telegram|телеграм|(^|[_\s-])тг([_\s-]|$)/i.test(raw)){
+    if(/бот|bot/i.test(raw))return{traffic:'Telegram',source:'Telegram-бот'};
+    if(/журнал|journal/i.test(raw))return{traffic:'Telegram',source:'Telegram-журнал'};
+    return{traffic:'Telegram',source:'Telegram'};
+  }
+  if(/google\s*search/i.test(raw))return{traffic:'Google Search',source:'Google Search'};
+  if(/сайт|site|gruz\.app/i.test(raw))return{traffic:'Сайт gruz.app',source:'Сайт gruz.app'};
+  if(/direct|директ/i.test(raw))return{traffic:'Реклама',source:'Яндекс Директ'};
+  return{traffic:'Неизвестно / органика',source:'Unknown / organic'};
+}
+function fallbackGrowthSourcesFromAppSources(rawSources){
+  const rows=Array.isArray(rawSources)?rawSources:[];
+  const grouped=new Map();
+  rows.forEach(item=>{
+    const installs=firstNumber(item,['installs','installations','users','count','value','total'])||0;
+    if(!installs)return;
+    const labels=installSourceTrafficLabels(item.name||item.source||item.tracker||item.label);
+    const key=`${labels.traffic}|${labels.source}`;
+    const prev=grouped.get(key)||{...labels,installs:0};
+    prev.installs+=installs;
+    grouped.set(key,prev);
+  });
+  return Array.from(grouped.values()).sort((a,b)=>b.installs-a.installs);
+}
+function alignGrowthSourcesToTotal(rows,total){
+  const target=Math.round(num(total));
+  const list=(Array.isArray(rows)?rows:[]).map(item=>({...item,installs:num(item.installs)})).filter(item=>item.installs>0);
+  const sum=list.reduce((acc,item)=>acc+item.installs,0);
+  const diff=target-sum;
+  if(diff<=0)return list;
+  const unknown=list.find(item=>item.traffic==='Неизвестно / органика'&&item.source==='Unknown / organic');
+  if(unknown)unknown.installs+=diff;
+  else list.push({traffic:'Неизвестно / органика',source:'Unknown / organic',installs:diff});
+  return list.sort((a,b)=>b.installs-a.installs);
+}
+function fitRowsToTotal(rows,total,key='users'){
+  const target=Math.round(num(total));
+  const list=(Array.isArray(rows)?rows:[]).map(item=>({...item,[key]:Math.round(num(item[key]))})).filter(item=>item[key]>0);
+  const sum=list.reduce((acc,item)=>acc+item[key],0);
+  if(!target||!sum||sum===target)return list;
+  const scaled=list.map(item=>{
+    const exact=item[key]*target/sum;
+    const base=Math.floor(exact);
+    return{...item,[key]:base,_fitRemainder:exact-base};
+  });
+  let rest=target-scaled.reduce((acc,item)=>acc+item[key],0);
+  scaled.sort((a,b)=>b._fitRemainder-a._fitRemainder).forEach(item=>{
+    if(rest>0){item[key]+=1;rest-=1}
+  });
+  return scaled.map(({_fitRemainder,...item})=>item).filter(item=>item[key]>0).sort((a,b)=>b[key]-a[key]);
+}
+function compactRowsWithOther(rows,limit,key='users',otherLabel='Другие'){
+  const list=Array.isArray(rows)?rows:[];
+  if(list.length<=limit)return list;
+  const head=list.slice(0,limit);
+  const tail=list.slice(limit).reduce((acc,item)=>acc+num(item[key]),0);
+  return tail>0?[...head,{name:otherLabel,version:otherLabel,[key]:tail}]:head;
+}
 function growthSourceLabels(item){
   const rawTraffic=String(item?.traffic||'').trim();
   const rawSource=String(item?.source||'').trim();
@@ -2723,7 +2824,8 @@ function normApp(raw){
   const summaryRaw=raw.summary||{};
   const sessionsTotal=firstNumber(raw,['sessions_total','session_starts_total','sessions_count','session_count'])??firstNumber(summaryRaw,['sessions','sessions_total','session_starts','session_starts_total']);
   const allTimeActive=firstNumber(raw,['all_time_active_users','active_users_all_time','users_all_time','total_active_users'])??firstNumber(summaryRaw,['all_time_active_users','active_users_all_time','users_all_time','total_active_users']);
-  const growthSources=normalizeGrowthSourceRows(raw.growth_sources||raw.traffic_sources||raw.attribution_sources||raw.source_attribution||raw.install_sources_exact);
+  const explicitGrowthSources=normalizeGrowthSourceRows(raw.growth_sources||raw.traffic_sources||raw.attribution_sources||raw.source_attribution||raw.install_sources_exact);
+  const growthSources=explicitGrowthSources.length?explicitGrowthSources:alignGrowthSourcesToTotal(fallbackGrowthSourcesFromAppSources(raw.sources),installsTotal);
   const platforms=normalizePlatformRows(raw.platforms||raw.users_by_platform||raw.platform_users||raw.os_users||summaryRaw.platforms);
   const versions=normalizeVersionRows(raw.versions||raw.app_versions||raw.version_users||summaryRaw.versions);
   const activeUsers=events.length?Math.max(...events.map(item=>item.unique_devices),0):0;
@@ -2830,8 +2932,15 @@ function normDirect(raw){if(!raw)return null;const s=raw.summary||{};return{summ
       ),
       paying_users: raw.unit_economics.paying_users == null ? null : num(raw.unit_economics.paying_users),
       arppu: raw.unit_economics.arppu == null ? null : num(raw.unit_economics.arppu),
+      arpu: raw.unit_economics.arpu == null ? null : num(raw.unit_economics.arpu),
       average_ltv: raw.unit_economics.average_ltv == null ? null : num(raw.unit_economics.average_ltv),
       median_ltv: raw.unit_economics.median_ltv == null ? null : num(raw.unit_economics.median_ltv),
+      lifetime_days: (raw.unit_economics.lifetime_days ?? raw.unit_economics.life_time_days ?? raw.unit_economics.live_time_days) == null ? null : num(raw.unit_economics.lifetime_days ?? raw.unit_economics.life_time_days ?? raw.unit_economics.live_time_days),
+      lifetime_months: (raw.unit_economics.lifetime_months ?? raw.unit_economics.life_time_months ?? raw.unit_economics.live_time_months) == null ? null : num(raw.unit_economics.lifetime_months ?? raw.unit_economics.life_time_months ?? raw.unit_economics.live_time_months),
+      cac: raw.unit_economics.cac == null ? null : num(raw.unit_economics.cac),
+      ltv_cac: (raw.unit_economics.ltv_cac ?? raw.unit_economics.ltv_cac_ratio) == null ? null : num(raw.unit_economics.ltv_cac ?? raw.unit_economics.ltv_cac_ratio),
+      direct_spend: (raw.unit_economics.direct_spend ?? raw.unit_economics.ad_spend ?? raw.unit_economics.marketing_spend) == null ? null : num(raw.unit_economics.direct_spend ?? raw.unit_economics.ad_spend ?? raw.unit_economics.marketing_spend),
+      ad_paying_users: (raw.unit_economics.ad_paying_users ?? raw.unit_economics.paid_users_from_ads ?? raw.unit_economics.new_paying_users_from_ads) == null ? null : num(raw.unit_economics.ad_paying_users ?? raw.unit_economics.paid_users_from_ads ?? raw.unit_economics.new_paying_users_from_ads),
       repeat_payers: raw.unit_economics.repeat_payers == null ? null : num(raw.unit_economics.repeat_payers),
       repeat_payer_percent: (raw.unit_economics.repeat_payer_percent ?? raw.unit_economics.repeat_payer_share_percent) == null ? null : num(raw.unit_economics.repeat_payer_percent ?? raw.unit_economics.repeat_payer_share_percent),
       retention_rate: (raw.unit_economics.retention_rate ?? raw.unit_economics.retention_rate_percent) == null ? null : num(raw.unit_economics.retention_rate ?? raw.unit_economics.retention_rate_percent),
@@ -2994,7 +3103,7 @@ function mobileFinanceCockpit(ctx) {
   const activeUsersRaw = appData?.summary?.active_users == null ? null : num(appData.summary.active_users);
   const activeUsersLabel = activeUsersRaw == null ? '— пользователей' : `<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['пользователь','пользователя','пользователей'])}`;
   const financeDetails = `<article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-panel active" data-mf-view="tariffs">${tariffCards}</div><div class="mf-panel" data-mf-view="trend"><div class="mf-chart-head"><span>Деньги по дням</span><b>${esc(period)}</b></div><div class="mf-bars">${bars}</div></div></article>`;
-  const analyticsDetails = `<section class="mf-bento mf-bento-compact" aria-label="Ключевые показатели аналитики"><article class="mf-kpi mf-kpi-cyan"><span>Средний чек</span><strong>${nowrap(averageCheckValue)}</strong></article><article class="mf-kpi mf-kpi-amber"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article></section><article class="mf-sections"><div class="mf-panel active"><div class="mf-split"><div><span>Связка с приложением</span><strong>${nowrap(conversionValue)}</strong><p>${linkUnavailable ? 'Клики приложения сейчас не пришли.' : linkEstimated ? 'Оценка по событиям оплаты из приложения.' : 'Нажали оплату → фактическая оплата.'}</p></div><div class="mf-mini-grid"><div><b>${nowrap(interestValue)}</b><span>нажали оплату</span></div><div><b>${unavailable ? '—' : nowrap(nfmt(paymentCount))}</b><span>оплаты</span></div></div></div><div class="mf-split"><div><span>DAU / MAU</span><strong>${nowrap(audienceValue)}</strong></div></div></div></article>`;
+  const analyticsDetails = `<section class="mf-bento mf-bento-compact mf-analytics-grid" aria-label="Ключевые показатели юнит-экономики"><article class="mf-kpi mf-kpi-amber"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article><article class="mf-kpi mf-kpi-cyan"><span>CAC</span><strong>н/д</strong></article><article class="mf-kpi"><span>Life Time</span><strong>н/д</strong></article></section><article class="mf-sections mf-analytics-ratio"><div class="mf-panel active"><div class="mf-split"><div><span>LTV / CAC</span><strong>н/д</strong><p>Окупаемость привлечения появится после связки рекламного расхода и платящих пользователей.</p></div></div></div></article>`;
   const appDetails = mobileAppDetailsContent(appData);
   const mainText = unavailable ? '<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>' : '';
   return `<section class="mobile-finance-cockpit" aria-label="Мобильные финансы"><article class="mf-hero-card">${trendChip}<div class="mf-hero-copy"><span>Деньги</span><strong>${nowrap(value)}</strong>${mainText}<div class="mf-hero-actions"><button class="mf-hero-action" type="button" data-mobile-detail="finance"><span>${paymentLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="app"><span>${activeUsersLabel}</span>${arrowIcon}</button><button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button></div></div><div class="mf-hero-wave" aria-hidden="true"></div><template data-mobile-template="finance">${financeDetails}</template><template data-mobile-template="app">${appDetails}</template><template data-mobile-template="analytics">${analyticsDetails}</template></article></section>`;
@@ -3094,23 +3203,24 @@ function mobileAppCockpit(data){
   const summary=data?.summary||{};
   const sessions=num(summary.sessions_total||data?.sessions_total);
   const allActive=summary.all_time_active_users==null?data?.all_time_active_users:summary.all_time_active_users;
-  return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения"><article class="mf-hero-card mf-app-card"><div class="mf-hero-copy"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>Установки, сессии и версии приложения.</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(data.installs_total))}</strong><p>за выбранный период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не дошли до регистрации</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section>${mobileAppDetailsContent(data)}</section>`;
+  return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения"><article class="mf-hero-card mf-app-card"><div class="mf-hero-copy"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>Установки, сессии и версии приложения.</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(data.installs_total))}</strong><p>за выбранный период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section>${mobileAppDetailsContent(data)}</section>`;
 }
 function mobileAppDetailsContent(app){
   const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
   if(!app)return'<div class="mf-empty">События приложения ещё не пришли в этот ответ.</div>';
   const summary=app.summary||{};
   const growth=Array.isArray(app.growth_sources)?app.growth_sources:[];
-  const platforms=Array.isArray(app.platforms)?app.platforms:[];
-  const versions=Array.isArray(app.versions)?app.versions:[];
+  const activeTotal=num(summary.active_users);
+  const platforms=fitRowsToTotal(Array.isArray(app.platforms)?app.platforms:[],activeTotal,'users');
+  const versions=compactRowsWithOther(fitRowsToTotal((Array.isArray(app.versions)?app.versions:[]).map(item=>({...item,users:num(item.users||item.sessions)})),activeTotal,'users'),8,'users','Другие версии');
   const maxPlatform=Math.max(...platforms.map(item=>item.users),1);
-  const maxVersion=Math.max(...versions.map(item=>item.users||item.sessions),1);
+  const maxVersion=Math.max(...versions.map(item=>item.users),1);
   const sessions=num(summary.sessions_total||app.sessions_total);
   const allActive=summary.all_time_active_users==null?app.all_time_active_users:summary.all_time_active_users;
   const sourceRows=growthSourcesTableHtml(growth,app.installs_total,true);
   const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(item.users/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
-  const versionRows=versions.length?versions.slice(0,8).map(item=>{const value=item.users||item.sessions;const detail=item.sessions?`${nfmt(item.sessions)} сессий`:`${nfmt(item.users)} пользователей`;return `<div class="mf-row"><div><strong>Версия ${esc(item.version)}</strong><span>${detail}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
-  return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не зарегистрировались</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
+  const versionRows=versions.length?versions.map(item=>{const value=num(item.users);const label=item.version==='Другие версии'?'Другие версии':`Версия ${esc(item.version)}`;return `<div class="mf-row"><div><strong>${label}</strong><span>${nfmt(value)} ${pluralRu(value,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
+  return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(activeTotal))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
 }
 function mobileAppCollapsible(app){
   const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
@@ -3118,7 +3228,7 @@ function mobileAppCollapsible(app){
   return `<details class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-fold"><summary><div class="mf-fold-title"><span>Активные пользователи</span><small>Сессии, платформы и версии</small></div><span class="mf-fold-control"><strong class="mf-fold-value">${active}</strong><span class="mf-fold-chevron" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M5.5 7.5L10 12L14.5 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></summary><div class="mf-fold-body">${mobileAppDetailsContent(app)}</div></details>`;
 }
 function mobileFinanceCockpit(ctx){
-  const {y,s,unavailable,cleanRevenue,cleanAfterRefunds,link,linkUnavailable,userIdReady,payingUsers,arppu,dau,mau,dauMau,appData}=ctx;
+  const {y,s,unavailable,cleanRevenue,cleanAfterRefunds,link,linkUnavailable,userIdReady,payingUsers,arppu,dau,mau,dauMau,appData,directData}=ctx;
   const unit=ctx.unit||y.unit_economics||{};
   const linkEstimated=link.status==='estimated';
   const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
@@ -3136,12 +3246,28 @@ function mobileFinanceCockpit(ctx){
   const tariffRows=(y.tariffs||[]).filter(item=>item.count||item.amount||item.net_amount);
   const tariffHtml=mobileTariffRowsHtml(tariffRows,shortMoney,unavailable);
   const chartHtml=mobileFinanceChartHtml(y.series||[],unavailable);
-  const averageCheckValue=unavailable?'—':money(s.average_check||(paymentCount?s.gross_revenue/Math.max(paymentCount,1):0));
-  const ltvValue=unit.average_ltv!=null?money(unit.average_ltv):(unit.median_ltv!=null?money(unit.median_ltv):'н/д');
-  const interestValue=linkUnavailable||link.payment_interest_users==null?'—':`${linkEstimated?'до ':''}${nfmt(link.payment_interest_users)}`;
-  const rawConversion=userIdReady&&link.payment_interest_users?(payingUsers/Math.max(link.payment_interest_users,1))*100:link.conversion_percent;
-  const conversionValue=linkUnavailable||rawConversion==null?'н/д':`${linkEstimated?'≈ ':''}${pct(rawConversion,1)}`;
-  const audienceValue=dau!=null&&mau!=null?`${nfmt(dau)} / ${nfmt(mau)}`:(dauMau!=null?pct(dauMau,1):'н/д');
+  const netPeriodValue=unavailable?null:num(cleanAfterRefunds||cleanRevenue||s.gross_revenue||0);
+  const arpuMetric=unit.arpu==null?null:num(unit.arpu);
+  const arppuMetric=unit.arppu==null?(arppu==null?null:num(arppu)):num(unit.arppu);
+  const lifetimeDays=unit.lifetime_days==null?null:num(unit.lifetime_days);
+  const lifetimeMonths=unit.lifetime_months==null?(lifetimeDays==null?null:lifetimeDays/30.4375):num(unit.lifetime_months);
+  const directSpend=unit.direct_spend==null?(directData?.summary?.spend==null?null:num(directData.summary.spend)):num(unit.direct_spend);
+  const adPayers=unit.ad_paying_users==null?null:num(unit.ad_paying_users);
+  const ltvRaw=unit.average_ltv!=null?num(unit.average_ltv):(arpuMetric!=null&&lifetimeMonths!=null?arpuMetric*lifetimeMonths:(arppuMetric!=null&&lifetimeMonths!=null?arppuMetric*lifetimeMonths:(payerCount&&netPeriodValue!=null?netPeriodValue/Math.max(payerCount,1):null)));
+  const cacRaw=unit.cac!=null?num(unit.cac):(directSpend!=null&&adPayers>0?directSpend/adPayers:null);
+  const ltvCacRaw=unit.ltv_cac!=null?num(unit.ltv_cac):(ltvRaw!=null&&cacRaw>0?ltvRaw/cacRaw:null);
+  const ltvValue=ltvRaw==null?'н/д':money(ltvRaw);
+  const cacValue=cacRaw==null?'н/д':money(cacRaw);
+  const lifetimeValue=lifetimeMonths==null?(lifetimeDays==null?'н/д':`${nfmt(lifetimeDays,0)} дн.`):`${nfmt(lifetimeMonths,1)} мес.`;
+  const ltvCacValue=ltvCacRaw==null?'н/д':`${nfmt(ltvCacRaw,2)}×`;
+  const ltvFormula=unit.average_ltv!=null?'average_ltv из n8n':arpuMetric!=null&&lifetimeMonths!=null?'ARPU × Life Time':arppuMetric!=null&&lifetimeMonths!=null?'ARPPU × Life Time':'чистая выручка / платящие пользователи';
+  const cacMissing=[];
+  if(cacRaw==null){
+    if(directSpend==null)cacMissing.push('расход Яндекс Директа за период');
+    if(!(adPayers>0))cacMissing.push('платящие пользователи из рекламы');
+  }
+  const ltvMissing=ltvRaw==null?['ARPU и Life Time или фактический average_ltv по истории платежей']:[];
+  const analyticsNote=[...ltvMissing,...cacMissing];
   const comparisonAllowed=!!previousFinancePeriod();
   const comparison=comparisonAllowed&&y.comparison&&typeof y.comparison==='object'?y.comparison:{};
   const explicitDeltaRaw=comparisonAllowed?(comparison.delta_percent??comparison.change_percent??s.delta_percent):null;
@@ -3153,8 +3279,8 @@ function mobileFinanceCockpit(ctx){
   const trendTitle=comparison.label||financeComparisonLabel()||'Сравнение с предыдущим равным периодом';
   const trendChip=comparisonAllowed&&trendLabel?`<span class="mf-trend-chip ${trendTone}" title="${esc(trendTitle)}">${trendLabel}</span>`:'';
   const arrowIcon='<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5L12.5 10L7 15.5"/></svg>';
-  const financeDetails=`<section class="mf-clean-sheet"><div class="mf-pay-summary"><article class="mf-pay-fact"><span>Платящие</span><strong>${payerCount==null?'—':nowrap(nfmt(payerCount))}</strong><small>Один водитель — один раз, даже при нескольких оплатах.</small></article><article class="mf-pay-fact"><span>Оплаты</span><strong>${unavailable?'—':nowrap(nfmt(paymentCount))}</strong><small>Подтверждённые платежи Ю-Кассы.</small></article></div><div class="mf-clean-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-clean-panel active" data-mf-view="tariffs">${tariffHtml}</div><div class="mf-clean-panel" data-mf-view="trend">${chartHtml}</div></section>`;
-  const analyticsDetails=`<section class="mf-bento mf-bento-compact" aria-label="Ключевые показатели аналитики"><article class="mf-kpi mf-kpi-cyan"><span>Средний чек</span><strong>${nowrap(averageCheckValue)}</strong></article><article class="mf-kpi mf-kpi-amber"><span>LTV</span><strong>${nowrap(ltvValue)}</strong></article></section><article class="mf-sections"><div class="mf-panel active"><div class="mf-split"><div><span>Связка с приложением</span><strong>${nowrap(conversionValue)}</strong><p>${linkUnavailable?'Клики приложения сейчас не пришли.':linkEstimated?'Оценка по событиям оплаты из приложения.':'Нажали оплату → фактическая оплата.'}</p></div><div class="mf-mini-grid"><div><b>${nowrap(interestValue)}</b><span>нажали оплату</span></div><div><b>${unavailable?'—':nowrap(nfmt(paymentCount))}</b><span>оплаты</span></div></div></div><div class="mf-split"><div><span>DAU / MAU</span><strong>${nowrap(audienceValue)}</strong></div></div></div></article>`;
+  const financeDetails=`<section class="mf-clean-sheet"><div class="mf-pay-summary"><article class="mf-pay-fact"><span>Платящие</span><strong>${payerCount==null?'—':nowrap(nfmt(payerCount))}</strong><small>Количество уникальных платящих пользователей.</small></article><article class="mf-pay-fact"><span>Оплаты</span><strong>${unavailable?'—':nowrap(nfmt(paymentCount))}</strong><small>Количество оплат за период.</small></article></div><div class="mf-clean-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-clean-panel active" data-mf-view="tariffs">${tariffHtml}</div><div class="mf-clean-panel" data-mf-view="trend">${chartHtml}</div></section>`;
+  const analyticsDetails=`<section class="mf-bento mf-bento-compact mf-analytics-grid" aria-label="Ключевые показатели юнит-экономики"><article class="mf-kpi mf-kpi-amber"><span>LTV</span><strong>${nowrap(ltvValue)}</strong><p>${esc(ltvFormula)}</p></article><article class="mf-kpi mf-kpi-cyan"><span>CAC</span><strong>${nowrap(cacValue)}</strong><p>Стоимость платящего пользователя</p></article><article class="mf-kpi"><span>Life Time</span><strong>${nowrap(lifetimeValue)}</strong><p>Средний срок жизни пользователя</p></article></section><article class="mf-sections mf-analytics-ratio"><div class="mf-panel active"><div class="mf-split"><div><span>LTV / CAC</span><strong>${nowrap(ltvCacValue)}</strong><p>Окупаемость привлечения: сколько LTV приходится на 1 рубль CAC.</p></div></div>${analyticsNote.length?`<div class="mf-empty mf-analytics-note">Для точного расчёта нужно: ${esc(analyticsNote.join(', '))}.</div>`:''}</div></article>`;
   const appDetails=mobileAppDetailsContent(appData);
   const mainText=unavailable?'<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>':'';
   const analyticsAction=showMobileAnalyticsEntry()?`<button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button>`:'';
@@ -3259,7 +3385,7 @@ function financeYookassaView(data, allData = {}) {
     { title: tariffsReady ? 'Факт: тарифы размечены' : 'Нужно для тарифов и источников', text: tariffsReady ? `${nfmt(tariffRows.length)} тарифных группы пришли из платежей. Доли считаются по чистой выручке.` : 'Передавать период тарифа, цену тарифа, номер заказа, источник, кампанию и экран оплаты. Неизвестный источник и органику не распределяем вручную.', warn: !tariffsReady },
   ];
 
-  const mobileCockpit = mobileFinanceCockpit({ y, s, unavailable, cleanRevenue, cleanAfterRefunds, link, linkUnavailable, userIdReady, payingUsers, arppu, dau, mau, dauMau, unit, appData: allData.appmetrica }) || '';
+  const mobileCockpit = mobileFinanceCockpit({ y, s, unavailable, cleanRevenue, cleanAfterRefunds, link, linkUnavailable, userIdReady, payingUsers, arppu, dau, mau, dauMau, unit, appData: allData.appmetrica, directData: allData.direct }) || '';
 
   return `${mobileCockpit}<section class="cards finance-kpi-cards">${card('Оплачено', moneyOrDash(s.gross_revenue), 'Только платежи со статусом «Оплачен» и признаком оплаты.', unavailable ? 'Данные не получены' : `${countOrDash(s.successful_payments)} успешных оплат`, 'var(--accent)')}${card('К зачислению', moneyOrDash(cleanRevenue), s.income_known ? 'Сумма после комиссии, если Ю-Касса её передала.' : 'Оценка по сумме платежей, без комиссии.', incomeNote, 'var(--green)')}${card('После возвратов', moneyOrDash(cleanAfterRefunds), 'Чистая сумма к зачислению минус возвраты за выбранный период.', s.refunded_amount > 0 ? `Возвраты: ${money(s.refunded_amount)}` : 'Возвратов нет', 'var(--cyan)')}${card('Средний платёж', moneyOrDash(s.average_check), 'Средняя сумма одной успешной оплаты. Это не средний доход на пользователя.', unavailable ? 'Ю-Касса не ответила' : `${countOrDash(s.successful_payments)} оплат в расчёте`, 'var(--yellow)')}</section><section class="payment-hero"><article class="panel money-panel"><div class="head"><div><h2>Деньги по Ю-Кассе</h2><p class="money-desktop-note">Реальные деньги от Ю-Кассы: оплаты, ожидание, отмены и возвраты.</p></div><div class="badge money-desktop-badge">До ${nfmt(s.page_limit)} платежей</div></div><div class="money-focus"><strong>${moneyOrDash(cleanAfterRefunds || cleanRevenue || s.gross_revenue)}</strong><span class="money-desktop-copy">${unavailable ? unavailableNote : `Чистый результат за период ${range(state.from, state.to)}: сумма к зачислению минус возвраты. Ожидание подтверждения деньгами не считается.`}</span><span class="money-mobile-copy">${mobileMoneyCopy}</span></div><div class="money-mobile-meta">${mobilePaymentMeta}</div><div class="payment-notes money-desktop-notes"><span>Платежей в периоде: ${countOrDash(s.period_payments_loaded)}</span><span>Возвраты: ${moneyOrDash(s.refunded_amount)}</span></div>${warnings.length ? `<div class="notes money-desktop-warnings">${warnings.map((item) => `<div class="pill">${financeWarningRu(item)}</div>`).join('')}</div>` : ''}</article><article class="panel"><div class="head"><div><h2>Связка с приложением</h2><p>Сколько людей проявили интерес к оплате и сколько оплат пришло от Ю-Кассы.</p></div><div class="badge">${linkUnavailable ? 'Приложение недоступно' : 'Воронка денег'}</div></div><div class="stats"><div class="stat"><b>${linkCount(link.payment_interest_users)}</b><span>${linkUnavailable ? 'Клики приложения не загрузились, поэтому это не ноль пользователей.' : 'Уникальные водители с интересом к оплате. Повторные нажатия одного водителя не раздувают эту цифру.'}</span></div><div class="stat"><b>${countOrDash(s.successful_payments)}</b><span>Успешные оплаты, подтверждённые Ю-Кассой. Это платежи, а не уникальные плательщики.</span></div><div class="stat"><b>${userIdReady && link.payment_interest_users ? pct((payingUsers / link.payment_interest_users) * 100, 1) : linkPercent(link.conversion_percent)}</b><span>${userIdReady ? 'Конверсия уникальных заинтересованных пользователей в платящих.' : 'Пока приближённо: оплаты делятся на уникальные клики, нужен идентификатор пользователя в платеже.'}</span></div></div><div class="payment-notes" style="margin-top:16px"><span>Нажатий всего: ${linkCount(link.payment_taps_total)}</span><span>Из нажатий в оплату: ${linkPercent(link.tap_to_payment_percent)}</span></div>${linkNote}</article></section><section class="finance-plan"><article class="panel"><div class="head"><div><h2>Деньги по пользователям</h2><p>То, что просил руководитель: не просто платежи, а сколько людей принесли деньги и сколько приносит один платящий пользователь.</p></div><div class="badge">${userIdReady ? 'идентификатор найден' : 'Ждём идентификатор'}</div></div><div class="metric-grid"><div class="metric-tile"><small>Платящие пользователи</small><b>${valueOrNeed(payingUsers)}</b><span>Уникальные пользователи, которые оплатили в периоде.</span></div><div class="metric-tile"><small>Доход на платящего</small><b>${moneyOrNeed(arppu)}</b><span>Чистая выручка после возвратов / платящие пользователи.</span></div><div class="metric-tile"><small>LTV</small><b>${moneyOrNeed(unit.average_ltv)}</b><span>Средняя выручка на платящего пользователя по загруженной истории платежей.</span></div></div></article><article class="panel"><div class="head"><div><h2>Качество данных</h2><p>Разделяет факты, предположения и то, что надо добавить в приложение и сервер.</p></div><div class="badge">Без догадок</div></div><div class="truth-list">${truthRows.map((item) => `<div class="truth-row ${item.warn ? 'warn' : ''}"><span class="truth-dot"></span><div><b>${esc(item.title)}</b><span>${esc(item.text)}</span></div></div>`).join('')}</div></article></section><section class="two finance-tariff-saas"><article class="panel"><div class="head"><div><h2>Подписки по тарифам</h2><p>300 ₽ = неделя, 900 ₽ = месяц, 9 900 ₽ = год. Точно считаем только после разметки тарифа в платеже.</p></div><div class="badge">${tariffRows.length ? 'Тарифы пришли' : 'Нужна разметка'}</div></div><div class="tariff-grid">${tariffCards}</div></article><article class="panel"><div class="head"><div><h2>SaaS, DAU/MAU и удержание</h2><p>Повторные оплаты, удержание, отток и активная аудитория приложения. Если отдельной аудитории нет в ответе, не подменяем её нулями.</p></div><div class="badge">SaaS-слой</div></div><div class="metric-grid"><div class="metric-tile wait"><small>Повторные плательщики</small><b>${valueOrNeed(unit.repeat_payers)}</b><span>${repeatPercent == null ? 'Нужна история по пользователю.' : `Доля повторных оплат: ${pct(repeatPercent, 1)}.`}</span></div><div class="metric-tile wait"><small>Удержание</small><b>${percentOrNeed(retentionRate)}</b><span>Платившие в прошлом месяце, которые вернулись в текущем.</span></div><div class="metric-tile wait"><small>Отток</small><b>${percentOrNeed(churnRate)}</b><span>Доля платящих прошлого месяца, которые не вернулись в текущем.</span></div><div class="metric-tile wait"><small>DAU / MAU</small><b>${audienceReady ? percentOrNeed(dauMau, 'н/д') : '<span class="value-missing">н/д</span>'}</b><span>${audienceReady ? `DAU: ${dau == null ? 'н/д' : nfmt(dau)}, MAU: ${mau == null ? 'н/д' : nfmt(mau)}.` : 'Аудитория приложения ещё не передаётся в финансовый ответ.'}</span></div></div><div class="formula-box" style="margin-top:16px"><strong>SaaS-модель:</strong><span>чистая выручка, платящие пользователи, доход на платящего, LTV, повторные оплаты, удержание, отток и DAU/MAU. Если нет аудитории или истории по пользователю, блок показывает “н/д”, а не выдумывает цифры.</span></div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Статусы платежей</h2><p>Ожидание подтверждения видно отдельно и не попадает в выручку.</p></div><div class="badge">Статусы</div></div><div class="rows">${y.statuses.length ? y.statuses.map((item) => bar(item.label, item.count, maxStatus, item.status === 'succeeded' ? 'green' : '', `${nfmt(item.count)} платежей`, `${item.label}: ${nfmt(item.count)} платежей на сумму ${money(item.amount)}.`)).join('') : `<div class="empty"><h3>${unavailable ? 'Статусы не получены' : 'Статусы не пришли'}</h3><p>${unavailable ? 'Сервер не получил ответ Ю-Кассы, поэтому статусы пока неизвестны.' : 'Когда Ю-Касса вернёт платежи, здесь появится разбивка по статусам.'}</p></div>`}</div></article><article class="panel"><div class="head"><div><h2>Способы оплаты</h2><p>Какими методами водители реально оплачивают заказ.</p></div><div class="badge">${nfmt(y.methods.length)} способов</div></div><div class="rows">${y.methods.length ? y.methods.map((item) => bar(item.label, item.amount, maxMethod, 'cyan', money(item.amount), `${item.label}: ${nfmt(item.count)} оплат на сумму ${money(item.amount)}.`)).join('') : `<div class="empty"><h3>${unavailable ? 'Способы не получены' : 'Способы оплаты не пришли'}</h3><p>${unavailable ? 'Провайдер не ответил, поэтому способы оплаты пока неизвестны.' : 'Данные появятся после первой успешной выгрузки Ю-Кассы.'}</p></div>`}</div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Выручка по продуктам</h2><p>Разбивка работает точно, когда сервер передаёт тариф, продукт или экран оплаты в разметке платежа.</p></div><div class="badge">Продукты</div></div><div class="rows">${productRows.length ? productRows.map((item) => bar(esc(item.product), item.amount, maxProduct, 'green', money(item.amount), `${esc(item.product)}: ${nfmt(item.count)} оплат на сумму ${money(item.amount)}. Источник: ${esc(item.source)}.`)).join('') : '<div class="empty"><h3>Нет разметки платежей</h3><p>Передайте тариф, продукт, внутренний номер заказа и источник в разметке платежа, и здесь появится выручка по продуктам.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Возвраты</h2><p>Сумма и количество возвратов за выбранный период.</p></div><div class="badge">${nfmt(s.refunds_count)} возвратов</div></div><div class="stats"><div class="stat"><b>${moneyOrDash(s.refunded_amount)}</b><span>Сумма возвратов за период.</span></div><div class="stat"><b>${countOrDash(s.refunds_count)}</b><span>Количество возвратов из отдельной выгрузки Ю-Кассы.</span></div><div class="stat"><b>${s.gross_revenue ? pct((s.refunded_amount / s.gross_revenue) * 100, 1) : '0%'}</b><span>Доля возвратов от оплаченной суммы.</span></div></div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Выручка по дням</h2><p>Когда фактически приходили успешные оплаты.</p></div><div class="badge">По дням</div></div>${days(y.series, 'revenue', 'green', 'Выручка за день', (value) => money(value))}</article><article class="panel"><div class="head"><div><h2>Возвраты по дням</h2><p>Когда деньги уходили обратно клиентам.</p></div><div class="badge">Возвраты</div></div>${days(y.series, 'refunds', '', 'Возвраты за день', (value) => money(value))}</article></section><article class="panel"><div class="head"><div><h2>Последние платежи</h2><p>Без персональных данных: только хвост платежа, время, статус, способ, продукт и сумма.</p></div><div class="badge">${nfmt(recentRows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Платёж</th><th>Дата</th><th>Статус</th><th>Способ</th><th>Продукт</th><th class="num">Сумма</th><th class="num">Возврат</th></tr></thead><tbody>${recentRows.length ? recentRows.map((item) => `<tr><td>…${esc(item.id_tail)}</td><td>${dateTimeRu(item.captured_at || item.created_at)}</td><td>${esc(item.status_label)}</td><td>${esc(item.method_label)}</td><td>${esc(item.product_label)}</td><td class="num">${money(item.amount)}</td><td class="num">${item.refunded_amount ? money(item.refunded_amount) : '—'}</td></tr>`).join('') : `<tr><td colspan="7">${unavailable ? 'Платежи не загружены: сервер не получил ответ Ю-Кассы.' : 'Платежей за выбранный период нет.'}</td></tr>`}</tbody></table></div></article><article class="panel"><div class="head"><div><h2>Последние возвраты</h2><p>Отдельный контроль возвратов из Ю-Кассы.</p></div><div class="badge">${nfmt(refundRows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Возврат</th><th>Платёж</th><th>Дата</th><th>Статус</th><th class="num">Сумма</th></tr></thead><tbody>${refundRows.length ? refundRows.map((item) => `<tr><td>…${esc(item.id_tail)}</td><td>…${esc(item.payment_tail)}</td><td>${dateTimeRu(item.created_at)}</td><td>${esc(item.status)}</td><td class="num">${money(item.amount)}</td></tr>`).join('') : '<tr><td colspan="5">Возвратов за выбранный период нет.</td></tr>'}</tbody></table></div></article>`;
 }
@@ -3302,7 +3428,7 @@ function showMobileDetail(type){
   if(!template)return;
   const meta={
     app:['Активные пользователи','Сессии, платформы и версии'],
-    analytics:['Аналитика','Средний чек, LTV и связь с приложением'],
+    analytics:['Аналитика','LTV, CAC, Life Time и LTV / CAC'],
     finance:['Платящие пользователи','Оплаты, тарифы и динамика']
   };
   const item=meta[type]||meta.finance;
@@ -3728,23 +3854,24 @@ init();
     const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
     if(!app)return'<div class="mf-empty">События приложения ещё не пришли в этот ответ.</div>';
     const summary=app.summary||{};
-    const platforms=Array.isArray(app.platforms)?app.platforms:[];
-    const versions=Array.isArray(app.versions)?app.versions:[];
+    const activeTotal=num(summary.active_users);
+    const platforms=fitRowsToTotal(Array.isArray(app.platforms)?app.platforms:[],activeTotal,'users');
+    const versions=compactRowsWithOther(fitRowsToTotal((Array.isArray(app.versions)?app.versions:[]).map(item=>({...item,users:num(item.users||item.sessions)})),activeTotal,'users'),8,'users','Другие версии');
     const maxPlatform=Math.max(...platforms.map(item=>num(item.users)),1);
-    const maxVersion=Math.max(...versions.map(item=>num(item.users||item.sessions)),1);
+    const maxVersion=Math.max(...versions.map(item=>num(item.users)),1);
     const sessions=num(summary.sessions_total||app.sessions_total);
     const allActive=summary.all_time_active_users==null?app.all_time_active_users:summary.all_time_active_users;
     const sourceRows=mobileGrowthSourcesPanel(app,true);
     const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(num(item.users)/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
-    const versionRows=versions.length?versions.slice(0,8).map(item=>{const value=num(item.users||item.sessions);const detail=item.sessions?`${nfmt(item.sessions)} сессий`:`${nfmt(item.users)} пользователей`;return `<div class="mf-row"><div><strong>Версия ${esc(item.version)}</strong><span>${detail}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
-    return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не зарегистрировались</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
+    const versionRows=versions.length?versions.map(item=>{const value=num(item.users);const label=item.version==='Другие версии'?'Другие версии':`Версия ${esc(item.version)}`;return `<div class="mf-row"><div><strong>${label}</strong><span>${nfmt(value)} ${pluralRu(value,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
+    return `<section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(app.installs_total))}</strong><p>за период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(activeTotal))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section><article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
   };
   window.mobileAppCockpit=function(data){
     const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
     const summary=data?.summary||{};
     const sessions=num(summary.sessions_total||data?.sessions_total);
     const allActive=summary.all_time_active_users==null?data?.all_time_active_users:summary.all_time_active_users;
-    return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения"><article class="mf-hero-card mf-app-card"><div class="mf-hero-copy"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>Установки, сессии и версии приложения.</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(data.installs_total))}</strong><p>за выбранный период</p></article><article class="mf-kpi"><span>Без регистрации</span><strong>${nowrap(nfmt(summary.not_registered))}</strong><p>установили, но не дошли до регистрации</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section>${window.mobileAppDetailsContent(data)}</section>`;
+    return `<section class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-cockpit" aria-label="Мобильная сводка приложения"><article class="mf-hero-card mf-app-card"><div class="mf-hero-copy"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>Установки, сессии и версии приложения.</p></div><div class="mf-hero-wave" aria-hidden="true"></div></article><section class="mf-bento" aria-label="Ключевые показатели приложения"><article class="mf-kpi mf-kpi-accent"><span>Установки</span><strong>${nowrap(nfmt(data.installs_total))}</strong><p>за выбранный период</p></article><article class="mf-kpi"><span>Активные пользователи</span><strong>${nowrap(nfmt(summary.active_users))}</strong><p>как на главной карточке</p></article><article class="mf-kpi mf-kpi-cyan"><span>Сессии</span><strong>${sessions?nowrap(nfmt(sessions)):'—'}</strong><p>${sessions?'запуски приложения':'ждём поле'}</p></article><article class="mf-kpi mf-kpi-amber"><span>Всего активных</span><strong>${allActive==null?'—':nowrap(nfmt(allActive))}</strong><p>${allActive==null?'ждём поле':'за всё время'}</p></article></section>${window.mobileAppDetailsContent(data)}</section>`;
   };
   if(!document.getElementById('mobile-growth-sources-guard')){
     const guard=document.createElement('style');
