@@ -4178,6 +4178,11 @@ body.locked .mobile-bottom-nav{display:none!important}
     padding-top:56px!important;
   }
 }
+@media (min-width:981px){
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-actions{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
 </style>
 </head>
 <body class="locked">
@@ -4187,6 +4192,7 @@ const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboar
 const PROD_HOSTS=new Set(['dashboard.gruz.app','www.dashboard.gruz.app']);
 function isProdDashboard(){return PROD_HOSTS.has(location.hostname)&&!location.pathname.replace(/\/+$/,'').startsWith('/dev')}
 function isDevDashboard(){return location.pathname.replace(/\/+$/,'').startsWith('/dev')}
+if(isProdDashboard())document.body.classList.add('prod-dashboard');
 if(isDevDashboard()||isProdDashboard())document.body.classList.add('dev-mobile-desktop');
 function showMobileAnalyticsEntry(){return !isProdDashboard()}
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
