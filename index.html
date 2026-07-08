@@ -2741,6 +2741,1443 @@ body.locked .mobile-bottom-nav{display:none!important}
     font-size:32px!important;
   }
 }
+
+/* Dev-only desktop preview: hide the old desktop and scale the mobile cockpit up. */
+@media(min-width:641px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    min-height:100vh;
+    overflow-x:hidden;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(191,255,0,.12), transparent 34%),
+      linear-gradient(180deg,#111920 0%,#060909 100%)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:clamp(430px,38vw,560px)!important;
+    max-width:calc(100vw - 64px)!important;
+    min-height:100vh;
+    padding:24px 0 56px!important;
+    gap:24px!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.032),transparent 24%),
+      linear-gradient(180deg,#131a22 0%,#070b0d 100%)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px);
+    background-size:100% 8px;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,black 16%,black 84%,transparent);
+    mask-image:linear-gradient(to bottom,transparent,black 16%,black 84%,transparent);
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    position:sticky;
+    top:0;
+    z-index:24;
+    display:grid!important;
+    gap:16px!important;
+    margin:0!important;
+    padding:0 0 16px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:linear-gradient(180deg,rgba(18,25,30,.98),rgba(18,25,30,.84) 80%,transparent)!important;
+    box-shadow:none!important;
+    -webkit-backdrop-filter:blur(16px);
+    backdrop-filter:blur(16px);
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero-top,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .subtitle,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .chips,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .tabs,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .toolbar-row,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .signal{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    min-width:0;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    justify-self:center!important;
+    margin-inline:auto!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-refresh{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 24px!important;
+    align-items:center!important;
+    gap:16px!important;
+    width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+    border-radius:26px!important;
+    padding:8px 20px!important;
+    overflow:hidden!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy{
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:8px;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy span{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy strong{
+    color:#fff;
+    font-size:17px;
+    line-height:1;
+    font-weight:950;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy small{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1;
+    font-weight:900;
+    white-space:nowrap;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{
+    display:grid!important;
+    gap:16px!important;
+    align-content:start!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content > .cards,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content > .payment-hero,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content > .finance-plan,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content > .finance-tariff-saas,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content > .two,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content > .panel,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content > .error-dashboard{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-unified-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold{
+    position:relative;
+    z-index:1;
+    display:grid!important;
+    gap:16px!important;
+    margin:0!important;
+    animation:fadeUp .22s ease both;
+  }
+  body.dev-mobile-desktop .mobile-app-brand{
+    min-width:0;
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  body.dev-mobile-desktop .mobile-app-logo{
+    flex:0 0 auto;
+    width:56px;
+    height:56px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    background:rgba(191,255,0,.14);
+    border:1px solid rgba(191,255,0,.38);
+    box-shadow:0 16px 40px rgba(191,255,0,.08), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  body.dev-mobile-desktop .mobile-app-title{
+    min-width:0;
+    display:grid;
+    gap:8px;
+  }
+  body.dev-mobile-desktop .mobile-app-title strong{
+    color:#fff;
+    font-size:28px;
+    line-height:1;
+    letter-spacing:-.045em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  body.dev-mobile-desktop .mobile-app-title span{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1;
+    font-weight:900;
+  }
+  body.dev-mobile-desktop .mobile-app-title span:empty{
+    display:none;
+  }
+  body.dev-mobile-desktop .mobile-app-refresh{
+    flex:0 0 auto;
+    width:56px;
+    height:56px;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.055);
+    color:var(--accent);
+    display:grid;
+    place-items:center;
+    padding:0;
+  }
+  body.dev-mobile-desktop .mobile-refresh-icon{
+    display:block;
+    width:26px;
+    height:26px;
+    color:var(--accent);
+    stroke:currentColor;
+    stroke-width:2.35;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    fill:none;
+  }
+  body.dev-mobile-desktop .mf-hero-card,
+  body.dev-mobile-desktop .mf-kpi,
+  body.dev-mobile-desktop .mf-sections{
+    min-width:0;
+    border:1px solid rgba(244,255,204,.13);
+    background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.03));
+    box-shadow:0 24px 56px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  body.dev-mobile-desktop .mf-hero-card{
+    position:relative;
+    overflow:hidden;
+    min-height:336px;
+    border-radius:36px;
+    padding:32px;
+    background:radial-gradient(circle at 88% 8%, rgba(191,255,0,.24), transparent 34%), linear-gradient(145deg,rgba(191,255,0,.15),rgba(255,255,255,.05) 58%,rgba(255,255,255,.026));
+    border-color:rgba(191,255,0,.32);
+  }
+  body.dev-mobile-desktop .mf-hero-card::after{
+    content:"";
+    position:absolute;
+    right:28px;
+    bottom:-56px;
+    width:152px;
+    height:152px;
+    border-radius:48px;
+    transform:rotate(18deg);
+    border:1px solid rgba(191,255,0,.16);
+    background:rgba(191,255,0,.035);
+  }
+  body.dev-mobile-desktop .mf-hero-copy{
+    position:relative;
+    z-index:1;
+    display:grid;
+    gap:8px;
+    max-width:100%;
+  }
+  body.dev-mobile-desktop .mf-hero-copy span,
+  body.dev-mobile-desktop .mf-kpi span,
+  body.dev-mobile-desktop .mf-split span,
+  body.dev-mobile-desktop .mf-mini-grid span,
+  body.dev-mobile-desktop .mf-chart-head span{
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:12px;
+    line-height:1.2;
+    font-weight:1000;
+  }
+  body.dev-mobile-desktop .mf-hero-copy strong{
+    color:var(--accent);
+    font-size:clamp(58px,6vw,78px);
+    line-height:.98;
+    letter-spacing:-.065em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  body.dev-mobile-desktop .mf-hero-copy p{
+    margin:0;
+    color:#dce6dd;
+    font-size:15px;
+    line-height:1.45;
+    font-weight:820;
+  }
+  body.dev-mobile-desktop .mf-trend-chip{
+    position:absolute;
+    right:32px;
+    top:32px;
+    z-index:3;
+    color:#92f2b4;
+    font-size:13px;
+    line-height:1;
+    font-weight:1000;
+    white-space:nowrap;
+    pointer-events:none;
+  }
+  body.dev-mobile-desktop .mf-trend-chip.down{
+    color:#ff9b9b;
+  }
+  body.dev-mobile-desktop .mf-hero-actions{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+    padding-top:8px;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  body.dev-mobile-desktop .mf-hero-action{
+    width:100%;
+    min-height:56px;
+    min-width:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    border:1px solid rgba(244,255,204,.12);
+    border-radius:999px;
+    background:rgba(255,255,255,.045);
+    color:#dfe8c1;
+    padding:0 16px 0 20px;
+    font-size:14px;
+    line-height:1;
+    font-weight:900;
+    cursor:pointer;
+  }
+  body.dev-mobile-desktop .mf-hero-action span{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  body.dev-mobile-desktop .mf-hero-action b{
+    color:var(--accent);
+    font-variant-numeric:tabular-nums;
+    font-size:15px;
+    white-space:nowrap;
+  }
+  body.dev-mobile-desktop .mf-hero-action svg{
+    width:24px;
+    height:24px;
+    flex:0 0 24px;
+    color:var(--accent);
+    stroke:currentColor;
+    stroke-width:2.4;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    fill:none;
+  }
+  body.dev-mobile-desktop .mf-bento,
+  body.dev-mobile-desktop .mf-bento-compact{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+  }
+  body.dev-mobile-desktop .mf-kpi{
+    min-height:144px;
+    border-radius:28px;
+    padding:20px;
+    display:grid;
+    align-content:space-between;
+    gap:16px;
+  }
+  body.dev-mobile-desktop .mf-kpi-accent{
+    background:linear-gradient(145deg,rgba(191,255,0,.14),rgba(255,255,255,.045));
+    border-color:rgba(191,255,0,.28);
+  }
+  body.dev-mobile-desktop .mf-kpi strong{
+    display:block;
+    color:#fff;
+    font-size:clamp(30px,3.2vw,42px);
+    line-height:1;
+    letter-spacing:-.05em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  body.dev-mobile-desktop .mf-kpi-accent strong{color:var(--accent)}
+  body.dev-mobile-desktop .mf-kpi-cyan strong{color:var(--cyan)}
+  body.dev-mobile-desktop .mf-kpi-amber strong{color:var(--yellow)}
+  body.dev-mobile-desktop .mf-kpi p{
+    margin:0;
+    color:#d7dfd9;
+    font-size:13px;
+    line-height:1.35;
+    font-weight:850;
+  }
+  body.dev-mobile-desktop .mf-hero-card.mf-app-card{
+    background:radial-gradient(circle at 88% 8%, rgba(98,216,255,.16), transparent 34%), linear-gradient(145deg,rgba(191,255,0,.12),rgba(255,255,255,.05) 58%,rgba(255,255,255,.026));
+  }
+  body.dev-mobile-desktop .mf-hero-card.mf-error-card{
+    background:radial-gradient(circle at 88% 8%, rgba(255,209,94,.16), transparent 34%), linear-gradient(145deg,rgba(191,255,0,.10),rgba(255,255,255,.05) 58%,rgba(255,255,255,.026));
+  }
+  body.dev-mobile-desktop .mf-app-summary-card{
+    min-height:260px;
+    display:grid;
+    align-content:start;
+    gap:32px;
+    padding:32px;
+  }
+  body.dev-mobile-desktop .mf-app-summary-main{
+    position:relative;
+    z-index:1;
+    display:grid;
+    gap:8px;
+    min-width:0;
+  }
+  body.dev-mobile-desktop .mf-app-summary-main span,
+  body.dev-mobile-desktop .mf-app-summary-metric span{
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:12px;
+    line-height:1.2;
+    font-weight:1000;
+  }
+  body.dev-mobile-desktop .mf-app-summary-main strong{
+    color:var(--accent);
+    font-size:72px;
+    line-height:.94;
+    letter-spacing:-.065em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  body.dev-mobile-desktop .mf-app-summary-metrics{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px;
+    align-items:start;
+    margin-top:8px;
+  }
+  body.dev-mobile-desktop .mf-app-summary-metric{
+    min-width:0;
+    display:grid;
+    gap:8px;
+    align-content:start;
+    justify-items:center;
+    text-align:center;
+  }
+  body.dev-mobile-desktop .mf-app-summary-metric span{
+    font-size:9px;
+    letter-spacing:.04em;
+    line-height:1.1;
+    white-space:nowrap;
+  }
+  body.dev-mobile-desktop .mf-app-summary-metric strong{
+    display:block;
+    color:var(--accent);
+    font-size:32px;
+    line-height:1;
+    letter-spacing:-.055em;
+    white-space:nowrap;
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+  }
+  body.dev-mobile-desktop .mf-app-summary-metric-cyan strong{color:var(--cyan)}
+  body.dev-mobile-desktop .mf-app-summary-metric-amber strong{color:var(--yellow)}
+  body.dev-mobile-desktop .mf-app-summary-metric p{
+    margin:0;
+    color:#d7dfd9;
+    font-size:13px;
+    line-height:1.25;
+    font-weight:900;
+  }
+  body.dev-mobile-desktop .mf-sections{
+    border-radius:32px;
+    padding:8px;
+  }
+  body.dev-mobile-desktop .mf-segment{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+    gap:8px;
+    padding:0;
+    margin:0 0 8px;
+  }
+  body.dev-mobile-desktop .mf-segment button{
+    min-width:0;
+    min-height:48px;
+    border:0;
+    border-radius:18px;
+    padding:0 8px;
+    background:transparent;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:1000;
+    line-height:1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    cursor:pointer;
+  }
+  body.dev-mobile-desktop .mf-segment button.active{
+    color:#172006;
+    background:var(--accent);
+    box-shadow:0 12px 28px rgba(191,255,0,.16);
+  }
+  body.dev-mobile-desktop .mf-panel{
+    display:none;
+    padding:8px;
+  }
+  body.dev-mobile-desktop .mf-panel.active{
+    display:grid;
+    gap:8px;
+  }
+  body.dev-mobile-desktop .mf-split,
+  body.dev-mobile-desktop .mf-row,
+  body.dev-mobile-desktop .mf-empty,
+  body.dev-mobile-desktop .mf-pay-fact,
+  body.dev-mobile-desktop .mf-tariff-line{
+    min-width:0;
+    border:1px solid rgba(244,255,204,.09);
+    background:rgba(255,255,255,.045);
+    border-radius:24px;
+    padding:16px;
+    overflow:hidden;
+  }
+  body.dev-mobile-desktop .mf-split{
+    display:grid;
+    gap:16px;
+  }
+  body.dev-mobile-desktop .mf-split strong{
+    display:block;
+    margin-top:8px;
+    color:#fff;
+    font-size:34px;
+    line-height:1;
+    letter-spacing:-.05em;
+    white-space:nowrap;
+    font-weight:1000;
+  }
+  body.dev-mobile-desktop .mf-split p,
+  body.dev-mobile-desktop .mf-row span{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.45;
+    font-weight:800;
+  }
+  body.dev-mobile-desktop .mf-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:16px;
+  }
+  body.dev-mobile-desktop .mf-row strong{
+    display:block;
+    color:#fff;
+    font-size:16px;
+    line-height:1.2;
+    font-weight:950;
+  }
+  body.dev-mobile-desktop .mf-row i{
+    display:block;
+    height:8px;
+    margin-top:8px;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--accent),var(--green));
+  }
+  body.dev-mobile-desktop .mf-row b{
+    color:var(--accent);
+    font-size:22px;
+    line-height:1;
+    white-space:nowrap;
+    font-weight:1000;
+  }
+  body.dev-mobile-desktop .mf-chart-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:8px 0 16px;
+  }
+  body.dev-mobile-desktop .mf-chart-head b{
+    color:var(--muted);
+    font-size:13px;
+    white-space:nowrap;
+  }
+  body.dev-mobile-desktop .mf-bars{
+    height:160px;
+    display:flex;
+    align-items:end;
+    gap:8px;
+  }
+  body.dev-mobile-desktop .mf-bar{
+    min-width:0;
+    flex:1 1 0;
+    display:grid;
+    align-items:end;
+    gap:8px;
+  }
+  body.dev-mobile-desktop .mf-bar i{
+    display:block;
+    width:100%;
+    min-height:16px;
+    border-radius:12px 12px 6px 6px;
+    background:linear-gradient(180deg,var(--accent),rgba(191,255,0,.18));
+  }
+  body.dev-mobile-desktop .mf-bar span{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1;
+    text-align:center;
+    font-weight:850;
+  }
+}
+
+/* Dev desktop cockpit pass: keep the mobile product language, remove dead zones. */
+@media(min-width:641px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:clamp(560px,40vw,720px);
+    --dev-edge:32px;
+    min-height:100vh;
+    overflow-x:hidden;
+    background:
+      radial-gradient(circle at 50% -6%, rgba(191,255,0,.14), transparent 30%),
+      radial-gradient(circle at 50% 38%, rgba(63,255,175,.07), transparent 36%),
+      linear-gradient(180deg,#0f171d 0%,#070b0d 100%)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked)::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg,transparent calc(50% - var(--dev-cockpit-width)/2 - 96px), rgba(191,255,0,.035) calc(50% - var(--dev-cockpit-width)/2 - 96px), transparent calc(50% - var(--dev-cockpit-width)/2 + 16px), transparent calc(50% + var(--dev-cockpit-width)/2 - 16px), rgba(191,255,0,.035) calc(50% + var(--dev-cockpit-width)/2 - 16px), transparent calc(50% + var(--dev-cockpit-width)/2 + 96px)),
+      linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:100% 100%,100% 8px;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:var(--dev-cockpit-width)!important;
+    max-width:calc(100vw - 64px)!important;
+    min-height:auto!important;
+    margin:0 auto!important;
+    padding:40px 0 64px!important;
+    gap:24px!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.035),transparent 34%),
+      linear-gradient(180deg,rgba(19,26,34,.82),rgba(7,11,13,.86))!important;
+    border-left:1px solid rgba(244,255,204,.055);
+    border-right:1px solid rgba(244,255,204,.055);
+    box-shadow:0 0 90px rgba(0,0,0,.34);
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell::before{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    position:relative!important;
+    top:auto!important;
+    z-index:20!important;
+    display:grid!important;
+    gap:24px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    min-height:64px!important;
+    padding:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-brand{
+    gap:16px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-logo{
+    width:56px!important;
+    height:56px!important;
+    border-radius:18px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title{
+    gap:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title strong{
+    font-size:clamp(28px,2.4vw,36px)!important;
+    line-height:1!important;
+    letter-spacing:-.055em!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title span{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-refresh{
+    width:56px!important;
+    height:56px!important;
+    border-radius:18px!important;
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035))!important;
+    border-color:rgba(255,255,255,.12)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{
+    display:grid!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    gap:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+    border-radius:24px!important;
+    padding:0 24px!important;
+    border-color:rgba(244,255,204,.16)!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.032)),
+      linear-gradient(90deg,rgba(191,255,0,.055),transparent 54%)!important;
+    color:#fff!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 16px 40px rgba(0,0,0,.18)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy{
+    display:grid!important;
+    grid-column:1!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:16px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy strong{
+    font-size:17px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy small{
+    font-size:13px!important;
+    line-height:1!important;
+    max-width:220px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-chevron{
+    grid-column:2!important;
+    grid-row:1!important;
+    justify-self:end!important;
+    align-self:center!important;
+    width:24px!important;
+    height:24px!important;
+    display:grid!important;
+    place-items:center!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{
+    display:grid!important;
+    gap:24px!important;
+    align-content:start!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-unified-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold{
+    gap:24px!important;
+    margin:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit > .mf-hero-card{
+    min-height:auto!important;
+    padding:32px!important;
+    border-radius:36px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card{
+    min-height:auto!important;
+    border-radius:36px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card::after{
+    right:24px!important;
+    bottom:-48px!important;
+    width:168px!important;
+    height:168px!important;
+    border-radius:52px!important;
+    opacity:.86!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy{
+    display:grid!important;
+    gap:16px!important;
+    max-width:100%!important;
+    width:100%!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy span{
+    font-size:12px!important;
+    line-height:1!important;
+    letter-spacing:.14em!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{
+    font-size:clamp(58px,5vw,82px)!important;
+    line-height:.96!important;
+    max-width:100%!important;
+    white-space:nowrap!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy p{
+    max-width:440px!important;
+    margin:0!important;
+    color:#e0ebde!important;
+    font-size:16px!important;
+    line-height:1.4!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{
+    width:100%!important;
+    max-width:100%!important;
+    gap:16px!important;
+    padding-top:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action{
+    min-height:56px!important;
+    border-radius:999px!important;
+    padding:0 18px 0 24px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action span{
+    font-size:14px!important;
+    line-height:1!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{
+    width:24px!important;
+    height:24px!important;
+    flex-basis:24px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-trend-chip{
+    top:32px!important;
+    right:32px!important;
+    font-size:14px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold summary{
+    min-height:112px!important;
+    padding:24px 28px!important;
+    border-radius:32px!important;
+  }
+}
+@media(min-width:1280px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:clamp(640px,38vw,760px);
+  }
+}
+@media(min-width:1680px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:760px;
+  }
+}
+</style>
+<style id="dev-desktop-final-pass">
+@media (min-width:641px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:min(960px,calc(100vw - 96px))!important;
+    min-height:100vh!important;
+    overflow-x:hidden!important;
+    background:radial-gradient(900px 520px at 50% 10%,rgba(191,255,0,.10),transparent 62%),radial-gradient(900px 520px at 50% 48%,rgba(88,255,187,.06),transparent 62%),linear-gradient(180deg,#0f171d 0%,#070a0c 100%)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked)::before{display:none!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:var(--dev-cockpit-width)!important;
+    max-width:var(--dev-cockpit-width)!important;
+    min-height:0!important;
+    height:auto!important;
+    margin:0 auto!important;
+    padding:48px 0 64px!important;
+    gap:24px!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    display:grid!important;
+    grid-template-rows:auto auto!important;
+    gap:24px!important;
+    margin:0!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{min-height:64px!important;padding:0!important;align-items:center!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-logo{width:56px!important;height:56px!important;border-radius:18px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title strong{font-size:clamp(30px,2.2vw,36px)!important;line-height:1!important;letter-spacing:-.055em!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-refresh{width:56px!important;height:56px!important;padding:0!important;display:grid!important;place-items:center!important;border-radius:18px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{width:100%!important;max-width:100%!important;margin:0!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 24px!important;
+    align-items:center!important;
+    gap:16px!important;
+    padding:0 24px!important;
+    border-radius:24px!important;
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.032)),linear-gradient(90deg,rgba(191,255,0,.06),transparent 56%)!important;
+    border-color:rgba(244,255,204,.16)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 16px 40px rgba(0,0,0,.16)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:24px!important;min-width:0!important;width:100%!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy strong{justify-self:start!important;text-align:left!important;font-size:18px!important;line-height:1!important;white-space:nowrap!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy small{justify-self:end!important;text-align:right!important;max-width:260px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:13px!important;line-height:1!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-chevron{display:grid!important;place-items:center!important;width:24px!important;height:24px!important;justify-self:end!important;align-self:center!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{display:grid!important;gap:24px!important;align-content:start!important;margin:0!important;padding:0!important;overflow:visible!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-unified-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold{width:100%!important;max-width:100%!important;gap:24px!important;margin:0!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit>.mf-hero-card{min-height:360px!important;padding:40px!important;border-radius:40px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card{border-radius:40px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card::after{right:48px!important;bottom:-104px!important;width:220px!important;height:220px!important;border-radius:68px!important;opacity:.42!important;pointer-events:none!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy{width:100%!important;max-width:100%!important;display:grid!important;gap:20px!important;align-content:center!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy span{font-size:13px!important;line-height:1!important;letter-spacing:.14em!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{max-width:100%!important;overflow-wrap:normal!important;white-space:nowrap!important;font-size:clamp(78px,5.7vw,108px)!important;line-height:.95!important;letter-spacing:-.075em!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy p{display:none!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{width:100%!important;max-width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;padding-top:0!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action{min-width:0!important;min-height:64px!important;padding:0 24px!important;border-radius:999px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action:nth-child(3){grid-column:1/-1!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:15px!important;line-height:1!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{width:24px!important;height:24px!important;flex:0 0 24px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-trend-chip{top:40px!important;right:40px!important;font-size:14px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold summary{min-height:104px!important;padding:24px 32px!important;border-radius:32px!important}
+}
+@media (min-width:1500px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){--dev-cockpit-width:min(1040px,calc(100vw - 160px))!important}
+}
+@media (min-width:641px) and (max-width:920px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){--dev-cockpit-width:calc(100vw - 48px)!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{padding:32px 0 48px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit>.mf-hero-card{min-height:auto!important;padding:32px!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{font-size:clamp(58px,9vw,76px)!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{grid-template-columns:1fr!important}
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action:nth-child(3){grid-column:auto!important}
+}
+@media (max-width:640px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    align-content:start!important;
+    align-items:start!important;
+    grid-template-rows:auto auto!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    grid-template-rows:auto auto!important;
+    min-height:0!important;
+    height:136px!important;
+    max-height:136px!important;
+    padding-bottom:0!important;
+    gap:16px!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    align-content:start!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{
+    margin-top:0!important;
+  }
+}
+</style>
+<style id="dev-mobile-as-desktop-fix">
+@media (min-width:641px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:clamp(720px,46vw,840px)!important;
+    --dev-desktop-gap:24px;
+    overflow-x:hidden!important;
+    background:
+      radial-gradient(760px 440px at 50% 10%,rgba(191,255,0,.075),transparent 68%),
+      radial-gradient(840px 560px at 50% 48%,rgba(63,255,175,.045),transparent 68%),
+      linear-gradient(180deg,#0d151a 0%,#070a0d 100%)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked)::before,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell::before{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:min(var(--dev-cockpit-width),calc(100vw - 64px))!important;
+    max-width:min(var(--dev-cockpit-width),calc(100vw - 64px))!important;
+    min-height:100svh!important;
+    height:auto!important;
+    margin:0 auto!important;
+    padding:48px 0 64px!important;
+    gap:var(--dev-desktop-gap)!important;
+    align-content:start!important;
+    align-items:stretch!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    display:grid!important;
+    grid-template-rows:auto auto!important;
+    gap:24px!important;
+    margin:0!important;
+    padding:0!important;
+    min-height:0!important;
+    height:auto!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    min-height:64px!important;
+    height:64px!important;
+    padding:0!important;
+    align-items:center!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-brand{
+    min-width:0!important;
+    gap:16px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-logo{
+    width:56px!important;
+    height:56px!important;
+    border-radius:18px!important;
+    flex:0 0 56px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title{
+    min-width:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title strong{
+    font-size:clamp(30px,2.35vw,38px)!important;
+    line-height:1!important;
+    letter-spacing:-.055em!important;
+    white-space:nowrap!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-title span{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-refresh{
+    display:grid!important;
+    place-items:center!important;
+    width:56px!important;
+    height:56px!important;
+    min-width:56px!important;
+    min-height:56px!important;
+    padding:0!important;
+    border-radius:18px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-refresh-icon{
+    width:24px!important;
+    height:24px!important;
+    display:block!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control{
+    display:grid!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    margin:0!important;
+    overflow:visible!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    width:100%!important;
+    height:64px!important;
+    min-height:64px!important;
+    max-height:64px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 24px!important;
+    align-items:center!important;
+    gap:16px!important;
+    padding:0 24px!important;
+    border-radius:24px!important;
+    border-color:rgba(244,255,204,.16)!important;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.032)),
+      linear-gradient(90deg,rgba(191,255,0,.055),transparent 58%)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 16px 40px rgba(0,0,0,.16)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    width:100%!important;
+    min-width:0!important;
+    gap:24px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy strong,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy small{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    line-height:1!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy strong{
+    justify-self:start!important;
+    text-align:left!important;
+    font-size:18px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-copy small{
+    justify-self:end!important;
+    text-align:right!important;
+    max-width:320px!important;
+    font-size:13px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-chevron{
+    display:grid!important;
+    place-items:center!important;
+    width:24px!important;
+    height:24px!important;
+    justify-self:end!important;
+    align-self:center!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{
+    display:grid!important;
+    gap:24px!important;
+    margin:0!important;
+    padding:0!important;
+    align-content:start!important;
+    overflow:visible!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-unified-cockpit,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    gap:24px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-finance-cockpit > .mf-hero-card{
+    min-height:0!important;
+    padding:40px!important;
+    border-radius:40px!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card{
+    border-radius:40px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card::after{
+    right:40px!important;
+    bottom:-96px!important;
+    width:220px!important;
+    height:220px!important;
+    border-radius:72px!important;
+    opacity:.44!important;
+    pointer-events:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy{
+    display:grid!important;
+    gap:20px!important;
+    width:100%!important;
+    max-width:100%!important;
+    align-content:start!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy span{
+    font-size:13px!important;
+    line-height:1!important;
+    letter-spacing:.14em!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font-size:clamp(68px,5.35vw,104px)!important;
+    line-height:.95!important;
+    letter-spacing:-.075em!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy p{
+    display:none!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{
+    width:100%!important;
+    max-width:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:16px!important;
+    padding-top:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action{
+    min-width:0!important;
+    min-height:64px!important;
+    padding:0 20px 0 24px!important;
+    border-radius:999px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action:nth-child(3){
+    grid-column:auto!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action span{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    font-size:15px!important;
+    line-height:1!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{
+    width:24px!important;
+    height:24px!important;
+    flex:0 0 24px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-trend-chip{
+    top:32px!important;
+    right:32px!important;
+    font-size:14px!important;
+    z-index:3!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-fold summary{
+    min-height:104px!important;
+    padding:24px 32px!important;
+    border-radius:32px!important;
+  }
+}
+@media (min-width:641px) and (max-width:980px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked){
+    --dev-cockpit-width:calc(100vw - 48px)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:calc(100vw - 48px)!important;
+    max-width:calc(100vw - 48px)!important;
+    padding:32px 0 48px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-copy strong{
+    font-size:clamp(56px,8vw,76px)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{
+    grid-template-columns:1fr!important;
+  }
+}
+@media (max-width:640px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    width:100%!important;
+    min-height:100svh!important;
+    padding:8px!important;
+    gap:16px!important;
+    align-content:start!important;
+    align-items:start!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .hero{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    gap:16px!important;
+    overflow:visible!important;
+    padding-bottom:0!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-topbar{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-control,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) #content{
+    margin-top:0!important;
+    gap:16px!important;
+  }
+}
+</style>
+<style id="dev-mobile-as-desktop-polish">
+@media (min-width:641px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-app-refresh{
+    transform:translateZ(0);
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open{
+    transition:border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-open:hover{
+    transform:translateY(-1px);
+    border-color:rgba(212,255,51,.34)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card{
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.09),
+      0 30px 90px rgba(0,0,0,.30)!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-actions{
+    align-items:stretch!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action{
+    transition:border-color .18s ease, background .18s ease, transform .18s ease;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action:hover{
+    transform:translateY(-1px);
+    border-color:rgba(212,255,51,.34)!important;
+    background:linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.045))!important;
+  }
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-refresh-icon,
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-chevron svg{
+    display:block!important;
+    margin:auto!important;
+  }
+  body.dev-mobile-desktop .overlay{
+    padding:48px!important;
+  }
+  body.dev-mobile-desktop .modal{
+    width:min(1120px,calc(100vw - 160px))!important;
+    max-height:min(88vh,960px)!important;
+    border-radius:32px!important;
+  }
+  body.dev-mobile-desktop .modalhead{
+    padding:32px!important;
+    align-items:center!important;
+  }
+  body.dev-mobile-desktop .modalhead h3{
+    font-size:32px!important;
+    line-height:1.05!important;
+    letter-spacing:-.04em!important;
+  }
+  body.dev-mobile-desktop .modalsub{
+    font-size:16px!important;
+    line-height:1.45!important;
+  }
+  body.dev-mobile-desktop .modalbody{
+    padding:32px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mobile-detail-modal-content,
+  body.dev-mobile-desktop .modalbody .mobile-detail-modal-content .mobile-finance-cockpit,
+  body.dev-mobile-desktop .modalbody .mobile-detail-modal-content .mobile-unified-cockpit{
+    gap:24px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-pay-summary{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:16px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-pay-fact{
+    min-height:136px!important;
+    padding:24px!important;
+    border-radius:24px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-pay-fact span,
+  body.dev-mobile-desktop .modalbody .mf-kpi span,
+  body.dev-mobile-desktop .modalbody .mf-split span,
+  body.dev-mobile-desktop .modalbody .mf-row span{
+    font-size:12px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-pay-fact strong{
+    font-size:40px!important;
+    line-height:1!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-pay-fact small{
+    font-size:15px!important;
+    line-height:1.45!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-clean-segment,
+  body.dev-mobile-desktop .modalbody .mf-segment{
+    gap:16px!important;
+    margin-bottom:16px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-clean-segment button,
+  body.dev-mobile-desktop .modalbody .mf-segment button{
+    min-height:56px!important;
+    font-size:15px!important;
+    border-radius:20px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-clean-panel.active,
+  body.dev-mobile-desktop .modalbody .mf-panel.active{
+    gap:16px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-row{
+    min-height:88px!important;
+    padding:20px 24px!important;
+    border-radius:24px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-row strong{
+    font-size:18px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-row b{
+    font-size:24px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-row i{
+    height:10px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-app-summary-card{
+    min-height:320px!important;
+    padding:40px!important;
+    border-radius:32px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-app-summary-main strong{
+    font-size:72px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-app-summary-main span{
+    font-size:15px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-app-summary-metrics{
+    gap:24px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-app-summary-metric span{
+    font-size:11px!important;
+    line-height:1.2!important;
+    min-height:26px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-app-summary-metric strong{
+    font-size:38px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-app-summary-metric p{
+    font-size:14px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-bento,
+  body.dev-mobile-desktop .modalbody .mf-bento-compact,
+  body.dev-mobile-desktop .modalbody .mf-analytics-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:16px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-kpi{
+    min-height:160px!important;
+    padding:24px!important;
+    border-radius:24px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-kpi strong{
+    font-size:36px!important;
+    line-height:1!important;
+    white-space:normal!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-kpi p{
+    font-size:15px!important;
+    line-height:1.45!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-analytics-ratio .mf-split strong{
+    font-size:44px!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-empty{
+    font-size:15px!important;
+    padding:24px!important;
+  }
+  body.dev-mobile-desktop .close{
+    width:64px!important;
+    height:64px!important;
+    min-width:64px!important;
+    min-height:64px!important;
+    border-radius:20px!important;
+  }
+  body.dev-mobile-desktop .close::before,
+  body.dev-mobile-desktop .close::after{
+    width:28px!important;
+    height:3px!important;
+  }
+}
+@media (min-width:641px) and (max-width:1180px){
+  body.dev-mobile-desktop .modal{
+    width:min(960px,calc(100vw - 64px))!important;
+  }
+  body.dev-mobile-desktop .modalbody .mf-bento,
+  body.dev-mobile-desktop .modalbody .mf-bento-compact,
+  body.dev-mobile-desktop .modalbody .mf-analytics-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media (min-width:1440px){
+  body.dev-mobile-desktop.mobile-finance-active:not(.locked) .shell{
+    padding-top:56px!important;
+  }
+}
 </style>
 </head>
 <body class="locked">
@@ -2749,6 +4186,8 @@ body.locked .mobile-bottom-nav{display:none!important}
 const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboard',analytics:'https://n8n-dev.gruzapp.team/webhook/gruzap-analytics'};
 const PROD_HOSTS=new Set(['dashboard.gruz.app','www.dashboard.gruz.app']);
 function isProdDashboard(){return PROD_HOSTS.has(location.hostname)&&!location.pathname.replace(/\/+$/,'').startsWith('/dev')}
+function isDevDashboard(){return location.pathname.replace(/\/+$/,'').startsWith('/dev')}
+if(isDevDashboard())document.body.classList.add('dev-mobile-desktop');
 function showMobileAnalyticsEntry(){return !isProdDashboard()}
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
 const state={tab:'finance',appMode:'overview',financeMode:'yookassa',errorKind:'all',preset:'this_month',errorRetryTimer:null,errorRetryCount:0,loadingTimer:null,loadingHideTimer:null,loadingWatchdog:null,loadingStartedAt:0,loadingEstimateMs:35000,requestSeq:0,financeComparisonSeq:0,mode:'legacy',data:{appmetrica:null,metrika:null,direct:null,finance:null},from:null,to:null};
@@ -3337,7 +4776,7 @@ function mobileFinanceCockpit(ctx){
   const repeatPayers=unit.repeat_payers==null?null:num(unit.repeat_payers);
   const payerLabel=payerCount==null?'<b>—</b> платящих':`<b>${nowrap(nfmt(payerCount))}</b> ${pluralRu(payerCount,['платящий пользователь','платящих пользователя','платящих пользователей'])}`;
   const activeUsersRaw=appData?.summary?.active_users==null?null:num(appData.summary.active_users);
-  const activeUsersLabel=activeUsersRaw==null?'<b>—</b> пользователей':`<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['пользователь','пользователя','пользователей'])}`;
+  const activeUsersLabel=activeUsersRaw>0?`<b>${nowrap(nfmt(activeUsersRaw))}</b> ${pluralRu(activeUsersRaw,['пользователь','пользователя','пользователей'])}`:'<b>—</b> пользователей';
   const paymentFact=unavailable?'—':`${nfmt(paymentCount)} ${pluralRu(paymentCount,['оплата','оплаты','оплат'])}`;
   const payerFact=payerCount==null?'нужен ID':`${nfmt(payerCount)} ${pluralRu(payerCount,['платящий','платящих','платящих'])}`;
   const repeatFact=repeatPayers==null?'нужна история':`${nfmt(repeatPayers)} ${pluralRu(repeatPayers,['повторный','повторных','повторных'])}`;
@@ -3796,7 +5235,7 @@ init();
     if(section&&!section.children.length)section.remove();
   }
   function normalizeProductCopy(root=document){
-    const host=root instanceof Document?root.body:root;
+    const host=root instanceof Document?(document.getElementById('content')||root.body):root;
     if(!host)return;
     const pattern=/AppMetrica|Аппметрика|аппметрика/g;
     const phraseMap=[
@@ -3808,6 +5247,17 @@ init();
       ['уникальных водителей проявили интерес','уникальных водителей нажали оплату'],
     ];
     const applyPhrases=value=>phraseMap.reduce((text,[from,to])=>text.split(from).join(to),value);
+    const text=host.textContent||'';
+    const hasTextWork=pattern.test(text)||phraseMap.some(([from])=>text.includes(from));
+    pattern.lastIndex=0;
+    const attrNodes=host.querySelectorAll?.('[aria-label],[title]')||[];
+    const hasAttrWork=[...attrNodes].some(element=>['aria-label','title'].some(attr=>{
+      const value=element.getAttribute(attr)||'';
+      const matched=pattern.test(value)||phraseMap.some(([from])=>value.includes(from));
+      pattern.lastIndex=0;
+      return matched;
+    }));
+    if(!hasTextWork&&!hasAttrWork)return;
     const walker=document.createTreeWalker(host,NodeFilter.SHOW_TEXT);
     const nodes=[];
     let node;
@@ -3818,7 +5268,7 @@ init();
       pattern.lastIndex=0;
     }
     nodes.forEach(item=>{item.nodeValue=applyPhrases(item.nodeValue.replace(pattern,'Приложение'))});
-    host.querySelectorAll?.('[aria-label],[title]').forEach(element=>{
+    attrNodes.forEach(element=>{
       ['aria-label','title'].forEach(attr=>{
         const value=element.getAttribute(attr);
         if(value&&(pattern.test(value)||phraseMap.some(([from])=>value.includes(from))))element.setAttribute(attr,applyPhrases(value.replace(pattern,'Приложение')));
@@ -3964,7 +5414,12 @@ init();
     const sourceRows=mobileGrowthSourcesPanel(app,true);
     const platformRows=platforms.length?platforms.map(item=>`<div class="mf-row"><div><strong>${esc(item.name)}</strong><span>${nfmt(item.users)} ${pluralRu(item.users,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(num(item.users)/maxPlatform*100))}%"></i></div><b>${nowrap(nfmt(item.users))}</b></div>`).join(''):'<div class="mf-empty">Ждём iPhone / Android.</div>';
     const versionRows=versions.length?versions.map(item=>{const value=num(item.users);const label=item.version==='Другие версии'?'Другие версии':`Версия ${esc(item.version)}`;return `<div class="mf-row"><div><strong>${label}</strong><span>${nfmt(value)} ${pluralRu(value,['пользователь','пользователя','пользователей'])}</span><i style="width:${Math.max(8,Math.round(value/maxVersion*100))}%"></i></div><b>${nowrap(nfmt(value))}</b></div>`}).join(''):'<div class="mf-empty">Ждём версии приложения.</div>';
-    return `${activeSummary}<article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения"><button class="active" type="button" data-mf-panel="summary">Источники</button><button type="button" data-mf-panel="tariffs">Платформы</button><button type="button" data-mf-panel="trend">Версии</button></div><div class="mf-panel active" data-mf-view="summary">${sourceRows}</div><div class="mf-panel" data-mf-view="tariffs">${platformRows}</div><div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
+    const hideSources=isProdDashboard();
+    const sourceTab=hideSources?'':`<button class="active" type="button" data-mf-panel="summary">Источники</button>`;
+    const platformTab=`<button class="${hideSources?'active':''}" type="button" data-mf-panel="tariffs">Платформы</button>`;
+    const sourcePanel=hideSources?'':`<div class="mf-panel active" data-mf-view="summary">${sourceRows}</div>`;
+    const platformPanel=`<div class="mf-panel ${hideSources?'active':''}" data-mf-view="tariffs">${platformRows}</div>`;
+    return `${activeSummary}<article class="mf-sections"><div class="mf-segment" role="tablist" aria-label="Срез приложения">${sourceTab}${platformTab}<button type="button" data-mf-panel="trend">Версии</button></div>${sourcePanel}${platformPanel}<div class="mf-panel" data-mf-view="trend">${versionRows}</div></article>`;
   };
   window.mobileAppCockpit=function(data){
     const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
@@ -3996,7 +5451,7 @@ init();
       syncMobileBottomNav();
       mergeFinanceUserMoneyAndTariffs();
       enhanceCollapsiblePanels();
-      normalizeProductCopy();
+      normalizeProductCopy(document.getElementById('content')||document);
     }finally{
       financeTweakLock=false;
     }
