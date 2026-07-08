@@ -4182,6 +4182,26 @@ body.locked .mobile-bottom-nav{display:none!important}
   body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-actions{
     grid-template-columns:1fr!important;
   }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{
+    margin-left:auto!important;
+    margin-right:0!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-sheet[aria-hidden="false"]{
+    position:fixed!important;
+    inset:0!important;
+    z-index:90!important;
+    display:block!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-dialog{
+    position:fixed!important;
+    left:50%!important;
+    right:auto!important;
+    bottom:auto!important;
+    top:50%!important;
+    width:min(520px,calc(100vw - 48px))!important;
+    max-height:calc(100vh - 48px)!important;
+    transform:translate(-50%,-50%)!important;
+  }
 }
 </style>
 </head>
