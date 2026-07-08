@@ -4205,17 +4205,158 @@ body.locked .mobile-bottom-nav{display:none!important}
     position:fixed!important;
     inset:0!important;
     z-index:90!important;
-    display:block!important;
+    display:grid!important;
+    place-items:center!important;
+    overflow:hidden!important;
+    padding:24px!important;
+    background:rgba(3,6,8,.42)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-dim{
+    position:absolute!important;
+    inset:0!important;
+    background:rgba(4,7,10,.68)!important;
+    -webkit-backdrop-filter:blur(14px)!important;
+    backdrop-filter:blur(14px)!important;
   }
   body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-dialog{
-    position:fixed!important;
-    left:50%!important;
+    position:relative!important;
+    left:auto!important;
     right:auto!important;
     bottom:auto!important;
-    top:50%!important;
+    top:auto!important;
     width:min(520px,calc(100vw - 48px))!important;
     max-height:calc(100vh - 48px)!important;
-    transform:translate(-50%,-50%)!important;
+    display:grid!important;
+    gap:16px!important;
+    overflow:auto!important;
+    padding:20px!important;
+    border:1px solid rgba(212,255,51,.24)!important;
+    border-radius:28px!important;
+    background:linear-gradient(180deg,rgba(26,32,42,.98),rgba(13,18,24,.98))!important;
+    box-shadow:0 24px 80px rgba(0,0,0,.52)!important;
+    transform:none!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-head{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:16px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-head h3{
+    margin:0!important;
+    color:#fff!important;
+    font-size:22px!important;
+    line-height:1.15!important;
+    letter-spacing:-.03em!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close{
+    position:relative!important;
+    width:48px!important;
+    height:48px!important;
+    min-width:48px!important;
+    min-height:48px!important;
+    display:grid!important;
+    place-items:center!important;
+    padding:0!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.045)!important;
+    color:#fff!important;
+    font-size:0!important;
+    line-height:1!important;
+    appearance:none!important;
+    -webkit-appearance:none!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::before,
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::after{
+    content:""!important;
+    position:absolute!important;
+    left:50%!important;
+    top:50%!important;
+    width:22px!important;
+    height:2px!important;
+    border-radius:999px!important;
+    background:currentColor!important;
+    transform-origin:center!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::before{
+    transform:translate(-50%,-50%) rotate(45deg)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::after{
+    transform:translate(-50%,-50%) rotate(-45deg)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-presets{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-preset{
+    min-height:48px!important;
+    padding:8px 14px!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.045)!important;
+    color:#e9f1f7!important;
+    font:900 13px/1.15 inherit!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-preset.active{
+    border-color:rgba(212,255,51,.55)!important;
+    background:linear-gradient(180deg,rgba(212,255,51,.24),rgba(212,255,51,.08))!important;
+    color:#f7ffe2!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-custom{
+    display:grid!important;
+    gap:16px!important;
+    padding:16px!important;
+    border:1px solid var(--line)!important;
+    border-radius:20px!important;
+    background:rgba(255,255,255,.03)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-fields{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:16px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field{
+    display:grid!important;
+    gap:8px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field label{
+    color:var(--muted)!important;
+    font-size:10px!important;
+    font-weight:900!important;
+    letter-spacing:.14em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field input{
+    width:100%!important;
+    height:50px!important;
+    padding:0 16px!important;
+    box-sizing:border-box!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.045)!important;
+    color:#fff!important;
+    font:900 16px/50px inherit!important;
+    text-align:center!important;
+    appearance:none!important;
+    -webkit-appearance:none!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field input::-webkit-date-and-time-value,
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field input::-webkit-datetime-edit{
+    display:block!important;
+    min-height:50px!important;
+    line-height:50px!important;
+    text-align:center!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-apply{
+    min-height:52px!important;
+    border:1px solid rgba(212,255,51,.42)!important;
+    border-radius:16px!important;
+    background:linear-gradient(180deg,rgba(212,255,51,.2),rgba(212,255,51,.08))!important;
+    color:#f7ffe2!important;
+    font:900 14px/1 inherit!important;
   }
 }
 </style>
