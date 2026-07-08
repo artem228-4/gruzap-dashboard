@@ -4187,7 +4187,7 @@ const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboar
 const PROD_HOSTS=new Set(['dashboard.gruz.app','www.dashboard.gruz.app']);
 function isProdDashboard(){return PROD_HOSTS.has(location.hostname)&&!location.pathname.replace(/\/+$/,'').startsWith('/dev')}
 function isDevDashboard(){return location.pathname.replace(/\/+$/,'').startsWith('/dev')}
-if(isDevDashboard())document.body.classList.add('dev-mobile-desktop');
+if(isDevDashboard()||isProdDashboard())document.body.classList.add('dev-mobile-desktop');
 function showMobileAnalyticsEntry(){return !isProdDashboard()}
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
 const state={tab:'finance',appMode:'overview',financeMode:'yookassa',errorKind:'all',preset:'this_month',errorRetryTimer:null,errorRetryCount:0,loadingTimer:null,loadingHideTimer:null,loadingWatchdog:null,loadingStartedAt:0,loadingEstimateMs:35000,requestSeq:0,financeComparisonSeq:0,mode:'legacy',data:{appmetrica:null,metrika:null,direct:null,finance:null},from:null,to:null};
