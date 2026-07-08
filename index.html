@@ -4182,9 +4182,24 @@ body.locked .mobile-bottom-nav{display:none!important}
   body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-actions{
     grid-template-columns:1fr!important;
   }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-action{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 24px!important;
+    align-items:center!important;
+    column-gap:16px!important;
+    justify-items:stretch!important;
+    padding:0 24px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-action span{
+    justify-self:start!important;
+    min-width:0!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+  }
   body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{
-    margin-left:auto!important;
-    margin-right:0!important;
+    justify-self:end!important;
+    margin:0!important;
   }
   body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-sheet[aria-hidden="false"]{
     position:fixed!important;
