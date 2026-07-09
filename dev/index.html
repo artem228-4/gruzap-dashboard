@@ -4178,6 +4178,187 @@ body.locked .mobile-bottom-nav{display:none!important}
     padding-top:56px!important;
   }
 }
+@media (min-width:641px){
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-actions{
+    grid-template-columns:1fr!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-action{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 24px!important;
+    align-items:center!important;
+    column-gap:16px!important;
+    justify-items:stretch!important;
+    padding:0 24px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-card-compact .mf-hero-action span{
+    justify-self:start!important;
+    min-width:0!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mf-hero-action svg{
+    justify-self:end!important;
+    margin:0!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-sheet[aria-hidden="false"]{
+    position:fixed!important;
+    inset:0!important;
+    z-index:90!important;
+    display:grid!important;
+    place-items:center!important;
+    overflow:hidden!important;
+    padding:24px!important;
+    background:rgba(3,6,8,.42)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-dim{
+    position:absolute!important;
+    inset:0!important;
+    background:rgba(4,7,10,.68)!important;
+    -webkit-backdrop-filter:blur(14px)!important;
+    backdrop-filter:blur(14px)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-dialog{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    top:auto!important;
+    width:min(520px,calc(100vw - 48px))!important;
+    max-height:calc(100vh - 48px)!important;
+    display:grid!important;
+    gap:16px!important;
+    overflow:auto!important;
+    padding:20px!important;
+    border:1px solid rgba(212,255,51,.24)!important;
+    border-radius:28px!important;
+    background:linear-gradient(180deg,rgba(26,32,42,.98),rgba(13,18,24,.98))!important;
+    box-shadow:0 24px 80px rgba(0,0,0,.52)!important;
+    transform:none!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-head{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:16px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-head h3{
+    margin:0!important;
+    color:#fff!important;
+    font-size:22px!important;
+    line-height:1.15!important;
+    letter-spacing:-.03em!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close{
+    position:relative!important;
+    width:48px!important;
+    height:48px!important;
+    min-width:48px!important;
+    min-height:48px!important;
+    display:grid!important;
+    place-items:center!important;
+    padding:0!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.045)!important;
+    color:#fff!important;
+    font-size:0!important;
+    line-height:1!important;
+    appearance:none!important;
+    -webkit-appearance:none!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::before,
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::after{
+    content:""!important;
+    position:absolute!important;
+    left:50%!important;
+    top:50%!important;
+    width:22px!important;
+    height:2px!important;
+    border-radius:999px!important;
+    background:currentColor!important;
+    transform-origin:center!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::before{
+    transform:translate(-50%,-50%) rotate(45deg)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-close::after{
+    transform:translate(-50%,-50%) rotate(-45deg)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-presets{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-preset{
+    min-height:48px!important;
+    padding:8px 14px!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.045)!important;
+    color:#e9f1f7!important;
+    font:900 13px/1.15 inherit!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-preset.active{
+    border-color:rgba(212,255,51,.55)!important;
+    background:linear-gradient(180deg,rgba(212,255,51,.24),rgba(212,255,51,.08))!important;
+    color:#f7ffe2!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-custom{
+    display:grid!important;
+    gap:16px!important;
+    padding:16px!important;
+    border:1px solid var(--line)!important;
+    border-radius:20px!important;
+    background:rgba(255,255,255,.03)!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-fields{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:16px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field{
+    display:grid!important;
+    gap:8px!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field label{
+    color:var(--muted)!important;
+    font-size:10px!important;
+    font-weight:900!important;
+    letter-spacing:.14em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field input{
+    width:100%!important;
+    height:50px!important;
+    padding:0 16px!important;
+    box-sizing:border-box!important;
+    border:1px solid var(--line)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.045)!important;
+    color:#fff!important;
+    font:900 16px/50px inherit!important;
+    text-align:center!important;
+    appearance:none!important;
+    -webkit-appearance:none!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field input::-webkit-date-and-time-value,
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-field input::-webkit-datetime-edit{
+    display:block!important;
+    min-height:50px!important;
+    line-height:50px!important;
+    text-align:center!important;
+  }
+  body.prod-dashboard.dev-mobile-desktop.mobile-finance-active:not(.locked) .mobile-period-apply{
+    min-height:52px!important;
+    border:1px solid rgba(212,255,51,.42)!important;
+    border-radius:16px!important;
+    background:linear-gradient(180deg,rgba(212,255,51,.2),rgba(212,255,51,.08))!important;
+    color:#f7ffe2!important;
+    font:900 14px/1 inherit!important;
+  }
+}
 </style>
 </head>
 <body class="locked">
@@ -4187,6 +4368,7 @@ const ENDPOINTS={dashboard:'https://n8n-dev.gruzapp.team/webhook/gruzap-dashboar
 const PROD_HOSTS=new Set(['dashboard.gruz.app','www.dashboard.gruz.app']);
 function isProdDashboard(){return PROD_HOSTS.has(location.hostname)&&!location.pathname.replace(/\/+$/,'').startsWith('/dev')}
 function isDevDashboard(){return location.pathname.replace(/\/+$/,'').startsWith('/dev')}
+if(isProdDashboard())document.body.classList.add('prod-dashboard');
 if(isDevDashboard()||isProdDashboard())document.body.classList.add('dev-mobile-desktop');
 function showMobileAnalyticsEntry(){return !isProdDashboard()}
 const META={appmetrica:{label:'Приложение',summary:'Мобильное приложение, установки, события и география.'},metrika:{label:'Яндекс Метрика',summary:'Сайт, сессии, отказы, источники и переходы в Telegram.'},direct:{label:'Яндекс Директ',summary:'Расход, показы, клики, конверсии и эффективность закупки.'},finance:{label:'ГРУЗАП Финансы',summary:'Фактические платежи Ю-Кассы, выручка, возвраты и путь из приложения к оплате.'}};
@@ -4468,6 +4650,7 @@ function normDirect(raw){if(!raw)return null;const s=raw.summary||{};return{summ
       ),
       paying_users: raw.unit_economics.paying_users == null ? null : num(raw.unit_economics.paying_users),
       arppu: raw.unit_economics.arppu == null ? null : num(raw.unit_economics.arppu),
+      average_payment: raw.unit_economics.average_payment == null ? null : num(raw.unit_economics.average_payment),
       arpu: raw.unit_economics.arpu == null ? null : num(raw.unit_economics.arpu),
       average_ltv: raw.unit_economics.average_ltv == null ? null : num(raw.unit_economics.average_ltv),
       median_ltv: raw.unit_economics.median_ltv == null ? null : num(raw.unit_economics.median_ltv),
@@ -4765,7 +4948,7 @@ function mobileAppCollapsible(app){
   return `<details class="mobile-finance-cockpit mobile-unified-cockpit mobile-app-fold"><summary><div class="mf-fold-title"><span>Активные пользователи</span><small>Сессии, платформы и версии</small></div><span class="mf-fold-control"><strong class="mf-fold-value">${active}</strong><span class="mf-fold-chevron" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M5.5 7.5L10 12L14.5 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></summary><div class="mf-fold-body">${mobileAppDetailsContent(app)}</div></details>`;
 }
 function mobileFinanceCockpit(ctx){
-  const {y,s,unavailable,cleanRevenue,cleanAfterRefunds,link,linkUnavailable,userIdReady,payingUsers,arppu,dau,mau,dauMau,appData,directData}=ctx;
+  const {y,s,unavailable,cleanRevenue,cleanAfterRefunds,link,linkUnavailable,userIdReady,payingUsers,arppu,dau,mau,dauMau,appData,metrikaData,directData}=ctx;
   const unit=ctx.unit||y.unit_economics||{};
   const linkEstimated=link.status==='estimated';
   const nowrap=value=>String(value==null||value===''?'—':value).replace(/\s/g,'&nbsp;');
@@ -4784,27 +4967,29 @@ function mobileFinanceCockpit(ctx){
   const tariffHtml=mobileTariffRowsHtml(tariffRows,shortMoney,unavailable);
   const chartHtml=mobileFinanceChartHtml(y.series||[],unavailable);
   const netPeriodValue=unavailable?null:num(cleanAfterRefunds||cleanRevenue||s.gross_revenue||0);
+  const metrikaUsers=metrikaData?.summary?.users==null?null:num(metrikaData.summary.users);
   const arpuMetric=unit.arpu==null?null:num(unit.arpu);
   const arppuMetric=unit.arppu==null?(arppu==null?null:num(arppu)):num(unit.arppu);
+  const averageCheckRaw=unit.average_payment!=null?num(unit.average_payment):(s.average_check?num(s.average_check):(paymentCount>0&&netPeriodValue!=null?netPeriodValue/paymentCount:null));
+  const arpuRaw=arpuMetric!=null?arpuMetric:(metrikaUsers>0&&netPeriodValue!=null?netPeriodValue/metrikaUsers:null);
   const lifetimeDays=unit.lifetime_days==null?null:num(unit.lifetime_days);
   const lifetimeMonths=unit.lifetime_months==null?(lifetimeDays==null?null:lifetimeDays/30.4375):num(unit.lifetime_months);
   const directSpend=unit.direct_spend==null?(directData?.summary?.spend==null?null:num(directData.summary.spend)):num(unit.direct_spend);
   const adPayers=unit.ad_paying_users==null?null:num(unit.ad_paying_users);
-  const ltvRaw=unit.average_ltv!=null?num(unit.average_ltv):(arpuMetric!=null&&lifetimeMonths!=null?arpuMetric*lifetimeMonths:(arppuMetric!=null&&lifetimeMonths!=null?arppuMetric*lifetimeMonths:(payerCount&&netPeriodValue!=null?netPeriodValue/Math.max(payerCount,1):null)));
-  const cacRaw=unit.cac!=null?num(unit.cac):(directSpend!=null&&adPayers>0?directSpend/adPayers:null);
+  const ltvRaw=unit.average_ltv!=null?num(unit.average_ltv):(arpuRaw!=null&&lifetimeMonths!=null?arpuRaw*lifetimeMonths:(arppuMetric!=null&&lifetimeMonths!=null?arppuMetric*lifetimeMonths:null));
+  const lifetimeEstimated=unit.lifetime_months==null&&lifetimeDays==null&&ltvRaw!=null&&arppuMetric>0;
+  const lifetimeMetric=lifetimeEstimated?ltvRaw/arppuMetric:lifetimeMonths;
+  const cacPayers=adPayers>0?adPayers:payerCount;
+  const cacRaw=unit.cac!=null?num(unit.cac):(directSpend!=null&&cacPayers>0?directSpend/cacPayers:null);
   const ltvCacRaw=unit.ltv_cac!=null?num(unit.ltv_cac):(ltvRaw!=null&&cacRaw>0?ltvRaw/cacRaw:null);
+  const averageCheckValue=averageCheckRaw==null?'н/д':money(averageCheckRaw);
+  const arppuValue=arppuMetric==null?'н/д':money(arppuMetric);
   const ltvValue=ltvRaw==null?'н/д':money(ltvRaw);
   const cacValue=cacRaw==null?'н/д':money(cacRaw);
-  const lifetimeValue=lifetimeMonths==null?(lifetimeDays==null?'н/д':`${nfmt(lifetimeDays,0)} дн.`):`${nfmt(lifetimeMonths,1)} мес.`;
+  const lifetimeValue=lifetimeMetric==null?(lifetimeDays==null?'н/д':`${nfmt(lifetimeDays,0)} дн.`):`${lifetimeEstimated?'≈ ':''}${nfmt(lifetimeMetric,1)} мес.`;
+  const arpuValue=arpuRaw==null?'н/д':money(arpuRaw);
   const ltvCacValue=ltvCacRaw==null?'н/д':`${nfmt(ltvCacRaw,2)}×`;
-  const ltvFormula=unit.average_ltv!=null?'average_ltv из n8n':arpuMetric!=null&&lifetimeMonths!=null?'ARPU × Life Time':arppuMetric!=null&&lifetimeMonths!=null?'ARPPU × Life Time':'чистая выручка / платящие пользователи';
-  const cacMissing=[];
-  if(cacRaw==null){
-    if(directSpend==null)cacMissing.push('расход Яндекс Директа за период');
-    if(!(adPayers>0))cacMissing.push('платящие пользователи из рекламы');
-  }
-  const ltvMissing=ltvRaw==null?['ARPU и Life Time или фактический average_ltv по истории платежей']:[];
-  const analyticsNote=[...ltvMissing,...cacMissing];
+  const metricCard=(label,value,caption,theme='')=>`<article class="mf-kpi ${theme}"><span>${label}</span><strong>${nowrap(value)}</strong><p>${esc(caption)}</p></article>`;
   const comparisonAllowed=!!previousFinancePeriod();
   const comparison=comparisonAllowed&&y.comparison&&typeof y.comparison==='object'?y.comparison:{};
   const explicitDeltaRaw=comparisonAllowed?(comparison.delta_percent??comparison.change_percent??s.delta_percent):null;
@@ -4817,7 +5002,7 @@ function mobileFinanceCockpit(ctx){
   const trendChip=comparisonAllowed&&trendLabel?`<span class="mf-trend-chip ${trendTone}" title="${esc(trendTitle)}">${trendLabel}</span>`:'';
   const arrowIcon='<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.5L12.5 10L7 15.5"/></svg>';
   const financeDetails=`<section class="mf-clean-sheet"><div class="mf-pay-summary"><article class="mf-pay-fact"><span>Платящие</span><strong>${payerCount==null?'—':nowrap(nfmt(payerCount))}</strong><small>Количество уникальных платящих пользователей.</small></article><article class="mf-pay-fact"><span>Оплаты</span><strong>${unavailable?'—':nowrap(nfmt(paymentCount))}</strong><small>Количество оплат за период.</small></article></div><div class="mf-clean-segment" role="tablist" aria-label="Финансовый срез"><button class="active" type="button" data-mf-panel="tariffs">Тарифы</button><button type="button" data-mf-panel="trend">Динамика</button></div><div class="mf-clean-panel active" data-mf-view="tariffs">${tariffHtml}</div><div class="mf-clean-panel" data-mf-view="trend">${chartHtml}</div></section>`;
-  const analyticsDetails=`<section class="mf-bento mf-bento-compact mf-analytics-grid" aria-label="Ключевые показатели юнит-экономики"><article class="mf-kpi mf-kpi-amber"><span>LTV</span><strong>${nowrap(ltvValue)}</strong><p>${esc(ltvFormula)}</p></article><article class="mf-kpi mf-kpi-cyan"><span>CAC</span><strong>${nowrap(cacValue)}</strong><p>Стоимость платящего пользователя</p></article><article class="mf-kpi"><span>Life Time</span><strong>${nowrap(lifetimeValue)}</strong><p>Средний срок жизни пользователя</p></article></section><article class="mf-sections mf-analytics-ratio"><div class="mf-panel active"><div class="mf-split"><div><span>LTV / CAC</span><strong>${nowrap(ltvCacValue)}</strong><p>Окупаемость привлечения: сколько LTV приходится на 1 рубль CAC.</p></div></div>${analyticsNote.length?`<div class="mf-empty mf-analytics-note">Для точного расчёта нужно: ${esc(analyticsNote.join(', '))}.</div>`:''}</div></article>`;
+  const analyticsDetails=`<section class="mf-bento mf-bento-compact mf-analytics-grid" aria-label="Юнит-экономика">${metricCard('Средний чек',averageCheckValue,'Оплаченная выручка / оплаты.','mf-kpi-cyan')}${metricCard('ARPPU',arppuValue,'Деньги / платящие пользователи.','mf-kpi-amber')}${metricCard('LTV',ltvValue,'Средняя выручка пользователя за всё время.','mf-kpi-amber')}${metricCard('Lifetime',lifetimeValue,'LTV / ARPPU, если n8n не дал срок напрямую.')}${metricCard('ARPU',arpuValue,'Деньги / пользователи Метрики.','mf-kpi-cyan')}${metricCard('CAC',cacValue,'Расход Директа / платящие пользователи.')}${metricCard('LTV / CAC',ltvCacValue,'Окупаемость привлечения.')}</section>`;
   const appDetails=mobileAppDetailsContent(appData);
   const mainText=unavailable?'<p>Ю-Касса не ответила, поэтому не показываем нули как факт.</p>':'';
   const analyticsAction=showMobileAnalyticsEntry()?`<button class="mf-hero-action" type="button" data-mobile-detail="analytics"><span>Аналитика</span>${arrowIcon}</button>`:'';
@@ -4923,7 +5108,7 @@ function financeYookassaView(data, allData = {}) {
     { title: tariffsReady ? 'Факт: тарифы размечены' : 'Нужно для тарифов и источников', text: tariffsReady ? `${nfmt(tariffRows.length)} тарифных группы пришли из платежей. Доли считаются по чистой выручке.` : 'Передавать период тарифа, цену тарифа, номер заказа, источник, кампанию и экран оплаты. Неизвестный источник и органику не распределяем вручную.', warn: !tariffsReady },
   ];
 
-  const mobileCockpit = mobileFinanceCockpit({ y, s, unavailable, cleanRevenue, cleanAfterRefunds, link, linkUnavailable, userIdReady, payingUsers, arppu, dau, mau, dauMau, unit, appData: allData.appmetrica, directData: allData.direct }) || '';
+  const mobileCockpit = mobileFinanceCockpit({ y, s, unavailable, cleanRevenue, cleanAfterRefunds, link, linkUnavailable, userIdReady, payingUsers, arppu, dau, mau, dauMau, unit, appData: allData.appmetrica, metrikaData: allData.metrika, directData: allData.direct }) || '';
 
   return `${mobileCockpit}<section class="cards finance-kpi-cards">${card('Оплачено', moneyOrDash(s.gross_revenue), 'Только платежи со статусом «Оплачен» и признаком оплаты.', unavailable ? 'Данные не получены' : `${countOrDash(s.successful_payments)} успешных оплат`, 'var(--accent)')}${card('К зачислению', moneyOrDash(cleanRevenue), s.income_known ? 'Сумма после комиссии, если Ю-Касса её передала.' : 'Оценка по сумме платежей, без комиссии.', incomeNote, 'var(--green)')}${card('После возвратов', moneyOrDash(cleanAfterRefunds), 'Чистая сумма к зачислению минус возвраты за выбранный период.', s.refunded_amount > 0 ? `Возвраты: ${money(s.refunded_amount)}` : 'Возвратов нет', 'var(--cyan)')}${card('Средний платёж', moneyOrDash(s.average_check), 'Средняя сумма одной успешной оплаты. Это не средний доход на пользователя.', unavailable ? 'Ю-Касса не ответила' : `${countOrDash(s.successful_payments)} оплат в расчёте`, 'var(--yellow)')}</section><section class="payment-hero"><article class="panel money-panel"><div class="head"><div><h2>Деньги по Ю-Кассе</h2><p class="money-desktop-note">Реальные деньги от Ю-Кассы: оплаты, ожидание, отмены и возвраты.</p></div><div class="badge money-desktop-badge">До ${nfmt(s.page_limit)} платежей</div></div><div class="money-focus"><strong>${moneyOrDash(cleanAfterRefunds || cleanRevenue || s.gross_revenue)}</strong><span class="money-desktop-copy">${unavailable ? unavailableNote : `Чистый результат за период ${range(state.from, state.to)}: сумма к зачислению минус возвраты. Ожидание подтверждения деньгами не считается.`}</span><span class="money-mobile-copy">${mobileMoneyCopy}</span></div><div class="money-mobile-meta">${mobilePaymentMeta}</div><div class="payment-notes money-desktop-notes"><span>Платежей в периоде: ${countOrDash(s.period_payments_loaded)}</span><span>Возвраты: ${moneyOrDash(s.refunded_amount)}</span></div>${warnings.length ? `<div class="notes money-desktop-warnings">${warnings.map((item) => `<div class="pill">${financeWarningRu(item)}</div>`).join('')}</div>` : ''}</article><article class="panel"><div class="head"><div><h2>Связка с приложением</h2><p>Сколько людей проявили интерес к оплате и сколько оплат пришло от Ю-Кассы.</p></div><div class="badge">${linkUnavailable ? 'Приложение недоступно' : 'Воронка денег'}</div></div><div class="stats"><div class="stat"><b>${linkCount(link.payment_interest_users)}</b><span>${linkUnavailable ? 'Клики приложения не загрузились, поэтому это не ноль пользователей.' : 'Уникальные водители с интересом к оплате. Повторные нажатия одного водителя не раздувают эту цифру.'}</span></div><div class="stat"><b>${countOrDash(s.successful_payments)}</b><span>Успешные оплаты, подтверждённые Ю-Кассой. Это платежи, а не уникальные плательщики.</span></div><div class="stat"><b>${userIdReady && link.payment_interest_users ? pct((payingUsers / link.payment_interest_users) * 100, 1) : linkPercent(link.conversion_percent)}</b><span>${userIdReady ? 'Конверсия уникальных заинтересованных пользователей в платящих.' : 'Пока приближённо: оплаты делятся на уникальные клики, нужен идентификатор пользователя в платеже.'}</span></div></div><div class="payment-notes" style="margin-top:16px"><span>Нажатий всего: ${linkCount(link.payment_taps_total)}</span><span>Из нажатий в оплату: ${linkPercent(link.tap_to_payment_percent)}</span></div>${linkNote}</article></section><section class="finance-plan"><article class="panel"><div class="head"><div><h2>Деньги по пользователям</h2><p>То, что просил руководитель: не просто платежи, а сколько людей принесли деньги и сколько приносит один платящий пользователь.</p></div><div class="badge">${userIdReady ? 'идентификатор найден' : 'Ждём идентификатор'}</div></div><div class="metric-grid"><div class="metric-tile"><small>Платящие пользователи</small><b>${valueOrNeed(payingUsers)}</b><span>Уникальные пользователи, которые оплатили в периоде.</span></div><div class="metric-tile"><small>Доход на платящего</small><b>${moneyOrNeed(arppu)}</b><span>Чистая выручка после возвратов / платящие пользователи.</span></div><div class="metric-tile"><small>LTV</small><b>${moneyOrNeed(unit.average_ltv)}</b><span>Средняя выручка на платящего пользователя по загруженной истории платежей.</span></div></div></article><article class="panel"><div class="head"><div><h2>Качество данных</h2><p>Разделяет факты, предположения и то, что надо добавить в приложение и сервер.</p></div><div class="badge">Без догадок</div></div><div class="truth-list">${truthRows.map((item) => `<div class="truth-row ${item.warn ? 'warn' : ''}"><span class="truth-dot"></span><div><b>${esc(item.title)}</b><span>${esc(item.text)}</span></div></div>`).join('')}</div></article></section><section class="two finance-tariff-saas"><article class="panel"><div class="head"><div><h2>Подписки по тарифам</h2><p>300 ₽ = неделя, 900 ₽ = месяц, 9 900 ₽ = год. Точно считаем только после разметки тарифа в платеже.</p></div><div class="badge">${tariffRows.length ? 'Тарифы пришли' : 'Нужна разметка'}</div></div><div class="tariff-grid">${tariffCards}</div></article><article class="panel"><div class="head"><div><h2>SaaS, DAU/MAU и удержание</h2><p>Повторные оплаты, удержание, отток и активная аудитория приложения. Если отдельной аудитории нет в ответе, не подменяем её нулями.</p></div><div class="badge">SaaS-слой</div></div><div class="metric-grid"><div class="metric-tile wait"><small>Повторные плательщики</small><b>${valueOrNeed(unit.repeat_payers)}</b><span>${repeatPercent == null ? 'Нужна история по пользователю.' : `Доля повторных оплат: ${pct(repeatPercent, 1)}.`}</span></div><div class="metric-tile wait"><small>Удержание</small><b>${percentOrNeed(retentionRate)}</b><span>Платившие в прошлом месяце, которые вернулись в текущем.</span></div><div class="metric-tile wait"><small>Отток</small><b>${percentOrNeed(churnRate)}</b><span>Доля платящих прошлого месяца, которые не вернулись в текущем.</span></div><div class="metric-tile wait"><small>DAU / MAU</small><b>${audienceReady ? percentOrNeed(dauMau, 'н/д') : '<span class="value-missing">н/д</span>'}</b><span>${audienceReady ? `DAU: ${dau == null ? 'н/д' : nfmt(dau)}, MAU: ${mau == null ? 'н/д' : nfmt(mau)}.` : 'Аудитория приложения ещё не передаётся в финансовый ответ.'}</span></div></div><div class="formula-box" style="margin-top:16px"><strong>SaaS-модель:</strong><span>чистая выручка, платящие пользователи, доход на платящего, LTV, повторные оплаты, удержание, отток и DAU/MAU. Если нет аудитории или истории по пользователю, блок показывает “н/д”, а не выдумывает цифры.</span></div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Статусы платежей</h2><p>Ожидание подтверждения видно отдельно и не попадает в выручку.</p></div><div class="badge">Статусы</div></div><div class="rows">${y.statuses.length ? y.statuses.map((item) => bar(item.label, item.count, maxStatus, item.status === 'succeeded' ? 'green' : '', `${nfmt(item.count)} платежей`, `${item.label}: ${nfmt(item.count)} платежей на сумму ${money(item.amount)}.`)).join('') : `<div class="empty"><h3>${unavailable ? 'Статусы не получены' : 'Статусы не пришли'}</h3><p>${unavailable ? 'Сервер не получил ответ Ю-Кассы, поэтому статусы пока неизвестны.' : 'Когда Ю-Касса вернёт платежи, здесь появится разбивка по статусам.'}</p></div>`}</div></article><article class="panel"><div class="head"><div><h2>Способы оплаты</h2><p>Какими методами водители реально оплачивают заказ.</p></div><div class="badge">${nfmt(y.methods.length)} способов</div></div><div class="rows">${y.methods.length ? y.methods.map((item) => bar(item.label, item.amount, maxMethod, 'cyan', money(item.amount), `${item.label}: ${nfmt(item.count)} оплат на сумму ${money(item.amount)}.`)).join('') : `<div class="empty"><h3>${unavailable ? 'Способы не получены' : 'Способы оплаты не пришли'}</h3><p>${unavailable ? 'Провайдер не ответил, поэтому способы оплаты пока неизвестны.' : 'Данные появятся после первой успешной выгрузки Ю-Кассы.'}</p></div>`}</div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Выручка по продуктам</h2><p>Разбивка работает точно, когда сервер передаёт тариф, продукт или экран оплаты в разметке платежа.</p></div><div class="badge">Продукты</div></div><div class="rows">${productRows.length ? productRows.map((item) => bar(esc(item.product), item.amount, maxProduct, 'green', money(item.amount), `${esc(item.product)}: ${nfmt(item.count)} оплат на сумму ${money(item.amount)}. Источник: ${esc(item.source)}.`)).join('') : '<div class="empty"><h3>Нет разметки платежей</h3><p>Передайте тариф, продукт, внутренний номер заказа и источник в разметке платежа, и здесь появится выручка по продуктам.</p></div>'}</div></article><article class="panel"><div class="head"><div><h2>Возвраты</h2><p>Сумма и количество возвратов за выбранный период.</p></div><div class="badge">${nfmt(s.refunds_count)} возвратов</div></div><div class="stats"><div class="stat"><b>${moneyOrDash(s.refunded_amount)}</b><span>Сумма возвратов за период.</span></div><div class="stat"><b>${countOrDash(s.refunds_count)}</b><span>Количество возвратов из отдельной выгрузки Ю-Кассы.</span></div><div class="stat"><b>${s.gross_revenue ? pct((s.refunded_amount / s.gross_revenue) * 100, 1) : '0%'}</b><span>Доля возвратов от оплаченной суммы.</span></div></div></article></section><section class="two"><article class="panel"><div class="head"><div><h2>Выручка по дням</h2><p>Когда фактически приходили успешные оплаты.</p></div><div class="badge">По дням</div></div>${days(y.series, 'revenue', 'green', 'Выручка за день', (value) => money(value))}</article><article class="panel"><div class="head"><div><h2>Возвраты по дням</h2><p>Когда деньги уходили обратно клиентам.</p></div><div class="badge">Возвраты</div></div>${days(y.series, 'refunds', '', 'Возвраты за день', (value) => money(value))}</article></section><article class="panel"><div class="head"><div><h2>Последние платежи</h2><p>Без персональных данных: только хвост платежа, время, статус, способ, продукт и сумма.</p></div><div class="badge">${nfmt(recentRows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Платёж</th><th>Дата</th><th>Статус</th><th>Способ</th><th>Продукт</th><th class="num">Сумма</th><th class="num">Возврат</th></tr></thead><tbody>${recentRows.length ? recentRows.map((item) => `<tr><td>…${esc(item.id_tail)}</td><td>${dateTimeRu(item.captured_at || item.created_at)}</td><td>${esc(item.status_label)}</td><td>${esc(item.method_label)}</td><td>${esc(item.product_label)}</td><td class="num">${money(item.amount)}</td><td class="num">${item.refunded_amount ? money(item.refunded_amount) : '—'}</td></tr>`).join('') : `<tr><td colspan="7">${unavailable ? 'Платежи не загружены: сервер не получил ответ Ю-Кассы.' : 'Платежей за выбранный период нет.'}</td></tr>`}</tbody></table></div></article><article class="panel"><div class="head"><div><h2>Последние возвраты</h2><p>Отдельный контроль возвратов из Ю-Кассы.</p></div><div class="badge">${nfmt(refundRows.length)} строк</div></div><div class="tablebox"><table><thead><tr><th>Возврат</th><th>Платёж</th><th>Дата</th><th>Статус</th><th class="num">Сумма</th></tr></thead><tbody>${refundRows.length ? refundRows.map((item) => `<tr><td>…${esc(item.id_tail)}</td><td>…${esc(item.payment_tail)}</td><td>${dateTimeRu(item.created_at)}</td><td>${esc(item.status)}</td><td class="num">${money(item.amount)}</td></tr>`).join('') : '<tr><td colspan="5">Возвратов за выбранный период нет.</td></tr>'}</tbody></table></div></article>`;
 }
@@ -4939,7 +5124,7 @@ function render(){header();const data=current();const allData=state.data;documen
 const utf8Decoder=new TextDecoder('utf-8');
 const readJsonUtf8=async response=>JSON.parse(utf8Decoder.decode(await response.arrayBuffer()));
 function isLongFinancePeriod(){return state.tab==='finance'&&state.from&&state.to&&(activePresetKey()==='year'||inclusiveDays(state.from,state.to)>120)}
-function requestedSources(){if(state.tab==='finance'){const sources=['appmetrica_finance','yookassa','appmetrica_overview'];if(!isLongFinancePeriod())sources.push('metrika');return sources}if(state.tab==='metrika')return['metrika'];if(state.tab==='direct')return['direct'];if(state.tab==='appmetrica'&&state.appMode==='errors')return['appmetrica_errors'];return['appmetrica_overview']}
+function requestedSources(){if(state.tab==='finance'){const sources=['appmetrica_finance','yookassa','appmetrica_overview'];if(showMobileAnalyticsEntry()){sources.push('metrika','direct')}else if(!isLongFinancePeriod())sources.push('metrika');return[...new Set(sources)]}if(state.tab==='metrika')return['metrika'];if(state.tab==='direct')return['direct'];if(state.tab==='appmetrica'&&state.appMode==='errors')return['appmetrica_errors'];return['appmetrica_overview']}
 function dashboardPayload(){return{date_from:iso(state.from),date_to:iso(state.to),tab:state.tab,app_mode:state.appMode,requested_sources:requestedSources()}}
 function addMonthsClamped(date,delta){const base=new Date(date.getFullYear(),date.getMonth()+delta,1);const last=new Date(base.getFullYear(),base.getMonth()+1,0).getDate();base.setDate(Math.min(date.getDate(),last));return d0(base)}
 function activePresetKey(){return state.preset||document.querySelector('.preset.active')?.dataset?.preset||'custom'}
@@ -4952,7 +5137,7 @@ function currentFinanceCleanValue(){const y=state.data.finance?.yookassa;const s
 function applyFinanceComparison(comparison){const y=state.data.finance?.yookassa;if(!y)return;if(!comparison){y.comparison=null;if(y.summary){y.summary.previous_net_after_refunds=null;y.summary.delta_percent=null}return}y.comparison=comparison;y.summary.previous_net_after_refunds=comparison.previous_net_after_refunds;y.summary.delta_percent=comparison.delta_percent}
 async function queueFinanceComparison(){if(state.tab!=='finance'||!state.from||!state.to)return;const y=state.data.finance?.yookassa;if(!y||y.status==='unavailable')return;const period=previousFinancePeriod();if(!period){applyFinanceComparison(null);return}const key=financeComparisonKey();if(!key)return;if(financeComparisonCache.has(key)){applyFinanceComparison(financeComparisonCache.get(key));return}if(financeComparisonPending.has(key))return;financeComparisonPending.add(key);const seq=++state.financeComparisonSeq;try{const response=await fetch(ENDPOINTS.dashboard,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date_from:iso(period.from),date_to:iso(period.to),tab:'finance',app_mode:'overview',requested_sources:['yookassa']} )});if(!response.ok)throw new Error(`HTTP ${response.status}`);const payload=await readJsonUtf8(response);const normalized=normResponse(payload);const previousY=normalized.data.finance?.yookassa;const previousS=previousY?.summary||{};const previous=num(previousS.net_after_refunds||previousS.net_revenue||previousS.gross_revenue||previousS.revenue);const current=currentFinanceCleanValue();const comparison={previous_net_after_refunds:previous,delta_percent:previous>0?((current-previous)/previous)*100:null,previous_period:{from:iso(period.from),to:iso(period.to)},label:financeComparisonLabel()};financeComparisonCache.set(key,comparison);if(seq===state.financeComparisonSeq&&state.tab==='finance'&&key===financeComparisonKey()){applyFinanceComparison(comparison);render()}}catch(error){console.warn('finance comparison skipped',error)}finally{financeComparisonPending.delete(key)}}
 function viewModeKey(){return state.tab==='appmetrica'?state.appMode:'main'}
-function cacheKey(){return state.from&&state.to?`${state.tab}:${viewModeKey()}:combined-v2:${iso(state.from)}:${iso(state.to)}`:''}
+function cacheKey(){return state.from&&state.to?`${state.tab}:${viewModeKey()}:combined-v3:${requestedSources().join(',')}:${iso(state.from)}:${iso(state.to)}`:''}
 function setActiveTab(tab){state.tab=tab;document.querySelectorAll('.tab').forEach(button=>{const active=button.dataset.tab===tab;button.classList.toggle('active',active);button.setAttribute('aria-selected',active?'true':'false')});const active=document.querySelector(`.tab[data-tab="${tab}"]`);const label=document.getElementById('mobile-tab-label');if(label&&active)label.textContent=active.dataset.mobileLabel||active.querySelector('b')?.textContent.trim()||active.textContent.trim()}
 function mergeDashboardData(next){Object.entries(next||{}).forEach(([key,value])=>{if(value!==null&&value!==undefined)state.data[key]=value})}
 function showCachedView(){const key=cacheKey();if(!key||!viewCache.has(key))return false;mergeDashboardData(viewCache.get(key));render();if(state.tab==='finance')queueFinanceComparison();const note=document.getElementById('period-note');if(note)note.textContent='Показаны ранее загруженные данные. Для свежего запроса нажмите «Обновить».';return true}
@@ -4966,7 +5151,7 @@ function showMobileDetail(type){
   if(!template)return;
   const meta={
     app:['Активные пользователи','Сессии, платформы и версии'],
-    analytics:['Аналитика','LTV, CAC, Life Time и LTV / CAC'],
+    analytics:['Аналитика','Юнит-экономика'],
     finance:['Платящие пользователи','Оплаты, тарифы и динамика']
   };
   const item=meta[type]||meta.finance;
